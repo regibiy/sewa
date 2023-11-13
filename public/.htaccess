@@ -1,0 +1,11 @@
+#mengindari kesalahan atau ambigu ketika memanggil file di dalam folder public
+Options -Multiviews
+
+RewriteEngine On
+#jika url folder, maka abaikan
+RewriteCond %{REQUEST_FILENAME} !-d 
+
+#menghindari jika folder atau file sama dengan controller dan method
+RewriteCond %{REQUEST_FILENAME} !-f
+
+RewriteRule ^(.*)$ index.php?url=$1 [L]

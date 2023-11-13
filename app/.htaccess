@@ -1,0 +1,2 @@
+#mencegah user mengakses folder yang tidak memiliki file index
+Options -Indexes 

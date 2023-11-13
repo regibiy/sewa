@@ -1,0 +1,53 @@
+<?php
+class Booking_Model
+{
+    private $table = "booking";
+    private $db;
+
+    public function __construct()
+    {
+        $this->db = new Database;
+    }
+
+    public function get_all_booking()
+    {
+        $this->db->query("SELECT * FROM " . $this->table);
+        return $this->db->result_set();
+    }
+
+    public function get_booking_by_id($id)
+    {
+        $this->db->query("SELECT * FROM " . $this->table . " WHERE id=:id");
+        $this->db->bind("id", $id);
+        return $this->db->single();
+    }
+
+    public function add_booking($data)
+    {
+        $sql = "INSERT INTO booking (no_transaksi, kode_booking, id_user, lapangan, tanggal_sewa, jadwal, jam_mulai, jam_selesai, status_booking, bukti_bayar) VALUES (:no_transaksi, :kode_booking, :id_user, :lapangan, :tanggal_sewa, :jadwal, :jam_mulai, :jam_selesai, :status_booking, :bukti_bayar)";
+        $this->db->query($sql);
+        $this->db->bind("no_transaksi", $data["no_transaksi"]);
+        $this->db->bind("kode_booking", $data["kode_booking"]);
+        $this->db->bind("id_user", $_SESSION["id_user"]);
+        $this->db->bind("lapangan", $data["lapangan"]);
+        $this->db->bind("tanggal_sewa", $data["tanggal_sewa"]);
+        $this->db->bind("jadwal", $data["jadwal"]);
+        $this->db->bind("jam_mulai", $data["jam_mulai"]);
+        $this->db->bind("jam_selesai", $data["jam_selesai"]);
+        $this->db->bind("status_booking", "Menunggu");
+        $this->db->bind("bukti_bayar", null);
+
+        $this->db->execute();
+        return $this->db->row_count();
+    }
+
+    public function data_booking_user($id)
+    {
+        $sql = "SELECT lapangan.nama_lapangan, jadwal.harga, jam_mulai, jam_selesai, bukti_bayar FROM booking 
+        INNER JOIN lapangan ON booking.lapangan = lapangan.id
+        INNER JOIN jadwal ON booking.jadwal = jadwal.sesi AND DAYNAME(booking.tanggal_sewa) = jadwal.hari WHERE id_user = :id";
+        $this->db->query($sql);
+        $this->db->bind("id", $id);
+        return $this->db->result_set();
+    }
+}
