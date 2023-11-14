@@ -31,33 +31,53 @@
                         $no = 0;
                         foreach ($data["data_booking"] as $value) {
                             $no++;
+                            $lama_sewa = getLamaSewa($value["jam_mulai"], $value["jam_selesai"]);
                             echo "<tr>";
                             echo  "<td>" . $no . "</td>";
                             echo  "<td>" . $value["nama_lapangan"] . "</td>";
                             echo  "<td>" . $value["harga"] . "</td>";
                             echo  "<td>" . $value["jam_mulai"] . "</td>";
                             echo  "<td>" . $value["jam_selesai"] . "</td>";
-                            echo  "<td>" . $value["jam_selesai"] . "</td>";
-                            echo  "<td>" . ($value["bukti_bayar"] === null ? "Segera upload bukti pembayaran Anda!" : "<button class='btn btn-outline-secondary'>Lihat Bukti</button>") . "</td>";
-                            echo  "<td>Undefined By User</td>";
-                            echo  "<td><button type='button' class='btn btn-sm btn-outline-secondary btn-detail-booking' data-bs-toggle='modal' data-bs-target='#detailBooking'>
-                            <i class='bi bi-file-text'></i></button></td>";
+                            echo  "<td>" . $lama_sewa . " Jam</td>";
+                            echo  "<td>" . ($value["bukti_bayar"] === null ? "Segera upload bukti pembayaran Anda!" : "<button type='button' class='btn btn-sm btn-outline-secondary' data-bs-toggle='modal' data-bs-target='#buktiBayar'>Lihat Bukti</button>") . "</td>";
+                            echo  "<td>" . $value["harga"] * $lama_sewa . "</td>";
+                            echo  "<td>
+                            <button type='button' class='btn btn-sm btn-outline-secondary btn-detail-booking' data-bs-toggle='modal' data-notrans='" . $value["no_transaksi"] . "' data-nama='" . $_SESSION["nama_user"] . "' data-status='" . $_SESSION["status_member"] . "' data-lama='" . $lama_sewa . "' data-bs-target='#detailBooking'><i class='bi bi-file-text'></i></button>
+                            <button type='button' class='btn btn-sm btn-outline-secondary btn-print' data-notrans='" . $value["no_transaksi"] . "' data-nama='" . $_SESSION["nama_user"] . "' data-status='" . $_SESSION["status_member"] . "' data-lama='" . $lama_sewa . "' data-bs-toggle='modal' data-bs-target='#cetak'><i class='bi bi-printer-fill'></i></button>
+                            <button type='button' class='btn btn-sm btn-outline-secondary btn-upload' data-notrans='" . $value["no_transaksi"] . "' data-bs-toggle='modal' data-bs-target='#upload'>
+                            <i class='bi bi-cloud-arrow-up-fill'></i>
+                            </button>
+                            </td>";
                             echo "</tr>";
                         }
                         ?>
-                        <!-- <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#cetak">
-                                <i class="bi bi-printer-fill"></i>
-                            </button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#upload">
-                                <i class="bi bi-cloud-arrow-up-fill"></i>
-                            </button>
-                            <a href="#" class="btn btn-sm btn-outline-secondary"><i class="bi bi-x-circle-fill"></i></a> -->
+                        <!-- 
+
+                            <a href='#" class="btn btn-sm btn-outline-secondary"><i class="bi bi-x-circle-fill"></i></a> -->
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 </div>
+</div>
+
+<!-- Modal NOT DONE YET-->
+<div class="modal fade" id="buktiBayar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Bukti Pembayaran</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img src="<?= BASEURL ?>/public/img/cth.png" class="img-fluid w-100" alt="bukti bayar">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-target="#konfirmasi" data-bs-toggle="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Modal -->
@@ -122,18 +142,18 @@
                         <p>:</p>
                     </div>
                     <div class="col-7">
-                        <p>123456789</p>
-                        <p>12345</p>
-                        <p>Agus</p>
-                        <p>Non-Member</p>
-                        <p>Lapangan 1</p>
-                        <p>01 November 2023</p>
-                        <p>Pagi</p>
-                        <p>09:00 - 10:00</p>
-                        <p>1 Jam</p>
-                        <p>Rp. 35.000,00</p>
-                        <p>Belum Dikonfirmasi / Sudah Dikonfirmasi</p>
-                        <p>Segera Upload Bukti Transfer / Aktif / Selesai</p>
+                        <p id="detail-no-trans"></p>
+                        <p id="detail-no-book"></p>
+                        <p id="detail-nama"></p>
+                        <p id="detail-status"></p>
+                        <p id="detail-lapangan"></p>
+                        <p id="detail-tanggal"></p>
+                        <p id="detail-jadwal"></p>
+                        <p id="detail-jam"></p>
+                        <p id="detail-lama"></p>
+                        <p id="detail-harga"></p>
+                        <p id="detail-konfir">Belum Dikonfirmasi / Sudah Dikonfirmasi</p>
+                        <p id="detail-ket">Segera Upload Bukti Transfer / Aktif / Selesai</p>
                     </div>
                 </div>
             </div>
@@ -175,17 +195,17 @@
                         <p>:</p>
                     </div>
                     <div class="col-7">
-                        <p>Agus</p>
-                        <p>Non-Member</p>
-                        <p>Lapangan 1</p>
-                        <p>01 November 2023</p>
-                        <p>Pagi</p>
-                        <p>09:00 - 10:00</p>
-                        <p>1 Jam</p>
-                        <p>Rp. 35.000,00</p>
+                        <p id="print-nama"></p>
+                        <p id="print-member"></p>
+                        <p id="print-lapangan"></p>
+                        <p id="print-tanggal"></p>
+                        <p id="print-sewa"></p>
+                        <p id="print-jam"></p>
+                        <p id="print-lama"></p>
+                        <p id="print-harga"></p>
                     </div>
                 </div>
-                <h5 class="text-center mb-4">Kode Booking : <br /> 123456</h5>
+                <h5 class="text-center mb-4">Kode Booking : <br /> <span id="print-kode-book"></span></h5>
                 <div class="text-center">
                     <p class="m-0">Gor Unipol</p>
                     <p class="m-0">Jalan Patikrama, Kec. Nanga Pinoh, Kab. Melawi, Kalimantan Barat</p>
@@ -193,7 +213,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                <button type="button" class="btn btn-primary">Cetak</button>
+                <a href="" class="btn btn-primary btn-anchor-print">Cetak</a>
             </div>
         </div>
     </div>
@@ -203,20 +223,23 @@
 <div class="modal fade" id="upload" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Upload Bukti Pembayaran</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-5">
-                    <label for="buktiBayar" class="form-label">Upload Bukti Pembayaran</label>
-                    <input type="file" id="buktiBayar" class="form-control">
+            <form action="<?= BASEURL ?>/dashboard/uploadbuktibayar" method="post" autocomplete="off" enctype="multipart/form-data">
+                <input type="hidden" name="id" id="id">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Upload Bukti Pembayaran</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                <button type="button" class="btn btn-primary">Upload</button>
-            </div>
+                <div class="modal-body">
+                    <div class="mb-5">
+                        <label for="buktiBayar" class="form-label">Upload Bukti Pembayaran</label>
+                        <input type="file" id="buktiBayar" class="form-control" name="bukti_bayar" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

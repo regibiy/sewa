@@ -164,6 +164,42 @@ class Dashboard extends Controller
         $this->UserView("templates/footer");
     }
 
+    public function getdetailbookingjson()
+    {
+        echo json_encode($this->model("Booking_Model")->detail_booking_by_id($_POST["id"]));
+    }
+
+    public function cetakbooking($url)
+    {
+        $data = [
+            "detail_booking" => $this->model("Booking_Model")->detail_booking_by_id($url),
+            "nama" => $_SESSION["nama_user"],
+            "status" => $_SESSION["status_member"]
+        ];
+        $this->Reporting("cetakbookinguser", $data);
+    }
+
+    public function uploadbuktibayar()
+    {
+        // validasi gambar sudah ada
+        $bukti_bayar = upload_image($_FILES["bukti_bayar"]["name"], $_FILES["bukti_bayar"]["size"], $_FILES["bukti_bayar"]["tmp_name"], "../public/img/evidence/");
+        if ($bukti_bayar) {
+            if ($this->model("Booking_Model")->update_bukti_bayar($_POST, $bukti_bayar) > 0) {
+                Flasher::set_flash("Terima kasih", "Bukti Pembayaran Berhasil Diunggah! Silakan Menuju Ke Gor Unipol Sesuai Jadwal Anda!", "success");
+                header("Location: " . BASEURL . "/dashboard/datasewa");
+                exit;
+            } else {
+                Flasher::set_flash("Upss..", "Anda Tidak Melakukan Perubahan Apapun!", "info");
+                header("Location: " . BASEURL . "/dashboard/datasewa");
+                exit;
+            }
+        } else {
+            Flasher::set_flash("Upss..", "Gagal Mengunggah Bukti Pembayaran! Pastikan File Berekstensi .jpg, .jpeg atau .png Dan Berukuran Kurang Dari 3MB", "error");
+            header("Location: " . BASEURL . "/dashboard/datasewa");
+            exit;
+        }
+    }
+
     public function logout()
     {
         unset($_SESSION["login"], $_SESSION["id_user"], $_SESSION["user"], $_SESSION["nama_user"], $_SESSION["status_member"]);

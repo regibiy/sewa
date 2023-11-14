@@ -43,11 +43,32 @@ class Booking_Model
 
     public function data_booking_user($id)
     {
-        $sql = "SELECT lapangan.nama_lapangan, jadwal.harga, jam_mulai, jam_selesai, bukti_bayar FROM booking 
+        $sql = "SELECT no_transaksi, lapangan.nama_lapangan, tanggal_sewa, jadwal.harga, jam_mulai, jam_selesai, bukti_bayar FROM booking
         INNER JOIN lapangan ON booking.lapangan = lapangan.id
         INNER JOIN jadwal ON booking.jadwal = jadwal.sesi AND DAYNAME(booking.tanggal_sewa) = jadwal.hari WHERE id_user = :id";
         $this->db->query($sql);
         $this->db->bind("id", $id);
         return $this->db->result_set();
+    }
+
+    public function detail_booking_by_id($no_transaksi)
+    {
+        $sql = "SELECT no_transaksi, kode_booking, lapangan.nama_lapangan, tanggal_sewa, booking.jadwal, jadwal.harga, jam_mulai, jam_selesai, bukti_bayar FROM booking 
+        INNER JOIN lapangan ON booking.lapangan = lapangan.id
+        INNER JOIN jadwal ON booking.jadwal = jadwal.sesi AND DAYNAME(booking.tanggal_sewa) = jadwal.hari WHERE no_transaksi = :no_transaksi";
+        $this->db->query($sql);
+        $this->db->bind("no_transaksi", $no_transaksi);
+        return $this->db->single();
+    }
+
+    public function update_bukti_bayar($data, $gambar)
+    {
+        $sql = "UPDATE booking SET bukti_bayar = :bukti_bayar WHERE no_transaksi = :no_transaksi";
+        $this->db->query($sql);
+        $this->db->bind("bukti_bayar", $gambar);
+        $this->db->bind("no_transaksi", $data["id"]);
+
+        $this->db->execute();
+        return $this->db->row_count();
     }
 }

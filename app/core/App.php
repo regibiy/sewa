@@ -18,7 +18,7 @@ class App
                 if (array_key_exists(1, $url)) {
                     if (file_exists($this->route_path . ucfirst($url[1]) . ".php")) {
                         $this->controller = ucfirst($url[1]);
-                        unset($url[0], $url[1]);
+                        // unset($url[0], $url[1]);
                     } else $this->controller = "Auth";
                 } else $this->controller = "Auth";
             }
@@ -40,7 +40,6 @@ class App
         }
 
         if (!empty($url)) $this->params = array_values($url);
-
         call_user_func_array([$this->controller, $this->method], $this->params);
     }
 

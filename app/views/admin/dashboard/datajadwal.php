@@ -7,7 +7,7 @@
             <button class="btn btn-primary btn-add-jadwal" data-bs-toggle="modal" data-bs-target="#modalJadwal">Tambah Jadwal</button>
         </div>
     </div>
-    <div class="row mb-4">
+    <div class="row">
         <div class="col">
             <div class="table-responsive border p-3 rounded">
                 <table id="sewa" class="table table-striped table-bordered" style="width:100%">
@@ -30,7 +30,10 @@
                             echo "<td>" . ucfirst($value["sesi"]) . "</td>";
                             echo "<td>" .  $data["hari"][$value["hari"]] . "</td>";
                             echo "<td>" . $value["harga"] . "</td>";
-                            echo "<td><button type='button' class='btn btn-sm btn-outline-secondary btn-edit-jadwal' data-bs-toggle='modal' data-bs-target='#modalJadwal' data-id='" . $value["id"] . "'><i class='bi bi-pencil-fill'></i></button></td>";
+                            echo "<td>
+                            <button type='button' class='btn btn-sm btn-outline-secondary btn-edit-jadwal' data-bs-toggle='modal' data-bs-target='#modalJadwal' data-id='" . $value["id"] . "'><i class='bi bi-pencil-fill'></i></button>
+                            <button type='button' class='btn btn-sm btn-outline-secondary btn-delete-jadwal' data-sesi='" . ucfirst($value["sesi"]) . "' data-hari='" . $data["hari"][$value["hari"]] . "' data-id='" . $value["id"] . "'><i class='bi bi-trash3-fill'></i></button>
+                            </td>";
                             echo "</tr>";
                         }
                         ?>

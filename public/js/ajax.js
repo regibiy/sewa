@@ -101,3 +101,101 @@ $(function () {
     });
   });
 });
+
+$(function () {
+  $(".btn-delete-jadwal").on("click", function () {
+    const id = $(this).data("id");
+    const sesi = $(this).data("sesi");
+    const hari = $(this).data("hari");
+
+    Swal.fire({
+      title: `Sesi ${sesi} Pada Hari ${hari} Akan Dihapus. Apakah Anda Yakin?`,
+      text: "Anda Tidak Dapat Mengembalikan Ini!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya, Hapus!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          url: `http://localhost/sewa-lapangan/admin/dashboard/deletejadwal`,
+          data: { id: id },
+          method: "post",
+          success: function () {
+            Swal.fire({
+              title: "Data Jadwal",
+              text: "Berhasil Dihapus",
+              icon: "success",
+              didClose: () => {
+                window.location.href = `http://localhost/sewa-lapangan/admin/dashboard/datajadwal`;
+              },
+            });
+          },
+        });
+      }
+    });
+  });
+});
+
+$(function () {
+  $(".btn-detail-booking").on("click", function () {
+    const noTrans = $(this).data("notrans");
+    const nama = $(this).data("nama");
+    const status = $(this).data("status");
+    const lama = $(this).data("lama");
+    $.ajax({
+      url: "http://localhost/sewa-lapangan/dashboard/getdetailbookingjson",
+      data: { id: noTrans },
+      method: "post",
+      dataType: "json",
+      success: function (data) {
+        $("#detail-no-trans").text(data.kode_booking);
+        $("#detail-nama").text(nama);
+        $("#detail-status").text(status);
+        $("#detail-lapangan").text(data.nama_lapangan);
+        $("#detail-tanggal").text(data.tanggal_sewa);
+        $("#detail-jadwal").text(data.jadwal);
+        $("#detail-jam").text(data.jam_mulai + " - " + data.jam_selesai);
+        $("#detail-lama").text(lama + " Jam");
+        $("#detail-harga").text(data.harga * lama);
+      },
+    });
+  });
+});
+
+$(function () {
+  $(".btn-print").on("click", function () {
+    const noTrans = $(this).data("notrans");
+    const nama = $(this).data("nama");
+    const status = $(this).data("status");
+    const lama = $(this).data("lama");
+    $.ajax({
+      url: "http://localhost/sewa-lapangan/dashboard/getdetailbookingjson",
+      data: { id: noTrans },
+      method: "post",
+      dataType: "json",
+      success: function (data) {
+        $("#print-nama").text(nama);
+        $("#print-member").text(status);
+        $("#print-lapangan").text(data.nama_lapangan);
+        $("#print-tanggal").text(data.tanggal_sewa);
+        $("#print-sewa").text(data.jadwal);
+        $("#print-jam").text(data.jam_mulai + " - " + data.jam_selesai);
+        $("#print-lama").text(lama + " Jam");
+        $("#print-harga").text(data.harga * lama);
+        $("#print-kode-book").text(data.kode_booking);
+        $(".btn-anchor-print").attr(
+          "href",
+          `http://localhost/sewa-lapangan/dashboard/cetakbooking/${data.no_transaksi}`
+        );
+      },
+    });
+  });
+});
+
+$(function () {
+  $(".btn-upload").on("click", function () {
+    $("#id").val($(this).data("notrans"));
+  });
+});

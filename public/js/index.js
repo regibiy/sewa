@@ -104,62 +104,77 @@ document.addEventListener("DOMContentLoaded", function () {
         let jamMulai = new Date("1970-01-01T" + inputJamMulai.value);
         let jam = jamMulai.getHours();
         let menit = jamMulai.getMinutes();
-        if (selectJadwal.value === "pagi")
+        if (selectJadwal.value === "pagi") {
           // if (jam < 7 || jam > 11) swalAlertPagi(inputJamMulai);
           // else if (menit % 30 !== 0) swalAlertMenit(inputJamMulai);
           // else jamMain.mulai = inputJamMulai.value;
-          validasiWaktuMain(
-            jam,
-            7,
-            11,
-            inputJamMulai,
-            menit,
-            (jamMain.mulai = inputJamMulai.value)
-          );
-        else if (selectJadwal.value === "siang")
-          validasiWaktuMain(
-            jam,
-            11,
-            17,
-            inputJamMulai,
-            menit,
-            (jamMain.mulai = inputJamMulai.value)
-          );
-        else if (selectJadwal.value === "malam")
-          validasiWaktuMain(
-            jam,
-            17,
-            23,
-            inputJamMulai,
-            menit,
-            (jamMain.mulai = inputJamMulai.value)
-          );
-        selisihWaktu(jamMain.mulai, jamMain.selesai);
+          if (
+            validasiWaktuMain(
+              jam,
+              7,
+              11,
+              inputJamMulai,
+              menit,
+              (jamMain.mulai = inputJamMulai.value)
+            )
+          )
+            selisihWaktu(jamMain.mulai, jamMain.selesai, inputJamMulai);
+        } else if (selectJadwal.value === "siang") {
+          if (
+            validasiWaktuMain(
+              jam,
+              11,
+              17,
+              inputJamMulai,
+              menit,
+              (jamMain.mulai = inputJamMulai.value)
+            )
+          )
+            selisihWaktu(jamMain.mulai, jamMain.selesai, inputJamMulai);
+        } else if (selectJadwal.value === "malam") {
+          if (
+            validasiWaktuMain(
+              jam,
+              17,
+              23,
+              inputJamMulai,
+              menit,
+              (jamMain.mulai = inputJamMulai.value)
+            )
+          )
+            selisihWaktu(jamMain.mulai, jamMain.selesai, inputJamMulai);
+        }
       });
 
       inputJamSelesai.addEventListener("change", function () {
         let jamSelesai = new Date("1970-01-01T" + inputJamSelesai.value);
         let jam = jamSelesai.getHours();
         let menit = jamSelesai.getMinutes();
-        if (selectJadwal.value === "pagi")
-          validasiWaktuMain(
-            jam,
-            7,
-            11,
-            inputJamSelesai,
-            menit,
-            (jamMain.selesai = inputJamSelesai.value)
-          );
-        else if (selectJadwal.value === "siang")
-          validasiWaktuMain(
-            jam,
-            11,
-            17,
-            inputJamSelesai,
-            menit,
-            (jamMain.selesai = inputJamSelesai.value)
-          );
-        else if (selectJadwal.value === "malam") {
+        if (selectJadwal.value === "pagi") {
+          if (
+            validasiWaktuMain(
+              jam,
+              7,
+              11,
+              inputJamSelesai,
+              menit,
+              (jamMain.selesai = inputJamSelesai.value)
+            )
+          )
+            selisihWaktu(jamMain.mulai, jamMain.selesai, inputJamSelesai);
+        } else if (selectJadwal.value === "siang") {
+          if (
+            validasiWaktuMain(
+              jam,
+              11,
+              17,
+              inputJamSelesai,
+              menit,
+              (jamMain.selesai = inputJamSelesai.value)
+            )
+          )
+            selisihWaktu(jamMain.mulai, jamMain.selesai, inputJamSelesai);
+        } else if (selectJadwal.value === "malam") {
           if (
             validasiWaktuMain(
               jam,
@@ -170,7 +185,7 @@ document.addEventListener("DOMContentLoaded", function () {
               (jamMain.selesai = inputJamSelesai.value)
             )
           )
-            selisihWaktu(jamMain.mulai, jamMain.selesai);
+            selisihWaktu(jamMain.mulai, jamMain.selesai, inputJamSelesai);
         }
       });
     });

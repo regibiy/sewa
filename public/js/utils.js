@@ -60,7 +60,7 @@ function validasiWaktuMain(jamUser, jamMin, jamMax, inputJam, menit, jamObj) {
   }
 }
 
-function selisihWaktu(jamMainMulai, jamMainSelesai) {
+function selisihWaktu(jamMainMulai, jamMainSelesai, inputJam) {
   let [jamMulai, menitMulai] = jamMainMulai.split(":").map(Number);
   let [jamSelesai2, menitSelesai] = jamMainSelesai.split(":").map(Number);
   let differenceInMinutes =
@@ -72,6 +72,7 @@ function selisihWaktu(jamMainMulai, jamMainSelesai) {
       "Waktu Yang Anda Pilih Kurang Dari 1 Jam Atau Tidak Kelipatan 1 Jam!",
       "warning"
     );
+    inputJam.value = null;
   }
 }
 

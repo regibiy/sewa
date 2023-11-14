@@ -23,7 +23,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link <?= isset($data["marker"]) ? $data["marker"] : "" ?>" aria-current="page" href="<?= isset($_SESSION["login"]) && isset($_SESSION["user"]) ? BASEURL . "/dashboard/informasi" : BASEURL . "/home/informasi" ?>">Informasi</a>
+                        <a class="nav-link <?= isset($data["marker"]) ? "active" : "" ?>" aria-current="page" href="<?= isset($_SESSION["login"]) && isset($_SESSION["user"]) ? BASEURL . "/dashboard/informasi" : BASEURL . "/home/informasi" ?>">Informasi</a>
                     </li>
                 </ul>
             </div>

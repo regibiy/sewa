@@ -127,6 +127,11 @@ class Dashboard extends Controller
         echo json_encode($this->model("Jadwal_Model")->get_jadwal_by_id($_POST["id"]));
     }
 
+    public function deletejadwal()
+    {
+        $this->model("Jadwal_Model")->delete_jadwal($_POST["id"]);
+    }
+
     public function datalapangan()
     {
         $data = [
