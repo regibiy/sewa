@@ -23,6 +23,7 @@
                             <th class="fw-medium bg-info-subtle">Lama Sewa</th>
                             <th class="fw-medium bg-info-subtle">Bukti Pembayaran</th>
                             <th class="fw-medium bg-info-subtle">Total</th>
+                            <th class="fw-medium bg-info-subtle">Status</th>
                             <th class="fw-medium bg-info-subtle">Aksi</th>
                         </tr>
                     </thead>
@@ -39,21 +40,20 @@
                             echo  "<td>" . $value["jam_mulai"] . "</td>";
                             echo  "<td>" . $value["jam_selesai"] . "</td>";
                             echo  "<td>" . $lama_sewa . " Jam</td>";
-                            echo  "<td>" . ($value["bukti_bayar"] === null ? "Segera upload bukti pembayaran Anda!" : "<button type='button' class='btn btn-sm btn-outline-secondary' data-bs-toggle='modal' data-bs-target='#buktiBayar'>Lihat Bukti</button>") . "</td>";
+                            echo  "<td>" . ($value["bukti_bayar"] === null ? "Segera upload bukti pembayaran Anda!" : "<button type='button' class='btn btn-sm btn-outline-secondary btn-show-evidence mb-1' data-notrans='" . $value["no_transaksi"] . "' data-bs-toggle='modal' data-bs-target='#buktiBayar'>Lihat Bukti</button>") . "</td>";
                             echo  "<td>" . $value["harga"] * $lama_sewa . "</td>";
+                            echo  "<td>" . $value["status_booking"] . "</td>";
                             echo  "<td>
-                            <button type='button' class='btn btn-sm btn-outline-secondary btn-detail-booking' data-bs-toggle='modal' data-notrans='" . $value["no_transaksi"] . "' data-nama='" . $_SESSION["nama_user"] . "' data-status='" . $_SESSION["status_member"] . "' data-lama='" . $lama_sewa . "' data-bs-target='#detailBooking'><i class='bi bi-file-text'></i></button>
-                            <button type='button' class='btn btn-sm btn-outline-secondary btn-print' data-notrans='" . $value["no_transaksi"] . "' data-nama='" . $_SESSION["nama_user"] . "' data-status='" . $_SESSION["status_member"] . "' data-lama='" . $lama_sewa . "' data-bs-toggle='modal' data-bs-target='#cetak'><i class='bi bi-printer-fill'></i></button>
-                            <button type='button' class='btn btn-sm btn-outline-secondary btn-upload' data-notrans='" . $value["no_transaksi"] . "' data-bs-toggle='modal' data-bs-target='#upload'>
+                            <button type='button' class='btn btn-sm btn-outline-secondary btn-detail-booking mb-1' data-bs-toggle='modal' data-notrans='" . $value["no_transaksi"] . "' data-nama='" . $_SESSION["nama_user"] . "' data-status='" . $_SESSION["status_member"] . "' data-lama='" . $lama_sewa . "' data-bs-target='#detailBooking'><i class='bi bi-file-text'></i></button>
+                            <button type='button' class='btn btn-sm btn-outline-secondary btn-print mb-1' data-notrans='" . $value["no_transaksi"] . "' data-nama='" . $_SESSION["nama_user"] . "' data-status='" . $_SESSION["status_member"] . "' data-lama='" . $lama_sewa . "' data-bs-toggle='modal' data-bs-target='#cetak'><i class='bi bi-printer-fill'></i></button>
+                            <button type='button' class='btn btn-sm btn-outline-secondary btn-upload mb-1' data-notrans='" . $value["no_transaksi"] . "'>
                             <i class='bi bi-cloud-arrow-up-fill'></i>
                             </button>
+                            <button type='button' class='btn btn-sm btn-outline-secondary btn-cancel-booking mb-1' data-notrans='" . $value["no_transaksi"] . "'><i class='bi bi-x-circle-fill'></i></button> 
                             </td>";
                             echo "</tr>";
                         }
                         ?>
-                        <!-- 
-
-                            <a href='#" class="btn btn-sm btn-outline-secondary"><i class="bi bi-x-circle-fill"></i></a> -->
                     </tbody>
                 </table>
             </div>
@@ -62,7 +62,7 @@
 </div>
 </div>
 
-<!-- Modal NOT DONE YET-->
+<!-- Modal-->
 <div class="modal fade" id="buktiBayar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
@@ -70,8 +70,8 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Bukti Pembayaran</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body text-center">
-                <img src="<?= BASEURL ?>/public/img/cth.png" class="img-fluid w-100" alt="bukti bayar">
+            <div class="modal-body text-center modal-body-evidence">
+                <img src="" class="img-fluid w-100" alt="bukti bayar">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-target="#konfirmasi" data-bs-toggle="modal">Tutup</button>

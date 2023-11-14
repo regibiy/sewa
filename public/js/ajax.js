@@ -11,7 +11,7 @@ $(function () {
     $(".select-lapangan").val("Aktif");
   });
 
-  $(".btn-edit-lapangan").on("click", function () {
+  $(document).on("click", ".btn-edit-lapangan", function () {
     $("#lapanganModalLabel").html("Edit Data Lapangan");
     $(".modal-content-lapangan form").attr(
       "action",
@@ -44,7 +44,7 @@ $(function () {
     $(".select-method").val("Aktif");
   });
 
-  $(".btn-edit-payment").on("click", function () {
+  $(document).on("click", ".btn-edit-payment", function () {
     $("#paymentModalLabel").html("Edit Data Rekening");
     $(".modal-content-payment form").attr(
       "action",
@@ -79,7 +79,7 @@ $(function () {
     $(".select-jadwal option:first").prop("selected", true);
   });
 
-  $(".btn-edit-jadwal").on("click", function () {
+  $(document).on("click", ".btn-edit-jadwal", function () {
     $("#jadwalModalLabel").html("Edit Data Jadwal");
     $(".modal-content-jadwal form").attr(
       "action",
@@ -103,7 +103,7 @@ $(function () {
 });
 
 $(function () {
-  $(".btn-delete-jadwal").on("click", function () {
+  $(document).on("click", ".btn-delete-jadwal", function () {
     const id = $(this).data("id");
     const sesi = $(this).data("sesi");
     const hari = $(this).data("hari");
@@ -118,28 +118,14 @@ $(function () {
       confirmButtonText: "Ya, Hapus!",
     }).then((result) => {
       if (result.isConfirmed) {
-        $.ajax({
-          url: `http://localhost/sewa-lapangan/admin/dashboard/deletejadwal`,
-          data: { id: id },
-          method: "post",
-          success: function () {
-            Swal.fire({
-              title: "Data Jadwal",
-              text: "Berhasil Dihapus",
-              icon: "success",
-              didClose: () => {
-                window.location.href = `http://localhost/sewa-lapangan/admin/dashboard/datajadwal`;
-              },
-            });
-          },
-        });
+        window.location.href = `http://localhost/sewa-lapangan/admin/dashboard/deletejadwal/${id}`;
       }
     });
   });
 });
 
 $(function () {
-  $(".btn-detail-booking").on("click", function () {
+  $(document).on("click", ".btn-detail-booking", function () {
     const noTrans = $(this).data("notrans");
     const nama = $(this).data("nama");
     const status = $(this).data("status");
@@ -165,7 +151,7 @@ $(function () {
 });
 
 $(function () {
-  $(".btn-print").on("click", function () {
+  $(document).on("click", ".btn-print", function () {
     const noTrans = $(this).data("notrans");
     const nama = $(this).data("nama");
     const status = $(this).data("status");
@@ -195,7 +181,71 @@ $(function () {
 });
 
 $(function () {
-  $(".btn-upload").on("click", function () {
-    $("#id").val($(this).data("notrans"));
+  $(document).on("click", ".btn-upload", function () {
+    const noTrans = $(this).data("notrans");
+    $("#id").val(noTrans);
+    $.ajax({
+      url: "http://localhost/sewa-lapangan/dashboard/getdetailbookingjson",
+      data: { id: noTrans },
+      method: "post",
+      dataType: "json",
+      success: function (data) {
+        if (data.bukti_bayar !== null) {
+          Swal.fire({
+            title: `Anda Telah Mengunggah Bukti Pembayaran. Yakin Untuk Mengunggah Ulang?`,
+            text: "Anda Tidak Dapat Mengembalikan Ini!",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Ya, Upload!",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $("#upload").modal("show");
+            }
+          });
+        } else {
+          $("#upload").modal("show");
+        }
+      },
+    });
+  });
+});
+
+$(function () {
+  $(document).on("click", ".btn-show-evidence", function () {
+    const noTrans = $(this).data("notrans");
+    $.ajax({
+      url: "http://localhost/sewa-lapangan/dashboard/getdetailbookingjson",
+      data: { id: noTrans },
+      method: "post",
+      dataType: "json",
+      success: function (data) {
+        $(".modal-body-evidence img").attr(
+          "src",
+          "http://localhost/sewa-lapangan/public/img/evidence/" +
+            data.bukti_bayar
+        );
+      },
+    });
+  });
+});
+
+$(function () {
+  $(document).on("click", ".btn-cancel-booking", function () {
+    const noTrans = $(this).data("notrans");
+    Swal.fire({
+      title: "Apakah Anda Yakin?",
+      text: "Saat Membatalkan, Pembayaran Yang Telah Dilakukan Tidak Dapat Dikembalikan!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya, Batalkan!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = `http://localhost/sewa-lapangan/dashboard/cancelbooking/${noTrans}`;
+      }
+    });
   });
 });

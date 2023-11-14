@@ -181,7 +181,9 @@ class Dashboard extends Controller
 
     public function uploadbuktibayar()
     {
-        // validasi gambar sudah ada
+        $data = $this->model("Booking_Model")->detail_booking_by_id($_POST["id"]);
+        if ($data["bukti_bayar"] !== null) unlink("../public/img/evidence/" . $data["bukti_bayar"]);
+
         $bukti_bayar = upload_image($_FILES["bukti_bayar"]["name"], $_FILES["bukti_bayar"]["size"], $_FILES["bukti_bayar"]["tmp_name"], "../public/img/evidence/");
         if ($bukti_bayar) {
             if ($this->model("Booking_Model")->update_bukti_bayar($_POST, $bukti_bayar) > 0) {
@@ -200,10 +202,25 @@ class Dashboard extends Controller
         }
     }
 
+    public function cancelbooking($url)
+    {
+        //ada kondisi jika sudah diubah oleh admin tidak boleh dicancel
+        if ($this->model("Booking_Model")->cancel_booking($url)) {
+            Flasher::set_flash("Pembatalan Berhasil!", "Terima Kasih Telah Melakukan Booking Di Web Gor Unipol", "success");
+            header("Location: " . BASEURL . "/dashboard/datasewa");
+            exit;
+        } else {
+            Flasher::set_flash("Upss..", "Anda Sudah Melakukan Pembatalan Booking!", "error");
+            header("Location: " . BASEURL . "/dashboard/datasewa");
+            exit;
+        }
+    }
+
     public function logout()
     {
         unset($_SESSION["login"], $_SESSION["id_user"], $_SESSION["user"], $_SESSION["nama_user"], $_SESSION["status_member"]);
         Flasher::set_flash("Terima Kasih", "Telah Berkunjung!", "info");
         header("Location: " . BASEURL . "/auth");
+        exit;
     }
 }

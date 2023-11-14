@@ -127,9 +127,12 @@ class Dashboard extends Controller
         echo json_encode($this->model("Jadwal_Model")->get_jadwal_by_id($_POST["id"]));
     }
 
-    public function deletejadwal()
+    public function deletejadwal($url)
     {
-        $this->model("Jadwal_Model")->delete_jadwal($_POST["id"]);
+        if ($this->model("Jadwal_Model")->delete_jadwal($url) > 0) {
+            Flasher::set_flash("Berhasil", "Menghapus Data Jadwal!", "success");
+            header("Location: " . BASEURL . "/admin/dashboard/datajadwal");
+        }
     }
 
     public function datalapangan()

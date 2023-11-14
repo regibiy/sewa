@@ -43,7 +43,7 @@ class Booking_Model
 
     public function data_booking_user($id)
     {
-        $sql = "SELECT no_transaksi, lapangan.nama_lapangan, tanggal_sewa, jadwal.harga, jam_mulai, jam_selesai, bukti_bayar FROM booking
+        $sql = "SELECT no_transaksi, lapangan.nama_lapangan, tanggal_sewa, jadwal.harga, jam_mulai, jam_selesai, booking.status_booking, bukti_bayar FROM booking
         INNER JOIN lapangan ON booking.lapangan = lapangan.id
         INNER JOIN jadwal ON booking.jadwal = jadwal.sesi AND DAYNAME(booking.tanggal_sewa) = jadwal.hari WHERE id_user = :id";
         $this->db->query($sql);
@@ -53,7 +53,7 @@ class Booking_Model
 
     public function detail_booking_by_id($no_transaksi)
     {
-        $sql = "SELECT no_transaksi, kode_booking, lapangan.nama_lapangan, tanggal_sewa, booking.jadwal, jadwal.harga, jam_mulai, jam_selesai, bukti_bayar FROM booking 
+        $sql = "SELECT no_transaksi, kode_booking, lapangan.nama_lapangan, tanggal_sewa, booking.jadwal, jadwal.harga, jam_mulai, jam_selesai, booking.status_booking, bukti_bayar FROM booking 
         INNER JOIN lapangan ON booking.lapangan = lapangan.id
         INNER JOIN jadwal ON booking.jadwal = jadwal.sesi AND DAYNAME(booking.tanggal_sewa) = jadwal.hari WHERE no_transaksi = :no_transaksi";
         $this->db->query($sql);
@@ -67,6 +67,17 @@ class Booking_Model
         $this->db->query($sql);
         $this->db->bind("bukti_bayar", $gambar);
         $this->db->bind("no_transaksi", $data["id"]);
+
+        $this->db->execute();
+        return $this->db->row_count();
+    }
+
+    public function cancel_booking($no_transaksi)
+    {
+        $sql = "UPDATE booking SET status_booking = :status_booking WHERE no_transaksi = :no_transaksi";
+        $this->db->query($sql);
+        $this->db->bind("status_booking", "Dibatalkan");
+        $this->db->bind("no_transaksi", $no_transaksi);
 
         $this->db->execute();
         return $this->db->row_count();
