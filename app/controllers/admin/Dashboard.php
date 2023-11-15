@@ -38,6 +38,7 @@ class Dashboard extends Controller
         if ($this->model("Rekening_Model")->add_payment_method($_POST) > 0) {
             Flasher::set_flash("Berhasil", "Menambahkan Data Metode Pembayaran!", "success");
             header("Location: " . BASEURL . "/admin/dashboard/metodepembayaran");
+            exit;
         }
     }
 
@@ -110,6 +111,7 @@ class Dashboard extends Controller
         if ($this->model("Jadwal_Model")->add_jadwal($_POST) > 0) {
             Flasher::set_flash("Berhasil", "Menambahkan Data Jadwal!", "success");
             header("Location: " . BASEURL . "/admin/dashboard/datajadwal");
+            exit;
         }
     }
 
@@ -118,9 +120,11 @@ class Dashboard extends Controller
         if ($this->model("Jadwal_Model")->edit_jadwal($_POST) > 0) {
             Flasher::set_flash("Berhasil", "Memperbarui Data Jadwal!", "success");
             header("Location: " . BASEURL . "/admin/dashboard/datajadwal");
+            exit;
         } else {
             Flasher::set_flash("Ups..", "Anda Tidak Melakukan Perubahan Apapun!", "warning");
             header("Location: " . BASEURL . "/admin/dashboard/datajadwal");
+            exit;
         }
     }
 
@@ -134,6 +138,7 @@ class Dashboard extends Controller
         if ($this->model("Jadwal_Model")->delete_jadwal($url) > 0) {
             Flasher::set_flash("Berhasil", "Menghapus Data Jadwal!", "success");
             header("Location: " . BASEURL . "/admin/dashboard/datajadwal");
+            exit;
         }
     }
 
@@ -155,6 +160,7 @@ class Dashboard extends Controller
         if ($this->model("Lapangan_Model")->add_lapangan($_POST) > 0) {
             Flasher::set_flash("Berhasil", "Menambahkan Data Lapangan!", "success");
             header("Location: " . BASEURL . "/admin/dashboard/datalapangan");
+            exit;
         }
     }
 
@@ -163,9 +169,11 @@ class Dashboard extends Controller
         if ($this->model("Lapangan_Model")->edit_lapangan($_POST) > 0) {
             Flasher::set_flash("Berhasil", "Memperbarui Data Lapangan!", "success");
             header("Location: " . BASEURL . "/admin/dashboard/datalapangan");
+            exit;
         } else {
             Flasher::set_flash("Ups..", "Anda Tidak Melakukan Perubahan Apapun!", "warning");
             header("Location: " . BASEURL . "/admin/dashboard/datalapangan");
+            exit;
         }
     }
 
@@ -299,5 +307,6 @@ class Dashboard extends Controller
         unset($_SESSION["login"], $_SESSION["id_admin"], $_SESSION["admin"], $_SESSION["nama_admin"], $_SESSION["role"]);
         Flasher::set_flash("Terima kasih", "Telah Bekerja!", "info");
         header("Location: " . BASEURL . "/admin/auth");
+        exit;
     }
 }
