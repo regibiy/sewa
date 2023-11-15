@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-2 p-3 border-end bg-body-tertiary height-100">
             <div class="mb-3">
-                <a href="<?= BASEURL ?>/dashboard/profil" class="text-decoration-none text-dark">
+                <a href="<?= BASEURL ?>/dashboard/profil/0" class="text-decoration-none text-dark">
                     <h4><?= $_SESSION["nama_user"] ?></h4>
                 </a>
                 <p>Status : <span class="fw-medium"><?= $_SESSION["status_member"] ?></span></p> <!-- dinamyc data -->

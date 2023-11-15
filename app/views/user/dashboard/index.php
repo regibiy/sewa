@@ -4,7 +4,7 @@
         <p>Jalan Patikrama, Kec. Nanga Pinoh, Kab. Melawi, Kalimantan Barat</p>
     </div>
     <div class="greeting">
-        <h1>Selamat Datang <a href="<?= BASEURL ?>/dashboard/profil" class="text-decoration-none"><?= $_SESSION["nama_user"] ?></a></h1>
+        <h1>Selamat Datang <a href="<?= BASEURL ?>/dashboard/profil/0" class="text-decoration-none"><?= $_SESSION["nama_user"] ?></a></h1>
     </div>
 </div>
 </div>

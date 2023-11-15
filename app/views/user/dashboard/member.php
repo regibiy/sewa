@@ -18,101 +18,105 @@
 <div class="modal fade" id="detailPembelian" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Data Pembelian</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row justify-content-center">
-                    <div class="col-12 p-3">
-                        <div class="row">
-                            <div class="col-3">
-                                <p>No. Transaksi</p>
+            <form action="<?= BASEURL ?>/dashboard/memberprocess" enctype="multipart/form-data" method="post" autocomplete="off">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Data Pembelian</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row justify-content-center">
+                        <div class="col-12 p-3">
+                            <div class="row">
+                                <div class="col-3">
+                                    <p>No. Transaksi</p>
+                                </div>
+                                <div class="col-1">
+                                    <p>:</p>
+                                </div>
+                                <div class="col-8">
+                                    <p class="p-no-transaksi"></p>
+                                    <input type="hidden" class="input-no-transaksi" name="no_transaksi">
+                                </div>
                             </div>
-                            <div class="col-1">
-                                <p>:</p>
+                            <div class="row">
+                                <div class="col-3">
+                                    <p>Nama</p>
+                                </div>
+                                <div class="col-1">
+                                    <p>:</p>
+                                </div>
+                                <div class="col-8">
+                                    <p><?= $_SESSION["nama_user"] ?></p>
+                                </div>
                             </div>
-                            <div class="col-8">
-                                <p>lorem</p>
+                            <div class="row">
+                                <div class="col-3">
+                                    <p>Jenis Paket</p>
+                                </div>
+                                <div class="col-1">
+                                    <p>:</p>
+                                </div>
+                                <div class="col-8">
+                                    <p class="p-jenis-paket"></p>
+                                    <input type="hidden" name="jenis_paket" id="jenisPaket" class="input-jenis-paket">
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-3">
-                                <p>Nama</p>
+                            <div class="row">
+                                <div class="col-3">
+                                    <p>Harga</p>
+                                </div>
+                                <div class="col-1">
+                                    <p>:</p>
+                                </div>
+                                <div class="col-8">
+                                    <p class="p-harga"></p>
+                                </div>
                             </div>
-                            <div class="col-1">
-                                <p>:</p>
+                            <div class="row mb-4">
+                                <div class="col-3">
+                                    <label for="tanggal" class="form-label">Tanggal</label>
+                                </div>
+                                <div class="col-1">
+                                    <p>:</p>
+                                </div>
+                                <div class="col-8">
+                                    <input type="date" class="form-control w-50 input-tanggal-beli" name="tanggal" id="tanggal" readonly>
+                                    <input type="hidden" class="input-berlaku-sampai" name="berlaku_sampai" id="berlakuSampai">
+                                </div>
                             </div>
-                            <div class="col-8">
-                                <p>lorem</p>
+                            <div class="row mb-4">
+                                <h5 class="mb-3">Keterangan Paket</h5>
+                                <p class="p-keterangan-paket"></p>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-3">
-                                <p>Jenis Paket</p>
+                            <div class="row mb-4">
+                                <h5 class="mb-3">Metode Pembayaran</h5>
+                                <div class="col-4">
+                                    <p>Transfer Bank</p>
+                                </div>
+                                <div class="col-8">
+                                    <?php
+                                    foreach ($data["metode_bayar"] as $value) {
+                                        echo "<p>" . $value["nama_bank"] . " - " . $value["nama_pemilik"] . " - " . $value["no_rekening"] . "</p>";
+                                    }
+                                    ?>
+                                </div>
                             </div>
-                            <div class="col-1">
-                                <p>:</p>
-                            </div>
-                            <div class="col-8">
-                                <p>Senin - Jumat, Pagi</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-3">
-                                <p>Harga</p>
-                            </div>
-                            <div class="col-1">
-                                <p>:</p>
-                            </div>
-                            <div class="col-8">
-                                <p>Rp. 300.000</p>
-                            </div>
-                        </div>
-                        <div class="row mb-4">
-                            <div class="col-3">
-                                <label for="tanggal" class="form-label">Tanggal</label>
-                            </div>
-                            <div class="col-1">
-                                <p>:</p>
-                            </div>
-                            <div class="col-8">
-                                <input type="date" class="form-control w-50" id="tanggal" disabled>
-                            </div>
-                        </div>
-                        <div class="row mb-4">
-                            <h5 class="mb-3">Keterangan Paket</h5>
-                            <p class="m-0">3 Jam, 4 Kali Pertemuan</p>
-                            <p>Selama 1 Bulan</p>
-                        </div>
-                        <div class="row mb-4">
-                            <h5 class="mb-3">Metode Pembayaran</h5>
-                            <div class="col-4">
-                                <p>Transfer Bank</p>
-                            </div>
-                            <div class="col-8">
-                                <?php
-                                foreach ($data["metode_bayar"] as $value) {
-                                    echo "<p>" . $value["nama_bank"] . " - " . $value["nama_pemilik"] . " - " . $value["no_rekening"] . "</p>";
-                                }
-                                ?>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-auto">
-                                <label for="buktiBayar" class="form-label">Upload Bukti Pembayaran</label>
-                            </div>
-                            <div class="col-auto">
-                                <input type="file" class="form-control" id="buktiBayar">
+                            <div class="row">
+                                <div class="col-auto">
+                                    <label for="buktiBayar" class="form-label">Upload Bukti Pembayaran</label>
+                                </div>
+                                <div class="col-auto">
+                                    <input type="file" class="form-control" id="buktiBayar" name="bukti_bayar" required>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                <a href="<?= BASEURL ?>/dashboard/membersuccess" class="btn btn-primary">Konfirmasi</a>
-            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Konfirmasi</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

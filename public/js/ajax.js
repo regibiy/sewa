@@ -1,4 +1,7 @@
+import { generateNoTransaction } from "./utils.js";
+
 const BASEURL = "http://localhost/sewa-lapangan";
+
 $("#sewa").DataTable();
 
 $(function () {
@@ -314,20 +317,25 @@ $(function () {
 $(function () {
   $(document).on("click", ".btn-buy-package", function () {
     const id = $(this).data("id");
+    const noTrans = generateNoTransaction();
+    const date = new Date();
+    const currentDate = date.toISOString().split("T")[0];
+    date.setDate(date.getDate() + 30);
+    const validUntil = date.toISOString().split("T")[0];
     $.ajax({
       url: `http://localhost/sewa-lapangan/dashboard/getpaketmemberjson`,
       data: { id: id },
       method: "post",
       dataType: "json",
       success: function (data) {
-        console.log(data);
-        // $("#namaPaket").val(data.nama_paket);
-        // $("#hari").val(data.hari);
-        // $("#sesi").val(data.jadwal);
-        // $("#keterangan").val(data.keterangan);
-        // $("#harga").val(data.harga);
-        // $("#status").val(data.status);
-        // $("#id").val(data.id);
+        $(".p-no-transaksi").text(noTrans);
+        $(".input-no-transaksi").val(noTrans);
+        $(".p-jenis-paket").text(data.nama_paket);
+        $(".input-jenis-paket").val(data.id);
+        $(".p-harga").text(data.harga);
+        $(".input-tanggal-beli").val(currentDate);
+        $(".input-berlaku-sampai").val(validUntil);
+        $(".p-keterangan-paket").text(data.keterangan);
       },
     });
   });

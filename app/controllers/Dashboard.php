@@ -22,12 +22,13 @@ class Dashboard extends Controller
         $this->UserView("templates/footer");
     }
 
-    public function profil()
+    public function profil($url)
     {
         $data = [
             "title" => "Profil Anda",
             "marker" => ["active"],
-            "data_user" => $this->user_data
+            "data_user" => $this->user_data,
+            "url" => $url
         ];
 
         $this->UserView("templates/header", $data);
@@ -134,6 +135,29 @@ class Dashboard extends Controller
     public function getpaketmemberjson()
     {
         echo json_encode($this->model("Member_Model")->get_member_by_id($_POST["id"]));
+    }
+
+    public function memberprocess()
+    {
+        //NOT DONE YET
+        // $data = $this->model("Booking_Model")->detail_booking_by_id($_POST["id"]);
+        // if ($data["bukti_bayar"] !== null) unlink("../public/img/evidence/" . $data["bukti_bayar"]);
+        $bukti_bayar = upload_image($_FILES["bukti_bayar"]["name"], $_FILES["bukti_bayar"]["size"], $_FILES["bukti_bayar"]["tmp_name"], "../public/img/evidence/");
+        if ($bukti_bayar) {
+            if ($this->model("Trans_Member_Model")->add_trans_member($_POST, $bukti_bayar) > 0) {
+                Flasher::set_flash("Terima kasih", "Telah Menjadi Member Gor Unipol. Data Anda Akan Segera Diproses Oleh Admin Kami!", "success");
+                header("Location: " . BASEURL . "/dashboard/profil/member");
+                exit;
+            } else {
+                Flasher::set_flash("Upss..", "Gagal Melakukan Transaksi Member!", "error");
+                header("Location: " . BASEURL . "/dashboard/1");
+                exit;
+            }
+        } else {
+            Flasher::set_flash("Upss..", "Gagal Mengunggah Bukti Pembayaran! Pastikan File Berekstensi .jpg, .jpeg atau .png Dan Berukuran Kurang Dari 3MB", "error");
+            header("Location: " . BASEURL . "/dashboard/member");
+            exit;
+        }
     }
 
     public function membersuccess()
