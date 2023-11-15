@@ -61,6 +61,25 @@ class Booking_Model
         return $this->db->single();
     }
 
+    public function check_booking($data)
+    {
+        $sql = "SELECT * FROM booking WHERE
+            (:jam_mulai NOT BETWEEN jam_mulai AND jam_selesai
+             OR :jam_selesai NOT BETWEEN jam_mulai AND jam_selesai)
+            AND lapangan = :lapangan
+            AND tanggal_sewa = :tanggal_sewa
+            AND status_booking IN ('Menunggu', 'Sedang Dicek', 'Aktif')";
+
+        $this->db->query($sql);
+        $this->db->bind("tanggal_sewa", $data["tanggal_sewa"]);
+        $this->db->bind("jam_mulai", $data["jam_mulai"] . ":00");
+        $this->db->bind("jam_selesai", $data["jam_selesai"] . ":00");
+        $this->db->bind("lapangan", $data["lapangan"]);
+
+        $this->db->execute();
+        return $this->db->row_count();
+    }
+
     public function update_bukti_bayar($data, $gambar)
     {
         $sql = "UPDATE booking SET bukti_bayar = :bukti_bayar WHERE no_transaksi = :no_transaksi";

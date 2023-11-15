@@ -11,6 +11,7 @@ class Rekening_Model
 
     public function get_all_payment_methods()
     {
+        //some get all methods has status field that must be a criteria when get all data !!!WARNING
         $this->db->query("SELECT * FROM " . $this->table);
         return $this->db->result_set();
     }

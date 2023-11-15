@@ -1,43 +1,17 @@
 <div class="col-10 p-5">
     <div class="row row-cols-1 row-cols-sm-1 row-cols-md-4 justify-content-md-evenly mb-5">
-        <div class="col-12 col-sm-12 col-md-2 p-3 text-center border bg-body-tertiary rounded">
-            <h5 class="mb-4">Paket Member</h5>
-            <p class="m-0">Senin - Jumat</p>
-            <p class="m-0">Pagi</p>
-            <p class="mb-4">Rp. 300.000</p>
-            <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#detailPembelian">
-                Beli
-            </button>
-        </div>
-        <div class="col-12 col-sm-12 col-md-2 p-3 text-center border bg-body-tertiary rounded">
-            <h5 class="mb-4">Paket Member</h5>
-            <p class="m-0">Senin - Jumat</p>
-            <p class="m-0">Pagi</p>
-            <p class="mb-4">Rp. 300.000</p>
-            <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#detailPembelian">
-                Beli
-            </button>
-        </div>
-        <div class="col-12 col-sm-12 col-md-2 p-3 text-center border bg-body-tertiary rounded">
-            <h5 class="mb-4">Paket Member</h5>
-            <p class="m-0">Senin - Jumat</p>
-            <p class="m-0">Pagi</p>
-            <p class="mb-4">Rp. 300.000</p>
-            <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#detailPembelian">
-                Beli
-            </button>
-        </div>
-        <div class="col-12 col-sm-12 col-md-2 p-3 text-center border bg-body-tertiary rounded">
-            <h5 class="mb-4">Paket Member</h5>
-            <p class="m-0">Senin - Jumat</p>
-            <p class="m-0">Pagi</p>
-            <p class="mb-4">Rp. 300.000</p>
-            <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#detailPembelian">
-                Beli
-            </button>
-        </div>
+        <?php
+        foreach ($data["paket_member"] as $value) {
+            echo "<div class='col-12 col-sm-12 col-md-2 p-3 text-center border bg-body-tertiary rounded'>";
+            echo "<h5 class='mb-4'>" . $value["nama_paket"] . "</h5>";
+            echo "<p class='m-0'>" . $value["hari"] . "</p>";
+            echo "<p class='m-0'>" . ucfirst($value["jadwal"]) . "</p>";
+            echo "<p class='m-4'>" . $value["harga"] . "</p>";
+            echo "<button type='button' class='btn btn-primary w-100 btn-buy-package' data-id='" . $value["id"] . "' data-bs-toggle='modal' data-bs-target='#detailPembelian'>Beli</button>";
+            echo "</div>";
+        }
+        ?>
     </div>
-</div>
 </div>
 
 <!-- Modal -->
@@ -117,7 +91,11 @@
                                 <p>Transfer Bank</p>
                             </div>
                             <div class="col-8">
-                                <p>BNI - 123456789</p>
+                                <?php
+                                foreach ($data["metode_bayar"] as $value) {
+                                    echo "<p>" . $value["nama_bank"] . " - " . $value["nama_pemilik"] . " - " . $value["no_rekening"] . "</p>";
+                                }
+                                ?>
                             </div>
                         </div>
                         <div class="row">

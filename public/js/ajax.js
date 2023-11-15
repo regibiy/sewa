@@ -1,3 +1,4 @@
+const BASEURL = "http://localhost/sewa-lapangan";
 $("#sewa").DataTable();
 
 $(function () {
@@ -5,7 +6,7 @@ $(function () {
     $("#lapanganModalLabel").html("Tambah Data Lapangan");
     $(".modal-content-lapangan form").attr(
       "action",
-      "http://localhost/sewa-lapangan/admin/dashboard/addlapangan"
+      `${BASEURL}/admin/dashboard/addlapangan`
     );
     $(".input-lapangan").val("");
     $(".select-lapangan").val("Aktif");
@@ -15,12 +16,12 @@ $(function () {
     $("#lapanganModalLabel").html("Edit Data Lapangan");
     $(".modal-content-lapangan form").attr(
       "action",
-      "http://localhost/sewa-lapangan/admin/dashboard/editlapangan"
+      `${BASEURL}/admin/dashboard/editlapangan`
     );
 
     const id = $(this).data("id");
     $.ajax({
-      url: "http://localhost/sewa-lapangan/admin/dashboard/getlapanganjson",
+      url: `${BASEURL}/admin/dashboard/getlapanganjson`,
       data: { id: id },
       method: "post",
       dataType: "json",
@@ -38,7 +39,7 @@ $(function () {
     $("#paymentModalLabel").html("Tambah Data Rekening");
     $(".modal-content-payment form").attr(
       "action",
-      "http://localhost/sewa-lapangan/admin/dashboard/addpaymentmethod"
+      `${BASEURL}/admin/dashboard/addpaymentmethod`
     );
     $(".input-method").val("");
     $(".select-method").val("Aktif");
@@ -48,12 +49,12 @@ $(function () {
     $("#paymentModalLabel").html("Edit Data Rekening");
     $(".modal-content-payment form").attr(
       "action",
-      "http://localhost/sewa-lapangan/admin/dashboard/editpaymentmethod"
+      `${BASEURL}/admin/dashboard/editpaymentmethod`
     );
 
     const id = $(this).data("id");
     $.ajax({
-      url: "http://localhost/sewa-lapangan/admin/dashboard/getpaymentmethodjson",
+      url: `${BASEURL}/admin/dashboard/getpaymentmethodjson`,
       data: { id: id },
       method: "post",
       dataType: "json",
@@ -73,7 +74,7 @@ $(function () {
     $("#jadwalModalLabel").html("Tambah Data Jadwal");
     $(".modal-content-jadwal form").attr(
       "action",
-      "http://localhost/sewa-lapangan/admin/dashboard/addjadwal"
+      `${BASEURL}/admin/dashboard/addjadwal`
     );
     $(".input-jadwal").val("");
     $(".select-jadwal option:first").prop("selected", true);
@@ -83,12 +84,12 @@ $(function () {
     $("#jadwalModalLabel").html("Edit Data Jadwal");
     $(".modal-content-jadwal form").attr(
       "action",
-      "http://localhost/sewa-lapangan/admin/dashboard/editjadwal"
+      `${BASEURL}/admin/dashboard/editjadwal`
     );
 
     const id = $(this).data("id");
     $.ajax({
-      url: "http://localhost/sewa-lapangan/admin/dashboard/getjadwaljson",
+      url: `${BASEURL}/admin/dashboard/getjadwaljson`,
       data: { id: id },
       method: "post",
       dataType: "json",
@@ -118,7 +119,7 @@ $(function () {
       confirmButtonText: "Ya, Hapus!",
     }).then((result) => {
       if (result.isConfirmed) {
-        window.location.href = `http://localhost/sewa-lapangan/admin/dashboard/deletejadwal/${id}`;
+        window.location.href = `${BASEURL}/admin/dashboard/deletejadwal/${id}`;
       }
     });
   });
@@ -131,7 +132,7 @@ $(function () {
     const status = $(this).data("status");
     const lama = $(this).data("lama");
     $.ajax({
-      url: "http://localhost/sewa-lapangan/dashboard/getdetailbookingjson",
+      url: `${BASEURL}/dashboard/getdetailbookingjson`,
       data: { id: noTrans },
       method: "post",
       dataType: "json",
@@ -157,7 +158,7 @@ $(function () {
     const status = $(this).data("status");
     const lama = $(this).data("lama");
     $.ajax({
-      url: "http://localhost/sewa-lapangan/dashboard/getdetailbookingjson",
+      url: `${BASEURL}/dashboard/getdetailbookingjson`,
       data: { id: noTrans },
       method: "post",
       dataType: "json",
@@ -173,7 +174,7 @@ $(function () {
         $("#print-kode-book").text(data.kode_booking);
         $(".btn-anchor-print").attr(
           "href",
-          `http://localhost/sewa-lapangan/dashboard/cetakbooking/${data.no_transaksi}`
+          `${BASEURL}/dashboard/cetakbooking/${data.no_transaksi}`
         );
       },
     });
@@ -185,7 +186,7 @@ $(function () {
     const noTrans = $(this).data("notrans");
     $("#id").val(noTrans);
     $.ajax({
-      url: "http://localhost/sewa-lapangan/dashboard/getdetailbookingjson",
+      url: `${BASEURL}/dashboard/getdetailbookingjson`,
       data: { id: noTrans },
       method: "post",
       dataType: "json",
@@ -216,15 +217,14 @@ $(function () {
   $(document).on("click", ".btn-show-evidence", function () {
     const noTrans = $(this).data("notrans");
     $.ajax({
-      url: "http://localhost/sewa-lapangan/dashboard/getdetailbookingjson",
+      url: `${BASEURL}/dashboard/getdetailbookingjson`,
       data: { id: noTrans },
       method: "post",
       dataType: "json",
       success: function (data) {
         $(".modal-body-evidence img").attr(
           "src",
-          "http://localhost/sewa-lapangan/public/img/evidence/" +
-            data.bukti_bayar
+          `${BASEURL}/public/img/evidence/${data.bukti_bayar}`
         );
       },
     });
@@ -244,8 +244,91 @@ $(function () {
       confirmButtonText: "Ya, Batalkan!",
     }).then((result) => {
       if (result.isConfirmed) {
-        window.location.href = `http://localhost/sewa-lapangan/dashboard/cancelbooking/${noTrans}`;
+        window.location.href = `${BASEURL}/dashboard/cancelbooking/${noTrans}`;
       }
+    });
+  });
+});
+
+$(function () {
+  $(".btn-add-paket-member").on("click", function () {
+    $("#memberModalLabel").html("Tambah Data Paket Member");
+    $(".modal-content-member form").attr(
+      "action",
+      `${BASEURL}/admin/dashboard/addpaketmember`
+    );
+    $(".input-paket-member").val("");
+    $(".textarea-paket-member").val(
+      "3 Jam Setiap Booking, 4 Kali Pertemuan Selama Satu Bulan"
+    );
+    $(".select-paket-member option:first").prop("selected", true);
+  });
+
+  $(document).on("click", ".btn-edit-paket-member", function () {
+    $("#memberModalLabel").html("Edit Data Paket Member");
+    $(".modal-content-member form").attr(
+      "action",
+      `${BASEURL}/admin/dashboard/editpaketmember`
+    );
+
+    const id = $(this).data("id");
+    $.ajax({
+      url: `${BASEURL}/admin/dashboard/getpaketmemberjson`,
+      data: { id: id },
+      method: "post",
+      dataType: "json",
+      success: function (data) {
+        $("#namaPaket").val(data.nama_paket);
+        $("#hari").val(data.hari);
+        $("#sesi").val(data.jadwal);
+        $("#keterangan").val(data.keterangan);
+        $("#harga").val(data.harga);
+        $("#status").val(data.status);
+        $("#id").val(data.id);
+      },
+    });
+  });
+});
+
+$(function () {
+  $(document).on("click", ".btn-delete-paket-member", function () {
+    const id = $(this).data("id");
+    const namaPaket = $(this).data("namapaket");
+
+    Swal.fire({
+      title: `${namaPaket} Akan Dihapus. Apakah Anda Yakin?`,
+      text: "Anda Tidak Dapat Mengembalikan Ini!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya, Hapus!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = `${BASEURL}/admin/dashboard/deletepaketmember/${id}`;
+      }
+    });
+  });
+});
+
+$(function () {
+  $(document).on("click", ".btn-buy-package", function () {
+    const id = $(this).data("id");
+    $.ajax({
+      url: `http://localhost/sewa-lapangan/dashboard/getpaketmemberjson`,
+      data: { id: id },
+      method: "post",
+      dataType: "json",
+      success: function (data) {
+        console.log(data);
+        // $("#namaPaket").val(data.nama_paket);
+        // $("#hari").val(data.hari);
+        // $("#sesi").val(data.jadwal);
+        // $("#keterangan").val(data.keterangan);
+        // $("#harga").val(data.harga);
+        // $("#status").val(data.status);
+        // $("#id").val(data.id);
+      },
     });
   });
 });

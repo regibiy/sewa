@@ -13,7 +13,7 @@ class Dashboard extends Controller
     {
         $data = [
             "title" => "Dashboard",
-            "marker" => ["active", null, null, null, null, null]
+            "marker" => ["active"]
         ];
 
         $this->UserView("templates/header", $data);
@@ -26,7 +26,7 @@ class Dashboard extends Controller
     {
         $data = [
             "title" => "Profil Anda",
-            "marker" => ["active", null, null, null, null, null],
+            "marker" => ["active"],
             "data_user" => $this->user_data
         ];
 
@@ -90,7 +90,7 @@ class Dashboard extends Controller
     {
         $data = [
             "title" =>  "Booking",
-            "marker" => [null, "active", null, null, null, null],
+            "marker" => [null, "active"],
             "lapangan" => $this->model("Lapangan_Model")->get_all_lapangan()
         ];
 
@@ -102,10 +102,16 @@ class Dashboard extends Controller
 
     public function bookingprocess()
     {
-        if ($this->model("Booking_Model")->add_booking($_POST) > 0) {
-            Flasher::set_flash("Terima Kasih", "Booking Berhasil Dilakukan. Segera Upload Bukti Pembayaran!", "success");
-            header("Location: " . BASEURL . "/dashboard/datasewa");
+        if ($this->model("Booking_Model")->check_booking($_POST) > 0) {
+            Flasher::set_flash("Upss..", "Jadwal Yang Anda Pilih Tidak Tersedia Karena Pengguna Lain. Silakan Memilih Jadwal Lain!", "error");
+            header("Location: " . BASEURL . "/dashboard/booking");
             exit;
+        } else {
+            if ($this->model("Booking_Model")->add_booking($_POST) > 0) {
+                Flasher::set_flash("Terima Kasih", "Booking Berhasil Dilakukan. Segera Upload Bukti Pembayaran!", "success");
+                header("Location: " . BASEURL . "/dashboard/datasewa");
+                exit;
+            }
         }
     }
 
@@ -113,20 +119,28 @@ class Dashboard extends Controller
     {
         $data = [
             "title" =>  "Data Booking",
-            "marker" => [null, null, "active", null, null, null]
+            "marker" => [null, null, "active"],
+            //some get all methods has status field that must be a criteria when get all data !!!WARNING
+            "paket_member" => $this->model("Member_Model")->get_all_members(),
+            "metode_bayar" => $this->model("Rekening_Model")->get_all_payment_methods()
         ];
 
         $this->UserView("templates/header", $data);
         $this->UserView("templates/sidebar", $data);
-        $this->UserView("dashboard/member");
+        $this->UserView("dashboard/member", $data);
         $this->UserView("templates/footer");
+    }
+
+    public function getpaketmemberjson()
+    {
+        echo json_encode($this->model("Member_Model")->get_member_by_id($_POST["id"]));
     }
 
     public function membersuccess()
     {
         $data = [
             "title" =>  "Member Sukses",
-            "marker" => [null, null, "active", null, null, null]
+            "marker" => [null, null, "active"]
         ];
 
         $this->UserView("templates/header", $data);
@@ -139,7 +153,7 @@ class Dashboard extends Controller
     {
         $data = [
             "title" =>  "Data Booking",
-            "marker" => [null, null, null, "active", null, null],
+            "marker" => [null, null, null, "active"],
             "lapangan" => $this->model("Lapangan_Model")->get_all_lapangan()
         ];
 
@@ -153,7 +167,7 @@ class Dashboard extends Controller
     {
         $data = [
             "title" =>  "Data Booking",
-            "marker" => [null, null, null, null, "active", null],
+            "marker" => [null, null, null, null, "active"],
             "payment_method" => $this->model("Rekening_Model")->get_all_payment_methods(),
             "data_booking" => $this->model("Booking_Model")->data_booking_user($_SESSION["id_user"])
         ];

@@ -11,7 +11,7 @@ class Dashboard extends Controller
     {
         $data = [
             "title" => "Beranda",
-            "marker" => ["active", null, null, null, null, null, null, null, null, null]
+            "marker" => ["active"]
         ];
         $this->AdminView("templates/header", $data);
         $this->AdminView("templates/sidebar", $data);
@@ -23,7 +23,7 @@ class Dashboard extends Controller
     {
         $data = [
             "title" => "Beranda",
-            "marker" => ["active", null, null, null, null, null, null, null, null, null],
+            "marker" => ["active"],
             "metode_bayar" => $this->model("Rekening_Model")->get_all_payment_methods()
         ];
 
@@ -51,9 +51,11 @@ class Dashboard extends Controller
         if ($this->model("Rekening_Model")->edit_payment_method($_POST) > 0) {
             Flasher::set_flash("Berhasil", "Memperbarui Data Metode Pembayaran!", "success");
             header("Location: " . BASEURL . "/admin/dashboard/metodepembayaran");
+            exit;
         } else {
             Flasher::set_flash("Upss..", "Anda Tidak Melakukan Perubahan Apapun!", "warning");
             header("Location: " . BASEURL . "/admin/dashboard/metodepembayaran");
+            exit;
         }
     }
 
@@ -61,7 +63,7 @@ class Dashboard extends Controller
     {
         $data = [
             "title" => "Data Akun",
-            "marker" => [null, "active", null, null, null, null, null, null, null, null]
+            "marker" => [null, "active"]
         ];
         $this->AdminView("templates/header", $data);
         $this->AdminView("templates/sidebar", $data);
@@ -73,7 +75,7 @@ class Dashboard extends Controller
     {
         $data = [
             "title" => "Data Booking",
-            "marker" => [null, null, "active", null, null, null, null, null, null, null]
+            "marker" => [null, null, "active"]
         ];
         $this->AdminView("templates/header", $data);
         $this->AdminView("templates/sidebar", $data);
@@ -85,7 +87,7 @@ class Dashboard extends Controller
     {
         $data = [
             "title" => "Data Jadwal",
-            "marker" => [null, null, null, "active", null, null, null, null, null, null],
+            "marker" => [null, null, null, "active"],
             "jadwal" => $this->model("Jadwal_Model")->get_all_jadwal(),
             "hari" => [
                 "Monday" => "Senin",
@@ -139,7 +141,7 @@ class Dashboard extends Controller
     {
         $data = [
             "title" => "Data Lapangan",
-            "marker" => [null, null, null, null, "active", null, null, null, null, null],
+            "marker" => [null, null, null, null, "active"],
             "lapangan" => $this->model("Lapangan_Model")->get_all_lapangan()
         ];
         $this->AdminView("templates/header", $data);
@@ -176,7 +178,7 @@ class Dashboard extends Controller
     {
         $data = [
             "title" => "Data Member",
-            "marker" => [null, null, null, null, null, "active", null, null, null, null]
+            "marker" => [null, null, null, null, null, "active"]
         ];
         $this->AdminView("templates/header", $data);
         $this->AdminView("templates/sidebar", $data);
@@ -184,11 +186,65 @@ class Dashboard extends Controller
         $this->AdminView("templates/footer");
     }
 
+    public function paketmember()
+    {
+        $data = [
+            "title" => "Data Paket Member",
+            "marker" => [null, null, null, null, null, null, "active"],
+            "member" => $this->model("Member_Model")->get_all_members()
+        ];
+        $this->AdminView("templates/header", $data);
+        $this->AdminView("templates/sidebar", $data);
+        $this->AdminView("dashboard/paketmember", $data);
+        $this->AdminView("templates/footer");
+    }
+
+    public function addpaketmember()
+    {
+        if ($this->model("Member_Model")->add_member($_POST) > 0) {
+            Flasher::set_flash("Berhasil", "Menambahkan Data Paket Member!", "success");
+            header("Location: " . BASEURL . "/admin/dashboard/paketmember");
+            exit;
+        } else {
+            Flasher::set_flash("Gagal", "Menambahkan Data Paket Member!", "error");
+            header("Location: " . BASEURL . "/admin/dashboard/paketmember");
+            exit;
+        }
+    }
+
+    public function editpaketmember()
+    {
+        if ($this->model("Member_Model")->edit_member($_POST) > 0) {
+            Flasher::set_flash("Berhasil", "Memperbarui Data Paket Member!", "success");
+            header("Location: " . BASEURL . "/admin/dashboard/paketmember");
+            exit;
+        } else {
+            Flasher::set_flash("Upss..", "Anda Tidak Melakukan Perubahan Apapun!", "warning");
+            header("Location: " . BASEURL . "/admin/dashboard/paketmember");
+            exit;
+        }
+    }
+
+    public function deletepaketmember($url)
+    {
+        //add validation whether the data is used or not
+        if ($this->model("Member_Model")->delete_member($url) > 0) {
+            Flasher::set_flash("Berhasil", "Menghapus Data Paket Member!", "success");
+            header("Location: " . BASEURL . "/admin/dashboard/paketmember");
+            exit;
+        }
+    }
+
+    public function getpaketmemberjson()
+    {
+        echo json_encode($this->model("Member_Model")->get_member_by_id($_POST["id"]));
+    }
+
     public function laporanbooking()
     {
         $data = [
             "title" => "Laporan Booking",
-            "marker" => [null, null, null, null, null, null, "active", null, null, null]
+            "marker" => [null, null, null, null, null, null, null, "active"]
         ];
         $this->AdminView("templates/header", $data);
         $this->AdminView("templates/sidebar", $data);
@@ -200,7 +256,7 @@ class Dashboard extends Controller
     {
         $data = [
             "title" => "Laporan Member",
-            "marker" => [null, null, null, null, null, null, null, "active", null, null]
+            "marker" => [null, null, null, null, null, null, null, null, "active"]
         ];
         $this->AdminView("templates/header", $data);
         $this->AdminView("templates/sidebar", $data);
@@ -212,7 +268,7 @@ class Dashboard extends Controller
     {
         $data = [
             "title" => "Informasi",
-            "marker" => [null, null, null, null, null, null, null, null, "active", null]
+            "marker" => [null, null, null, null, null, null, null, null, null, "active"]
         ];
         $this->AdminView("templates/header", $data);
         $this->AdminView("templates/sidebar", $data);
@@ -224,7 +280,7 @@ class Dashboard extends Controller
     {
         $data = [
             "title" => "Beranda",
-            "marker" => [null, null, null, null, null, null, null, null, null, "active"]
+            "marker" => [null, null, null, null, null, null, null, null, null, null, "active"]
         ];
 
         $this->AdminView("templates/header", $data);
