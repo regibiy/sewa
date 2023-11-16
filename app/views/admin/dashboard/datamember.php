@@ -18,23 +18,24 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>lorem</td>
-                            <td>lorem</td>
-                            <td>lorem</td>
-                            <td>lorem</td>
-                            <td>lorem</td>
-                            <td>lorem</td>
-                            <td>lorem</td>
-                            <td>lorem</td>
-                            <td>
-                                <a href="#" class="btn btn-sm btn-outline-secondary"><i class="bi bi-file-arrow-down-fill"></i></a> <!-- entry laporan-->
-                                <a href="#" class="btn btn-sm btn-outline-secondary"><i class="bi bi-trash-fill"></i></a>
-                                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#konfirmasi">
-                                    <i class="bi bi-check-square-fill"></i>
-                                </button> <!-- konfirmasi sewa -->
-                            </td>
-                        </tr>
+                        <?php
+                        $no = 0;
+                        foreach ($data["member"] as $value) {
+                            $no++;
+                            echo "<tr>";
+                            echo "<td>" . $no . "</td>";
+                            echo "<td>" . $value["no_transaksi"] . "</td>";
+                            echo "<td>" . $value["nama"] . "</td>";
+                            echo "<td>" . $value["tanggal_transaksi"] . "</td>";
+                            echo "<td>" . $value["nama_paket"];
+                            echo "<td>" . $value["hari"] . " " . $value["jadwal"] . " " . "</td>";
+                            echo "<td>" . $value["harga"] .  "</td>";
+                            echo "<td><button type='button' class='btn btn-sm btn-outline-secondary btn-show-evidence-3 mb-1' data-memberid='" . $value["member_id"] . "' data-bs-toggle='modal' data-bs-target='#buktiBayar'>Lihat Bukti</button></td>";
+                            echo "<td><a href='#' class='btn btn-sm btn-outline-secondary'><i class='bi bi-file-arrow-down-fill'></i></a>
+                            <a href='#' class='btn btn-sm btn-outline-secondary'><i class='bi bi-trash-fill'></i></a>
+                            <button type='button' class='btn btn-sm btn-outline-secondary' data-memberid='" . $value["member_id"] . "' data-bs-toggle='modal' data-bs-target='#konfirmasi'><i class='bi bi-check-square-fill'></i></button></td>";
+                        }
+                        ?>
                     </tbody>
                 </table>
             </div>
@@ -81,8 +82,7 @@
                                 <h6>Bukti Pembayaran</h6>
                             </div>
                             <div class="col border rounded">
-                                <!-- <p>Belum Upload Bukti / Foko Bukti Pembayaran</p> -->
-                                <img src="<?= BASEURL ?>/public/img/cth.png" class="img-fluid img-zoom" alt="bukti bayar" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                <img src="<?= BASEURL ?>/public/img/cth.png" class="img-fluid img-zoom" alt="bukti bayar" data-bs-toggle="modal" data-bs-target="#buktiBayar">
                             </div>
                         </div>
                     </div>
@@ -97,17 +97,18 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal fade" id="buktiBayar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Bukti Pembayaran</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body text-center">
-                <img src="<?= BASEURL ?>/public/img/cth.png" class="img-fluid w-100" alt="bukti bayar">
+            <div class="modal-body text-center modal-body-evidence">
+                <img src="" class="img-fluid w-100" alt="bukti bayar">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-target="#konfirmasi" data-bs-toggle="modal">Kembali</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
             </div>
         </div>
     </div>

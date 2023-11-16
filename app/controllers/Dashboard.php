@@ -28,13 +28,19 @@ class Dashboard extends Controller
             "title" => "Profil Anda",
             "marker" => ["active"],
             "data_user" => $this->user_data,
-            "url" => $url
+            "url" => $url,
+            "history_beli" => $this->model("Trans_Member_Model")->get_detail_trans_member($_SESSION["id_user"])
         ];
 
         $this->UserView("templates/header", $data);
         $this->UserView("templates/sidebar", $data);
         $this->UserView("dashboard/profil", $data);
         $this->UserView("templates/footer");
+    }
+
+    public function getdetailmemberjson()
+    {
+        echo json_encode($this->model("Trans_Member_Model")->get_trans_member_by_id($_POST["id"]));
     }
 
     public function ubahprofil()
@@ -44,11 +50,11 @@ class Dashboard extends Controller
             $_SESSION["user"] = $temp["username"];
             $_SESSION["nama_user"] = $temp["nama"];
             Flasher::set_flash("Berhasil", "Memperbarui Data!", "success");
-            header("Location: " . BASEURL . "/dashboard/profil");
+            header("Location: " . BASEURL . "/dashboard/profil/0");
             exit;
         } else {
             Flasher::set_flash("Upss..", "Anda Tidak Melakukan Perubahan Apapun!", "info");
-            header("Location: " . BASEURL . "/dashboard/profil");
+            header("Location: " . BASEURL . "/dashboard/profil/0");
             exit;
         }
     }
@@ -64,12 +70,12 @@ class Dashboard extends Controller
                 exit;
             } else {
                 Flasher::set_flash("Upss..", "Anda Tidak Melakukan Perubahan Apapun!", "info");
-                header("Location: " . BASEURL . "/dashboard/profil");
+                header("Location: " . BASEURL . "/dashboard/profil/0");
                 exit;
             }
         } else {
             Flasher::set_flash("Upss...", "Password Lama Anda Tidak Sama!", "warning");
-            header("Location: " . BASEURL . "/dashboard/profil");
+            header("Location: " . BASEURL . "/dashboard/profil/0");
             exit;
         }
     }
@@ -146,7 +152,7 @@ class Dashboard extends Controller
         if ($bukti_bayar) {
             if ($this->model("Trans_Member_Model")->add_trans_member($_POST, $bukti_bayar) > 0) {
                 Flasher::set_flash("Terima kasih", "Telah Menjadi Member Gor Unipol. Data Anda Akan Segera Diproses Oleh Admin Kami!", "success");
-                header("Location: " . BASEURL . "/dashboard/profil/member");
+                header("Location: " . BASEURL . "/dashboard/profil/1");
                 exit;
             } else {
                 Flasher::set_flash("Upss..", "Gagal Melakukan Transaksi Member!", "error");
@@ -236,6 +242,43 @@ class Dashboard extends Controller
         } else {
             Flasher::set_flash("Upss..", "Gagal Mengunggah Bukti Pembayaran! Pastikan File Berekstensi .jpg, .jpeg atau .png Dan Berukuran Kurang Dari 3MB", "error");
             header("Location: " . BASEURL . "/dashboard/datasewa");
+            exit;
+        }
+    }
+
+    public function uploadbuktibayarmember()
+    {
+        $data = $this->model("Trans_Member_Model")->get_trans_member_by_id($_POST["id"]);
+        if ($data["bukti_bayar"] !== null) unlink("../public/img/evidence/" . $data["bukti_bayar"]);
+
+        $bukti_bayar = upload_image($_FILES["bukti_bayar"]["name"], $_FILES["bukti_bayar"]["size"], $_FILES["bukti_bayar"]["tmp_name"], "../public/img/evidence/");
+        if ($bukti_bayar) {
+            if ($this->model("Trans_Member_Model")->update_bukti_bayar($_POST, $bukti_bayar) > 0) {
+                Flasher::set_flash("Terima kasih", "Bukti Pembayaran Berhasil Diunggah! Data Anda Akan Segera Diproses Oleh Admin Kami!", "success");
+                header("Location: " . BASEURL . "/dashboard/profil/1");
+                exit;
+            } else {
+                Flasher::set_flash("Upss..", "Anda Tidak Melakukan Perubahan Apapun!", "info");
+                header("Location: " . BASEURL . "/dashboard/profil/1");
+                exit;
+            }
+        } else {
+            Flasher::set_flash("Upss..", "Gagal Mengunggah Bukti Pembayaran! Pastikan File Berekstensi .jpg, .jpeg atau .png Dan Berukuran Kurang Dari 3MB", "error");
+            header("Location: " . BASEURL . "/dashboard/profil/1");
+            exit;
+        }
+    }
+
+    public function cancelmember($url)
+    {
+        //ada kondisi jika sudah diubah oleh admin tidak boleh dicancel
+        if ($this->model("Trans_Member_Model")->cancel_member($url)) {
+            Flasher::set_flash("Pembatalan Berhasil!", "Terima Kasih Telah Mengunjungi Web Gor Unipol.", "success");
+            header("Location: " . BASEURL . "/dashboard/profil/1");
+            exit;
+        } else {
+            Flasher::set_flash("Upss..", "Anda Sudah Melakukan Pembatalan Member!", "error");
+            header("Location: " . BASEURL . "/dashboard/profil/1");
             exit;
         }
     }

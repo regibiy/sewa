@@ -323,7 +323,7 @@ $(function () {
     date.setDate(date.getDate() + 30);
     const validUntil = date.toISOString().split("T")[0];
     $.ajax({
-      url: `http://localhost/sewa-lapangan/dashboard/getpaketmemberjson`,
+      url: `${BASEURL}/dashboard/getpaketmemberjson`,
       data: { id: id },
       method: "post",
       dataType: "json",
@@ -336,6 +336,94 @@ $(function () {
         $(".input-tanggal-beli").val(currentDate);
         $(".input-berlaku-sampai").val(validUntil);
         $(".p-keterangan-paket").text(data.keterangan);
+      },
+    });
+  });
+});
+
+$(function () {
+  $(document).on("click", ".btn-show-evidence-2", function () {
+    const memberId = $(this).data("memberid");
+    $.ajax({
+      url: `${BASEURL}/dashboard/getdetailmemberjson`,
+      data: { id: memberId },
+      method: "post",
+      dataType: "json",
+      success: function (data) {
+        $(".modal-body-evidence img").attr(
+          "src",
+          `${BASEURL}/public/img/evidence/${data.bukti_bayar}`
+        );
+      },
+    });
+  });
+});
+
+$(function () {
+  $(document).on("click", ".btn-edit-member", function () {
+    const memberid = $(this).data("memberid");
+    $("#id").val(memberid);
+    $.ajax({
+      url: `${BASEURL}/dashboard/getdetailmemberjson`,
+      data: { id: memberid },
+      method: "post",
+      dataType: "json",
+      success: function (data) {
+        if (data.bukti_bayar !== null) {
+          Swal.fire({
+            title: `Anda Telah Mengunggah Bukti Pembayaran. Yakin Untuk Mengunggah Ulang?`,
+            text: "Anda Tidak Dapat Mengembalikan Ini!",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Ya, Upload!",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $("#upload").modal("show");
+            }
+          });
+        } else {
+          $("#upload").modal("show");
+        }
+      },
+    });
+  });
+});
+
+$(function () {
+  $(document).on("click", ".btn-cancel-member", function () {
+    const memberId = $(this).data("memberid");
+    Swal.fire({
+      title: "Apakah Anda Yakin?",
+      text: "Saat Membatalkan, Pembayaran Yang Telah Dilakukan Tidak Dapat Dikembalikan!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya, Batalkan!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = `${BASEURL}/dashboard/cancelmember/${memberId}`;
+      }
+    });
+  });
+});
+
+$(function () {
+  $(document).on("click", ".btn-show-evidence-3", function () {
+    const memberId = $(this).data("memberid");
+    $.ajax({
+      url: `${BASEURL}/admin/dashboard/getdetailtransjson`,
+      data: { id: memberId },
+      method: "post",
+      dataType: "json",
+      success: function (data) {
+        console.log(data);
+        $(".modal-body-evidence img").attr(
+          "src",
+          `${BASEURL}/public/img/evidence/${data.bukti_bayar}`
+        );
       },
     });
   });

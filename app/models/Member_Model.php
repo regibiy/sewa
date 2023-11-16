@@ -24,7 +24,7 @@ class Member_Model
 
     public function add_member($data)
     {
-        $sql = "INSERT INTO member (nama_paket, hari, jadwal, keterangan, harga, status) VALUES (:nama_paket, :hari, :jadwal, :keterangan, :harga, :status)";
+        $sql = "INSERT INTO member (nama_paket, hari, jadwal, keterangan, harga, status_member) VALUES (:nama_paket, :hari, :jadwal, :keterangan, :harga, :status)";
         $this->db->query($sql);
         $this->db->bind("nama_paket", $data["nama_paket"]);
         $this->db->bind("hari", $data["hari"]);
@@ -39,7 +39,7 @@ class Member_Model
 
     public function edit_member($data)
     {
-        $sql = "UPDATE member SET nama_paket = :nama_paket, hari = :hari, jadwal = :jadwal, keterangan = :keterangan, harga = :harga, status = :status WHERE id = :id";
+        $sql = "UPDATE member SET nama_paket = :nama_paket, hari = :hari, jadwal = :jadwal, keterangan = :keterangan, harga = :harga, status_member = :status WHERE id = :id";
         $this->db->query($sql);
         $this->db->bind("nama_paket", $data["nama_paket"]);
         $this->db->bind("hari", $data["hari"]);

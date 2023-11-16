@@ -186,12 +186,18 @@ class Dashboard extends Controller
     {
         $data = [
             "title" => "Data Member",
-            "marker" => [null, null, null, null, null, "active"]
+            "marker" => [null, null, null, null, null, "active"],
+            "member" => $this->model("Trans_Member_Model")->get_detail_trans_members()
         ];
         $this->AdminView("templates/header", $data);
         $this->AdminView("templates/sidebar", $data);
         $this->AdminView("dashboard/datamember", $data);
         $this->AdminView("templates/footer");
+    }
+
+    public function getdetailtransjson()
+    {
+        echo json_encode($this->model("Trans_Member_Model")->get_trans_member_by_id($_POST["id"]));
     }
 
     public function paketmember()

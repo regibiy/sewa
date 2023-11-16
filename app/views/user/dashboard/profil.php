@@ -55,7 +55,55 @@
                 </div>
             </form>
         </div>
-        <div class="tab-pane fade <?= $data["url"] == "1" ? "show active" : "" ?>" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">.b.</div>
+        <div class="tab-pane fade <?= $data["url"] == "1" ? "show active" : "" ?>" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
+            <div class="row mb-5">
+                <div class="col">
+                    <div class="table-responsive p-3 rounded shadow-sm">
+                        <table id="sewa" class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th class="fw-medium bg-info-subtle">No.</th>
+                                    <th class="fw-medium bg-info-subtle">No. Pembelian</th>
+                                    <th class="fw-medium bg-info-subtle">Tanggal Pembelian</th>
+                                    <th class="fw-medium bg-info-subtle">Nama Paket</th>
+                                    <th class="fw-medium bg-info-subtle">Hari</th>
+                                    <th class="fw-medium bg-info-subtle">Jadwal</th>
+                                    <th class="fw-medium bg-info-subtle">Keterangan</th>
+                                    <th class="fw-medium bg-info-subtle">Harga</th>
+                                    <th class="fw-medium bg-info-subtle">Berlaku Sampai</th>
+                                    <th class="fw-medium bg-info-subtle">Status</th>
+                                    <th class="fw-medium bg-info-subtle">Bukti Pembayaran</th>
+                                    <th class="fw-medium bg-info-subtle">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $no = 0;
+                                foreach ($data["history_beli"] as $value) {
+                                    $no++;
+                                    echo "<tr>";
+                                    echo  "<td>" . $no . "</td>";
+                                    echo  "<td>" . $value["no_transaksi"] . "</td>";
+                                    echo  "<td>" . $value["tanggal_transaksi"] . "</td>";
+                                    echo  "<td>" . $value["nama_paket"] . "</td>";
+                                    echo  "<td>" . $value["hari"] . "</td>";
+                                    echo  "<td>" . $value["jadwal"] . "</td>";
+                                    echo  "<td>" . $value["keterangan"] . "</td>";
+                                    echo  "<td>" . $value["harga"] . "</td>";
+                                    echo  "<td>" . $value["berlaku_sampai"] . "</td>";
+                                    echo  "<td>" . $value["status_transaksi"] . "</td>";
+                                    echo  "<td>" . ($value["bukti_bayar"] === null ? "Segera upload bukti pembayaran Anda!" : "<button type='button' class='btn btn-sm btn-outline-secondary btn-show-evidence-2 mb-1' data-memberid='" . $value["member_id"] . "' data-bs-toggle='modal' data-bs-target='#buktiBayar'>Lihat Bukti</button>") . "</td>";
+                                    echo  "<td><button type='button' class='btn btn-sm btn-outline-secondary btn-cancel-member mb-1' data-memberid='" . $value["member_id"] . "'><i class='bi bi-x-circle-fill'></i></button>
+                                    <button type='button' class='btn btn-sm btn-outline-secondary btn-edit-member mb-1' data-memberid='" . $value["member_id"] . "'><i class='bi bi-pencil-fill'></i></button></td>";
+                                    echo "</tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 </div>
@@ -88,6 +136,49 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                     <button type="submit" class="btn btn-primary">Ganti Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="buktiBayar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Bukti Pembayaran</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center modal-body-evidence">
+                <img src="" class="img-fluid w-100" alt="bukti bayar">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-target="#konfirmasi" data-bs-toggle="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="upload" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form action="<?= BASEURL ?>/dashboard/uploadbuktibayarmember" method="post" autocomplete="off" enctype="multipart/form-data">
+                <input type="hidden" name="id" id="id">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Upload Bukti Pembayaran</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-5">
+                        <label for="buktiBayar" class="form-label">Upload Bukti Pembayaran</label>
+                        <input type="file" id="buktiBayar" class="form-control" name="bukti_bayar" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <button type="submit" class="btn btn-primary">Upload</button>
                 </div>
             </form>
         </div>

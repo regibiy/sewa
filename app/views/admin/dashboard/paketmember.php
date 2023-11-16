@@ -35,7 +35,7 @@
                             echo "<td>" . $value["jadwal"] . "</td>";
                             echo "<td>" . $value["keterangan"] . "</td>";
                             echo "<td>" . $value["harga"] . "</td>";
-                            echo "<td>" . $value["status"] . "</td>";
+                            echo "<td>" . $value["status_member"] . "</td>";
                             echo "<td>
                             <button type='button' class='btn btn-sm btn-outline-secondary btn-edit-paket-member mb-1' data-bs-toggle='modal' data-bs-target='#modalMember' data-id='" . $value["id"] . "'><i class='bi bi-pencil-fill'></i></button>
                             <button type='button' class='btn btn-sm btn-outline-secondary btn-delete-paket-member mb-1' data-id='" . $value["id"] . "' data-namapaket='" . $value["nama_paket"] . "'><i class='bi bi-trash3-fill'></i></button>

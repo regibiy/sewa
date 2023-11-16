@@ -22,9 +22,28 @@ class Trans_Member_Model
         return $this->db->single();
     }
 
+    public function get_detail_trans_member($id)
+    {
+        $sql = "SELECT *, transaksi_member.id AS member_id, member.id AS paket_member_id FROM transaksi_member 
+        INNER JOIN member ON transaksi_member.paket_member = member.id
+        WHERE id_user= :id";
+        $this->db->query($sql);
+        $this->db->bind("id", $id);
+        return $this->db->result_set();
+    }
+
+    public function get_detail_trans_members()
+    {
+        $sql = "SELECT *, transaksi_member.id AS member_id, member.id AS paket_member_id, akun_pengguna.id AS id_akun FROM transaksi_member 
+        INNER JOIN member ON transaksi_member.paket_member = member.id
+        INNER JOIN akun_pengguna ON transaksi_member.id_user = akun_pengguna.id";
+        $this->db->query($sql);
+        return $this->db->result_set();
+    }
+
     public function add_trans_member($data, $bukti_bayar)
     {
-        $sql = "INSERT INTO transaksi_member (tanggal_transaksi, no_transaksi, paket_member, berlaku_sampai, status, bukti_bayar) VALUES (:tanggal_transaksi, :no_transaksi, :paket_member, :berlaku_sampai, :status, :bukti_bayar)";
+        $sql = "INSERT INTO transaksi_member (tanggal_transaksi, no_transaksi, paket_member, berlaku_sampai, status_transaksi, bukti_bayar) VALUES (:tanggal_transaksi, :no_transaksi, :paket_member, :berlaku_sampai, :status, :bukti_bayar)";
         $this->db->query($sql);
         $this->db->bind("tanggal_transaksi", $data["tanggal"]);
         $this->db->bind("no_transaksi", $data["no_transaksi"]);
@@ -37,29 +56,25 @@ class Trans_Member_Model
         return $this->db->row_count();
     }
 
-    // public function edit_member($data)
-    // {
-    //     $sql = "UPDATE member SET nama_paket = :nama_paket, hari = :hari, jadwal = :jadwal, keterangan = :keterangan, harga = :harga, status = :status WHERE id = :id";
-    //     $this->db->query($sql);
-    //     $this->db->bind("nama_paket", $data["nama_paket"]);
-    //     $this->db->bind("hari", $data["hari"]);
-    //     $this->db->bind("jadwal", $data["sesi"]);
-    //     $this->db->bind("keterangan", $data["keterangan"]);
-    //     $this->db->bind("harga", $data["harga"]);
-    //     $this->db->bind("status", $data["status"]);
-    //     $this->db->bind("id", $data["id"]);
+    public function update_bukti_bayar($data, $gambar)
+    {
+        $sql = "UPDATE transaksi_member SET bukti_bayar = :bukti_bayar WHERE id = :id";
+        $this->db->query($sql);
+        $this->db->bind("bukti_bayar", $gambar);
+        $this->db->bind("id", $data["id"]);
 
-    //     $this->db->execute();
-    //     return $this->db->row_count();
-    // }
+        $this->db->execute();
+        return $this->db->row_count();
+    }
 
-    // public function delete_member($id)
-    // {
-    //     $sql = "DELETE FROM member WHERE id = :id";
-    //     $this->db->query($sql);
-    //     $this->db->bind("id", $id);
+    public function cancel_member($id)
+    {
+        $sql = "UPDATE transaksi_member SET status_transaksi = :status_transaksi WHERE id= :id";
+        $this->db->query($sql);
+        $this->db->bind("status_transaksi", "Dibatalkan");
+        $this->db->bind("id", $id);
 
-    //     $this->db->execute();
-    //     return $this->db->row_count();
-    // }
+        $this->db->execute();
+        return $this->db->row_count();
+    }
 }
