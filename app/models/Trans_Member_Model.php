@@ -17,7 +17,10 @@ class Trans_Member_Model
 
     public function get_trans_member_by_id($id)
     {
-        $this->db->query("SELECT * FROM " . $this->table . " WHERE id=:id");
+        $sql = "SELECT * FROM transaksi_member
+        INNER JOIN akun_pengguna ON transaksi_member.id_user = akun_pengguna.id
+        WHERE transaksi_member.id=:id";
+        $this->db->query($sql);
         $this->db->bind("id", $id);
         return $this->db->single();
     }
@@ -36,8 +39,10 @@ class Trans_Member_Model
     {
         $sql = "SELECT *, transaksi_member.id AS member_id, member.id AS paket_member_id, akun_pengguna.id AS id_akun FROM transaksi_member 
         INNER JOIN member ON transaksi_member.paket_member = member.id
-        INNER JOIN akun_pengguna ON transaksi_member.id_user = akun_pengguna.id";
+        INNER JOIN akun_pengguna ON transaksi_member.id_user = akun_pengguna.id
+        WHERE status_transaksi = :status_transaksi";
         $this->db->query($sql);
+        $this->db->bind("status_transaksi", "Menunggu");
         return $this->db->result_set();
     }
 
@@ -61,6 +66,17 @@ class Trans_Member_Model
         $sql = "UPDATE transaksi_member SET bukti_bayar = :bukti_bayar WHERE id = :id";
         $this->db->query($sql);
         $this->db->bind("bukti_bayar", $gambar);
+        $this->db->bind("id", $data["id"]);
+
+        $this->db->execute();
+        return $this->db->row_count();
+    }
+
+    public function update_status_member($data)
+    {
+        $sql = "UPDATE transaksi_member SET status_transaksi = :status_transaksi WHERE id = :id";
+        $this->db->query($sql);
+        $this->db->bind("status_transaksi", $data["status_transaksi"]);
         $this->db->bind("id", $data["id"]);
 
         $this->db->execute();

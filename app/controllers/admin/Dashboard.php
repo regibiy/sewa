@@ -5,6 +5,15 @@ class Dashboard extends Controller
     public function __construct()
     {
         if (!isLogin()) header("Location: " . BASEURL . "/admin/auth");
+        $data = $this->model("Trans_Member_Model")->get_all_trans_members();
+        foreach ($data as $item) {
+            if (date("Y-m-d") === $item["berlaku_sampai"]) {
+                var_dump("hei");
+            } else {
+                var_dump("ho");
+            }
+        }
+        // if (date("Y-m-d"))
     }
 
     public function index()
@@ -193,6 +202,21 @@ class Dashboard extends Controller
         $this->AdminView("templates/sidebar", $data);
         $this->AdminView("dashboard/datamember", $data);
         $this->AdminView("templates/footer");
+    }
+
+    public function confirmdatamember()
+    {
+        if ($this->model("Trans_Member_Model")->update_status_member($_POST) > 0) {
+            if ($this->model("User_Model")->update_status_member($_POST) > 0) {
+                Flasher::set_flash("Berhasil", "Memperbarui Status Member User!", "success");
+                header("Location: " . BASEURL . "/admin/dashboard/datamember");
+                exit;
+            }
+        } else {
+            Flasher::set_flash("Gagal", "Memperbarui Status Member User!", "error");
+            header("Location: " . BASEURL . "/admin/dashboard/datamember");
+            exit;
+        }
     }
 
     public function getdetailtransjson()

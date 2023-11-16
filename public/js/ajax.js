@@ -412,6 +412,11 @@ $(function () {
 
 $(function () {
   $(document).on("click", ".btn-show-evidence-3", function () {
+    $(".btn-navigation-modal")
+      .removeAttr("data-bs-target")
+      .removeAttr("data-bs-toggle")
+      .attr("data-bs-dismiss", "modal")
+      .text("Tutup");
     const memberId = $(this).data("memberid");
     $.ajax({
       url: `${BASEURL}/admin/dashboard/getdetailtransjson`,
@@ -419,7 +424,39 @@ $(function () {
       method: "post",
       dataType: "json",
       success: function (data) {
-        console.log(data);
+        $(".modal-body-evidence img").attr(
+          "src",
+          `${BASEURL}/public/img/evidence/${data.bukti_bayar}`
+        );
+      },
+    });
+  });
+});
+
+$(function () {
+  $(document).on("click", ".btn-confirm-booking", function () {
+    $(".btn-navigation-modal")
+      .removeAttr("data-bs-dismiss")
+      .attr("data-bs-target", "#konfirmasi")
+      .attr("data-bs-toggle", "modal")
+      .text("Kembali");
+    const memberId = $(this).data("memberid");
+    $("#id").val(memberId);
+    $.ajax({
+      url: `${BASEURL}/admin/dashboard/getdetailtransjson`,
+      data: { id: memberId },
+      method: "post",
+      dataType: "json",
+      success: function (data) {
+        $("#id_user").val(data.id_user);
+        $(".p-confirm-name").text(data.nama);
+        $(".p-confirm-email").text(data.email);
+        $(".p-confirm-telp").text(data.no_telp);
+        $(".p-confirm-gender").text(data.jenis_kelamin);
+        $(".img-confirm").attr(
+          "src",
+          `${BASEURL}/public/img/evidence/${data.bukti_bayar}`
+        );
         $(".modal-body-evidence img").attr(
           "src",
           `${BASEURL}/public/img/evidence/${data.bukti_bayar}`
