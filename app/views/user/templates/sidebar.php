@@ -5,7 +5,7 @@
                 <a href="<?= BASEURL ?>/dashboard/profil/0" class="text-decoration-none text-dark">
                     <h4><?= $_SESSION["nama_user"] ?></h4>
                 </a>
-                <p>Status : <span class="fw-medium"><?= $_SESSION["status_member"] ?></span></p> <!-- dinamyc data -->
+                <p>Status : <span class="fw-medium status-user"><?= $_SESSION["status_member"] ?></span></p> <!-- dinamyc data -->
             </div>
             <div class="mb-5 text-center">
                 <ul class="list-group mb-3">

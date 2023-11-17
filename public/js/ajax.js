@@ -297,7 +297,6 @@ $(function () {
   $(document).on("click", ".btn-delete-paket-member", function () {
     const id = $(this).data("id");
     const namaPaket = $(this).data("namapaket");
-
     Swal.fire({
       title: `${namaPaket} Akan Dihapus. Apakah Anda Yakin?`,
       text: "Anda Tidak Dapat Mengembalikan Ini!",
@@ -315,30 +314,48 @@ $(function () {
 });
 
 $(function () {
-  $(document).on("click", ".btn-buy-package", function () {
-    const id = $(this).data("id");
-    const noTrans = generateNoTransaction();
-    const date = new Date();
-    const currentDate = date.toISOString().split("T")[0];
-    date.setDate(date.getDate() + 30);
-    const validUntil = date.toISOString().split("T")[0];
-    $.ajax({
-      url: `${BASEURL}/dashboard/getpaketmemberjson`,
-      data: { id: id },
-      method: "post",
-      dataType: "json",
-      success: function (data) {
-        $(".p-no-transaksi").text(noTrans);
-        $(".input-no-transaksi").val(noTrans);
-        $(".p-jenis-paket").text(data.nama_paket);
-        $(".input-jenis-paket").val(data.id);
-        $(".p-harga").text(data.harga);
-        $(".input-tanggal-beli").val(currentDate);
-        $(".input-berlaku-sampai").val(validUntil);
-        $(".p-keterangan-paket").text(data.keterangan);
-      },
+  const statusMember = $(".status-user").text();
+  if (statusMember === "Member") {
+    $(document).on("click", ".btn-buy-package", function () {
+      Swal.fire({
+        title: "Upss...",
+        text: "Anda Telah Menjadi Member Di Gor Unipol!",
+        icon: "info",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = `${BASEURL}/dashboard/membersuccess`;
+        }
+      });
     });
-  });
+  } else {
+    $(".btn-buy-package")
+      .attr("data-bs-toggle", "modal")
+      .attr("data-bs-target", "#detailPembelian");
+    $(document).on("click", ".btn-buy-package", function () {
+      const id = $(this).data("id");
+      const noTrans = generateNoTransaction();
+      const date = new Date();
+      const currentDate = date.toISOString().split("T")[0];
+      date.setDate(date.getDate() + 30);
+      const validUntil = date.toISOString().split("T")[0];
+      $.ajax({
+        url: `${BASEURL}/dashboard/getpaketmemberjson`,
+        data: { id: id },
+        method: "post",
+        dataType: "json",
+        success: function (data) {
+          $(".p-no-transaksi").text(noTrans);
+          $(".input-no-transaksi").val(noTrans);
+          $(".p-jenis-paket").text(data.nama_paket);
+          $(".input-jenis-paket").val(data.id);
+          $(".p-harga").text(data.harga);
+          $(".input-tanggal-beli").val(currentDate);
+          $(".input-berlaku-sampai").val(validUntil);
+          $(".p-keterangan-paket").text(data.keterangan);
+        },
+      });
+    });
+  }
 });
 
 $(function () {
@@ -363,50 +380,68 @@ $(function () {
   $(document).on("click", ".btn-edit-member", function () {
     const memberid = $(this).data("memberid");
     $("#id").val(memberid);
-    $.ajax({
-      url: `${BASEURL}/dashboard/getdetailmemberjson`,
-      data: { id: memberid },
-      method: "post",
-      dataType: "json",
-      success: function (data) {
-        if (data.bukti_bayar !== null) {
-          Swal.fire({
-            title: `Anda Telah Mengunggah Bukti Pembayaran. Yakin Untuk Mengunggah Ulang?`,
-            text: "Anda Tidak Dapat Mengembalikan Ini!",
-            icon: "question",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Ya, Upload!",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              $("#upload").modal("show");
-            }
-          });
-        } else {
-          $("#upload").modal("show");
-        }
-      },
-    });
+    const statusTransaksi = $(this).data("statustransaksi");
+    if (statusTransaksi !== "Menunggu") {
+      Swal.fire({
+        title: "Upss...",
+        text: `Transaksi berstatus ${statusTransaksi}. Anda Tidak Dapat Melakukan Perubahan!`,
+        icon: "error",
+      });
+    } else {
+      $.ajax({
+        url: `${BASEURL}/dashboard/getdetailmemberjson`,
+        data: { id: memberid },
+        method: "post",
+        dataType: "json",
+        success: function (data) {
+          if (data.bukti_bayar !== null) {
+            Swal.fire({
+              title: `Anda Telah Mengunggah Bukti Pembayaran. Yakin Untuk Mengunggah Ulang?`,
+              text: "Anda Tidak Dapat Mengembalikan Ini!",
+              icon: "question",
+              showCancelButton: true,
+              confirmButtonColor: "#3085d6",
+              cancelButtonColor: "#d33",
+              confirmButtonText: "Ya, Upload!",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                $("#upload").modal("show");
+              }
+            });
+          } else {
+            $("#upload").modal("show");
+          }
+        },
+      });
+    }
   });
 });
 
 $(function () {
   $(document).on("click", ".btn-cancel-member", function () {
     const memberId = $(this).data("memberid");
-    Swal.fire({
-      title: "Apakah Anda Yakin?",
-      text: "Saat Membatalkan, Pembayaran Yang Telah Dilakukan Tidak Dapat Dikembalikan!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Ya, Batalkan!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        window.location.href = `${BASEURL}/dashboard/cancelmember/${memberId}`;
-      }
-    });
+    const statusTransaksi = $(this).data("statustransaksi");
+    if (statusTransaksi !== "Menunggu") {
+      Swal.fire({
+        title: "Upss...",
+        text: `Transaksi berstatus ${statusTransaksi}. Anda Tidak Dapat Melakukan Pembatalan!`,
+        icon: "error",
+      });
+    } else {
+      Swal.fire({
+        title: "Apakah Anda Yakin?",
+        text: "Saat Membatalkan, Pembayaran Yang Telah Dilakukan Tidak Dapat Dikembalikan!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya, Batalkan!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = `${BASEURL}/dashboard/cancelmember/${memberId}`;
+        }
+      });
+    }
   });
 });
 

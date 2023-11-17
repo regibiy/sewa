@@ -1,7 +1,7 @@
 function generateNoTransaction() {
   let date = new Date();
   let getDate = date.getDate();
-  let getMonth = date.getMonth();
+  let getMonth = date.getMonth() + 1;
   let random = Math.random().toString();
   return `${getDate}${getMonth}${random.slice(2, 6)}`;
 }

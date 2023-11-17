@@ -5,6 +5,13 @@ class Auth extends Controller
     public function __construct()
     {
         if (isLogin()) header("Location: " . BASEURL . "/admin/dashboard");
+        $data = $this->model("Trans_Member_Model")->get_all_trans_members_dua();
+        foreach ($data as $item) {
+            if (date("Y-m-d") === $item["berlaku_sampai"]) {
+                $this->model("Trans_Member_Model")->update_status_member_dua($item["member_id"]);
+                $this->model("User_Model")->update_status_member_dua($item["user_id"]);
+            }
+        }
     }
 
     public function index()

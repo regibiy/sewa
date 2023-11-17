@@ -15,6 +15,14 @@ class Trans_Member_Model
         return $this->db->result_set();
     }
 
+    public function get_all_trans_members_dua()
+    {
+        $sql = "SELECT *, transaksi_member.id AS member_id, akun_pengguna.id AS user_id 
+        FROM transaksi_member INNER JOIN akun_pengguna ON transaksi_member.id_user = akun_pengguna.id";
+        $this->db->query($sql);
+        return $this->db->result_set();
+    }
+
     public function get_trans_member_by_id($id)
     {
         $sql = "SELECT * FROM transaksi_member
@@ -79,6 +87,16 @@ class Trans_Member_Model
         $this->db->bind("status_transaksi", $data["status_transaksi"]);
         $this->db->bind("id", $data["id"]);
 
+        $this->db->execute();
+        return $this->db->row_count();
+    }
+
+    public function update_status_member_dua($id)
+    {
+        $sql = "UPDATE transaksi_member SET status_transaksi = :status_transaksi WHERE id = :id";
+        $this->db->query($sql);
+        $this->db->bind("status_transaksi", "Habis");
+        $this->db->bind("id", $id);
         $this->db->execute();
         return $this->db->row_count();
     }

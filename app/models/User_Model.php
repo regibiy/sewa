@@ -88,4 +88,15 @@ class User_Model
         $this->db->execute();
         return $this->db->row_count();
     }
+
+    public function update_status_member_dua($id)
+    {
+        $sql = "UPDATE akun_pengguna SET status_member = :status_member WHERE id = :id";
+        $this->db->query($sql);
+        $this->db->bind("status_member", "Non-Member");
+        $this->db->bind("id", $id);
+
+        $this->db->execute();
+        return $this->db->row_count();
+    }
 }

@@ -93,8 +93,8 @@
                                     echo  "<td>" . $value["berlaku_sampai"] . "</td>";
                                     echo  "<td>" . $value["status_transaksi"] . "</td>";
                                     echo  "<td>" . ($value["bukti_bayar"] === null ? "Segera upload bukti pembayaran Anda!" : "<button type='button' class='btn btn-sm btn-outline-secondary btn-show-evidence-2 mb-1' data-memberid='" . $value["member_id"] . "' data-bs-toggle='modal' data-bs-target='#buktiBayar'>Lihat Bukti</button>") . "</td>";
-                                    echo  "<td><button type='button' class='btn btn-sm btn-outline-secondary btn-cancel-member mb-1' data-memberid='" . $value["member_id"] . "'><i class='bi bi-x-circle-fill'></i></button>
-                                    <button type='button' class='btn btn-sm btn-outline-secondary btn-edit-member mb-1' data-memberid='" . $value["member_id"] . "'><i class='bi bi-pencil-fill'></i></button></td>";
+                                    echo  "<td><button type='button' class='btn btn-sm btn-outline-secondary btn-cancel-member mb-1' data-memberid='" . $value["member_id"] . "' data-statustransaksi='" . $value["status_transaksi"] . "'><i class='bi bi-x-circle-fill'></i></button>
+                                    <button type='button' class='btn btn-sm btn-outline-secondary btn-edit-member mb-1' data-memberid='" . $value["member_id"] . "' data-statustransaksi='" . $value["status_transaksi"] . "'><i class='bi bi-pencil-fill'></i></button></td>";
                                     echo "</tr>";
                                 }
                                 ?>

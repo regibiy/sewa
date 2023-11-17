@@ -5,15 +5,13 @@ class Dashboard extends Controller
     public function __construct()
     {
         if (!isLogin()) header("Location: " . BASEURL . "/admin/auth");
-        $data = $this->model("Trans_Member_Model")->get_all_trans_members();
+        $data = $this->model("Trans_Member_Model")->get_all_trans_members_dua();
         foreach ($data as $item) {
             if (date("Y-m-d") === $item["berlaku_sampai"]) {
-                var_dump("hei");
-            } else {
-                var_dump("ho");
+                $this->model("Trans_Member_Model")->update_status_member_dua($item["member_id"]);
+                $this->model("User_Model")->update_status_member_dua($item["user_id"]);
             }
         }
-        // if (date("Y-m-d"))
     }
 
     public function index()

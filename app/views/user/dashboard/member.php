@@ -7,7 +7,7 @@
             echo "<p class='m-0'>" . $value["hari"] . "</p>";
             echo "<p class='m-0'>" . ucfirst($value["jadwal"]) . "</p>";
             echo "<p class='m-4'>" . $value["harga"] . "</p>";
-            echo "<button type='button' class='btn btn-primary w-100 btn-buy-package' data-id='" . $value["id"] . "' data-bs-toggle='modal' data-bs-target='#detailPembelian'>Beli</button>";
+            echo "<button type='button' class='btn btn-primary w-100 btn-buy-package' data-id='" . $value["id"] . "' data-statusmember='" . $data["status_member"] . "'>Beli</button>";
             echo "</div>";
         }
         ?>

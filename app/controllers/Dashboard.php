@@ -127,6 +127,7 @@ class Dashboard extends Controller
         $data = [
             "title" =>  "Data Booking",
             "marker" => [null, null, "active"],
+            "status_member" => $_SESSION["status_member"],
             //some get all methods has status field that must be a criteria when get all data !!!WARNING
             "paket_member" => $this->model("Member_Model")->get_all_members(),
             "metode_bayar" => $this->model("Rekening_Model")->get_all_payment_methods()
