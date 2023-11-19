@@ -32,7 +32,6 @@ class Member_Model
         $this->db->bind("keterangan", $data["keterangan"]);
         $this->db->bind("harga", $data["harga"]);
         $this->db->bind("status", $data["status"]);
-
         $this->db->execute();
         return $this->db->row_count();
     }
@@ -48,7 +47,6 @@ class Member_Model
         $this->db->bind("harga", $data["harga"]);
         $this->db->bind("status", $data["status"]);
         $this->db->bind("id", $data["id"]);
-
         $this->db->execute();
         return $this->db->row_count();
     }
@@ -58,7 +56,6 @@ class Member_Model
         $sql = "DELETE FROM member WHERE id = :id";
         $this->db->query($sql);
         $this->db->bind("id", $id);
-
         $this->db->execute();
         return $this->db->row_count();
     }

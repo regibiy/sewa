@@ -31,7 +31,6 @@ class Rekening_Model
         $this->db->bind("nama_pemilik", $data["nama_pemilik"]);
         $this->db->bind("no_rekening", $data["no_rekening"]);
         $this->db->bind("status", $data["status"]);
-
         $this->db->execute();
         return $this->db->row_count();
     }
@@ -45,7 +44,6 @@ class Rekening_Model
         $this->db->bind("no_rekening", $data["no_rekening"]);
         $this->db->bind("status", $data["status"]);
         $this->db->bind("id", $data["id"]);
-
         $this->db->execute();
         return $this->db->row_count();
     }

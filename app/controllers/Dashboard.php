@@ -107,6 +107,11 @@ class Dashboard extends Controller
         $this->UserView("templates/footer");
     }
 
+    public function checkbeforebooking()
+    {
+        echo json_encode($this->model("Trans_Member_Model")->get_status_trans($_SESSION["id_user"]));
+    }
+
     public function bookingprocess()
     {
         if ($this->model("Booking_Model")->check_booking($_POST) > 0) {
@@ -146,12 +151,10 @@ class Dashboard extends Controller
 
     public function memberprocess()
     {
-        //NOT DONE YET
-        // $data = $this->model("Booking_Model")->detail_booking_by_id($_POST["id"]);
-        // if ($data["bukti_bayar"] !== null) unlink("../public/img/evidence/" . $data["bukti_bayar"]);
+        $id_user = $_SESSION["id_user"];
         $bukti_bayar = upload_image($_FILES["bukti_bayar"]["name"], $_FILES["bukti_bayar"]["size"], $_FILES["bukti_bayar"]["tmp_name"], "../public/img/evidence/");
         if ($bukti_bayar) {
-            if ($this->model("Trans_Member_Model")->add_trans_member($_POST, $bukti_bayar) > 0) {
+            if ($this->model("Trans_Member_Model")->add_trans_member($_POST, $id_user, $bukti_bayar) > 0) {
                 Flasher::set_flash("Terima kasih", "Telah Menjadi Member Gor Unipol. Data Anda Akan Segera Diproses Oleh Admin Kami!", "success");
                 header("Location: " . BASEURL . "/dashboard/profil/1");
                 exit;
@@ -169,15 +172,20 @@ class Dashboard extends Controller
 
     public function membersuccess()
     {
+        $status = $this->model("Trans_Member_Model")->get_status_trans($_SESSION["id_user"]);
+        $tanggal_berlaku = new DateTime($status["berlaku_sampai"]);
+        $selisih = $tanggal_berlaku->diff(new DateTime());
+        $sisa_hari = $selisih->days;
         $data = [
             "title" =>  "Member Sukses",
-            "marker" => [null, null, "active"]
+            "marker" => [null, null, "active"],
+            "sisa_hari" => $sisa_hari
         ];
 
-        $this->UserView("templates/header", $data);
-        $this->UserView("templates/sidebar", $data);
-        $this->UserView("dashboard/membersuccess");
-        $this->UserView("templates/footer");
+        // $this->UserView("templates/header", $data);
+        // $this->UserView("templates/sidebar", $data);
+        // $this->UserView("dashboard/membersuccess");
+        // $this->UserView("templates/footer");
     }
 
     public function databooking()

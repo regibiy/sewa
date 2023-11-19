@@ -169,7 +169,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Preview Bukti Booking</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Cetak Bukti Booking</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -205,15 +205,11 @@
                         <p id="print-harga"></p>
                     </div>
                 </div>
-                <h5 class="text-center mb-4">Kode Booking : <br /> <span id="print-kode-book"></span></h5>
-                <div class="text-center">
-                    <p class="m-0">Gor Unipol</p>
-                    <p class="m-0">Jalan Patikrama, Kec. Nanga Pinoh, Kab. Melawi, Kalimantan Barat</p>
-                </div>
+                <h5 class="text-center">Kode Booking : <br /> <span id="print-kode-book"></span></h5>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                <a href="" class="btn btn-primary btn-anchor-print">Cetak</a>
+                <a href="" class="btn btn-primary btn-anchor-print">Unduh</a>
             </div>
         </div>
     </div>

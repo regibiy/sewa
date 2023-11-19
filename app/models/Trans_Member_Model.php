@@ -54,17 +54,33 @@ class Trans_Member_Model
         return $this->db->result_set();
     }
 
-    public function add_trans_member($data, $bukti_bayar)
+    public function get_status_trans($id)
     {
-        $sql = "INSERT INTO transaksi_member (tanggal_transaksi, no_transaksi, paket_member, berlaku_sampai, status_transaksi, bukti_bayar) VALUES (:tanggal_transaksi, :no_transaksi, :paket_member, :berlaku_sampai, :status, :bukti_bayar)";
+        $sql = "SELECT * FROM transaksi_member INNER JOIN member ON transaksi_member.paket_member = member.id WHERE id_user = :id AND status_transaksi = :status_transaksi";
+        $this->db->query($sql);
+        $this->db->bind("id", $id);
+        $this->db->bind("status_transaksi", "Aktif");
+        return $this->db->single();
+    }
+
+    public function get_count_book($id)
+    {
+        $sql = "SELECT COUNT(booking.no_transaksi) FROM booking 
+        INNER JOIN transaksi_member ON booking.id_user = transaksi_member.id_user
+        WHERE booking.id_user = 8 AND booking.tanggal_sewa BETWEEN transaksi_member.tanggal_transaksi AND transaksi_member.berlaku_sampai";
+    }
+
+    public function add_trans_member($data, $id_user, $bukti_bayar)
+    {
+        $sql = "INSERT INTO transaksi_member (tanggal_transaksi, no_transaksi, id_user, paket_member, berlaku_sampai, status_transaksi, bukti_bayar) VALUES (:tanggal_transaksi, :id_user, :no_transaksi, :paket_member, :berlaku_sampai, :status, :bukti_bayar)";
         $this->db->query($sql);
         $this->db->bind("tanggal_transaksi", $data["tanggal"]);
         $this->db->bind("no_transaksi", $data["no_transaksi"]);
+        $this->db->bind("id_user", $id_user);
         $this->db->bind("paket_member", $data["jenis_paket"]);
         $this->db->bind("berlaku_sampai", $data["berlaku_sampai"]);
         $this->db->bind("status", "Menunggu");
         $this->db->bind("bukti_bayar", $bukti_bayar);
-
         $this->db->execute();
         return $this->db->row_count();
     }
@@ -75,7 +91,6 @@ class Trans_Member_Model
         $this->db->query($sql);
         $this->db->bind("bukti_bayar", $gambar);
         $this->db->bind("id", $data["id"]);
-
         $this->db->execute();
         return $this->db->row_count();
     }
@@ -86,7 +101,6 @@ class Trans_Member_Model
         $this->db->query($sql);
         $this->db->bind("status_transaksi", $data["status_transaksi"]);
         $this->db->bind("id", $data["id"]);
-
         $this->db->execute();
         return $this->db->row_count();
     }
@@ -107,7 +121,6 @@ class Trans_Member_Model
         $this->db->query($sql);
         $this->db->bind("status_transaksi", "Dibatalkan");
         $this->db->bind("id", $id);
-
         $this->db->execute();
         return $this->db->row_count();
     }

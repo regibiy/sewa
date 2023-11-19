@@ -29,7 +29,6 @@ class Jadwal_Model
         $this->db->bind("sesi", $data["sesi"]);
         $this->db->bind("hari", $data["hari"]);
         $this->db->bind("harga", $data["harga"]);
-
         $this->db->execute();
         return $this->db->row_count();
     }
@@ -42,7 +41,6 @@ class Jadwal_Model
         $this->db->bind("hari", $data["hari"]);
         $this->db->bind("harga", $data["harga"]);
         $this->db->bind("id", $data["id"]);
-
         $this->db->execute();
         return $this->db->row_count();
     }
@@ -52,7 +50,6 @@ class Jadwal_Model
         $sql = "DELETE FROM jadwal WHERE id = :id";
         $this->db->query($sql);
         $this->db->bind("id", $id);
-
         $this->db->execute();
         return $this->db->row_count();
     }

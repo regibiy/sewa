@@ -1,132 +1,12 @@
-import { generateNoTransaction } from "./utils.js";
+import {
+  generateNoBooking,
+  generateNoTransaction,
+  selisihWaktu,
+} from "./utils.js";
 
 const BASEURL = "http://localhost/sewa-lapangan";
 
 $("#sewa").DataTable();
-
-$(function () {
-  $(".btn-add-lapangan").on("click", function () {
-    $("#lapanganModalLabel").html("Tambah Data Lapangan");
-    $(".modal-content-lapangan form").attr(
-      "action",
-      `${BASEURL}/admin/dashboard/addlapangan`
-    );
-    $(".input-lapangan").val("");
-    $(".select-lapangan").val("Aktif");
-  });
-
-  $(document).on("click", ".btn-edit-lapangan", function () {
-    $("#lapanganModalLabel").html("Edit Data Lapangan");
-    $(".modal-content-lapangan form").attr(
-      "action",
-      `${BASEURL}/admin/dashboard/editlapangan`
-    );
-
-    const id = $(this).data("id");
-    $.ajax({
-      url: `${BASEURL}/admin/dashboard/getlapanganjson`,
-      data: { id: id },
-      method: "post",
-      dataType: "json",
-      success: function (data) {
-        $("#namaLapangan").val(data.nama_lapangan);
-        $("#statusLapangan").val(data.status_lapangan);
-        $("#id").val(data.id);
-      },
-    });
-  });
-});
-
-$(function () {
-  $(".btn-add-payment").on("click", function () {
-    $("#paymentModalLabel").html("Tambah Data Rekening");
-    $(".modal-content-payment form").attr(
-      "action",
-      `${BASEURL}/admin/dashboard/addpaymentmethod`
-    );
-    $(".input-method").val("");
-    $(".select-method").val("Aktif");
-  });
-
-  $(document).on("click", ".btn-edit-payment", function () {
-    $("#paymentModalLabel").html("Edit Data Rekening");
-    $(".modal-content-payment form").attr(
-      "action",
-      `${BASEURL}/admin/dashboard/editpaymentmethod`
-    );
-
-    const id = $(this).data("id");
-    $.ajax({
-      url: `${BASEURL}/admin/dashboard/getpaymentmethodjson`,
-      data: { id: id },
-      method: "post",
-      dataType: "json",
-      success: function (data) {
-        $("#namaBank").val(data.nama_bank);
-        $("#namaPemilik").val(data.nama_pemilik);
-        $("#noRek").val(data.no_rekening);
-        $("#status").val(data.status);
-        $("#id").val(data.id);
-      },
-    });
-  });
-});
-
-$(function () {
-  $(".btn-add-jadwal").on("click", function () {
-    $("#jadwalModalLabel").html("Tambah Data Jadwal");
-    $(".modal-content-jadwal form").attr(
-      "action",
-      `${BASEURL}/admin/dashboard/addjadwal`
-    );
-    $(".input-jadwal").val("");
-    $(".select-jadwal option:first").prop("selected", true);
-  });
-
-  $(document).on("click", ".btn-edit-jadwal", function () {
-    $("#jadwalModalLabel").html("Edit Data Jadwal");
-    $(".modal-content-jadwal form").attr(
-      "action",
-      `${BASEURL}/admin/dashboard/editjadwal`
-    );
-
-    const id = $(this).data("id");
-    $.ajax({
-      url: `${BASEURL}/admin/dashboard/getjadwaljson`,
-      data: { id: id },
-      method: "post",
-      dataType: "json",
-      success: function (data) {
-        $("#sesi").val(data.sesi);
-        $("#hari").val(data.hari);
-        $("#harga").val(data.harga);
-        $("#id").val(data.id);
-      },
-    });
-  });
-});
-
-$(function () {
-  $(document).on("click", ".btn-delete-jadwal", function () {
-    const id = $(this).data("id");
-    const sesi = $(this).data("sesi");
-    const hari = $(this).data("hari");
-
-    Swal.fire({
-      title: `Sesi ${sesi} Pada Hari ${hari} Akan Dihapus. Apakah Anda Yakin?`,
-      text: "Anda Tidak Dapat Mengembalikan Ini!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Ya, Hapus!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        window.location.href = `${BASEURL}/admin/dashboard/deletejadwal/${id}`;
-      }
-    });
-  });
-});
 
 $(function () {
   $(document).on("click", ".btn-detail-booking", function () {
@@ -140,7 +20,8 @@ $(function () {
       method: "post",
       dataType: "json",
       success: function (data) {
-        $("#detail-no-trans").text(data.kode_booking);
+        $("#detail-no-trans").text(data.no_transaksi);
+        $("#detail-no-book").text(data.kode_booking);
         $("#detail-nama").text(nama);
         $("#detail-status").text(status);
         $("#detail-lapangan").text(data.nama_lapangan);
@@ -152,9 +33,7 @@ $(function () {
       },
     });
   });
-});
 
-$(function () {
   $(document).on("click", ".btn-print", function () {
     const noTrans = $(this).data("notrans");
     const nama = $(this).data("nama");
@@ -182,9 +61,7 @@ $(function () {
       },
     });
   });
-});
 
-$(function () {
   $(document).on("click", ".btn-upload", function () {
     const noTrans = $(this).data("notrans");
     $("#id").val(noTrans);
@@ -214,9 +91,7 @@ $(function () {
       },
     });
   });
-});
 
-$(function () {
   $(document).on("click", ".btn-show-evidence", function () {
     const noTrans = $(this).data("notrans");
     $.ajax({
@@ -232,9 +107,7 @@ $(function () {
       },
     });
   });
-});
 
-$(function () {
   $(document).on("click", ".btn-cancel-booking", function () {
     const noTrans = $(this).data("notrans");
     Swal.fire({
@@ -251,69 +124,7 @@ $(function () {
       }
     });
   });
-});
 
-$(function () {
-  $(".btn-add-paket-member").on("click", function () {
-    $("#memberModalLabel").html("Tambah Data Paket Member");
-    $(".modal-content-member form").attr(
-      "action",
-      `${BASEURL}/admin/dashboard/addpaketmember`
-    );
-    $(".input-paket-member").val("");
-    $(".textarea-paket-member").val(
-      "3 Jam Setiap Booking, 4 Kali Pertemuan Selama Satu Bulan"
-    );
-    $(".select-paket-member option:first").prop("selected", true);
-  });
-
-  $(document).on("click", ".btn-edit-paket-member", function () {
-    $("#memberModalLabel").html("Edit Data Paket Member");
-    $(".modal-content-member form").attr(
-      "action",
-      `${BASEURL}/admin/dashboard/editpaketmember`
-    );
-
-    const id = $(this).data("id");
-    $.ajax({
-      url: `${BASEURL}/admin/dashboard/getpaketmemberjson`,
-      data: { id: id },
-      method: "post",
-      dataType: "json",
-      success: function (data) {
-        $("#namaPaket").val(data.nama_paket);
-        $("#hari").val(data.hari);
-        $("#sesi").val(data.jadwal);
-        $("#keterangan").val(data.keterangan);
-        $("#harga").val(data.harga);
-        $("#status").val(data.status);
-        $("#id").val(data.id);
-      },
-    });
-  });
-});
-
-$(function () {
-  $(document).on("click", ".btn-delete-paket-member", function () {
-    const id = $(this).data("id");
-    const namaPaket = $(this).data("namapaket");
-    Swal.fire({
-      title: `${namaPaket} Akan Dihapus. Apakah Anda Yakin?`,
-      text: "Anda Tidak Dapat Mengembalikan Ini!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Ya, Hapus!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        window.location.href = `${BASEURL}/admin/dashboard/deletepaketmember/${id}`;
-      }
-    });
-  });
-});
-
-$(function () {
   const statusMember = $(".status-user").text();
   if (statusMember === "Member") {
     $(document).on("click", ".btn-buy-package", function () {
@@ -356,9 +167,7 @@ $(function () {
       });
     });
   }
-});
 
-$(function () {
   $(document).on("click", ".btn-show-evidence-2", function () {
     const memberId = $(this).data("memberid");
     $.ajax({
@@ -374,9 +183,7 @@ $(function () {
       },
     });
   });
-});
 
-$(function () {
   $(document).on("click", ".btn-edit-member", function () {
     const memberid = $(this).data("memberid");
     $("#id").val(memberid);
@@ -415,9 +222,7 @@ $(function () {
       });
     }
   });
-});
 
-$(function () {
   $(document).on("click", ".btn-cancel-member", function () {
     const memberId = $(this).data("memberid");
     const statusTransaksi = $(this).data("statustransaksi");
@@ -443,60 +248,210 @@ $(function () {
       });
     }
   });
-});
 
-$(function () {
-  $(document).on("click", ".btn-show-evidence-3", function () {
-    $(".btn-navigation-modal")
-      .removeAttr("data-bs-target")
-      .removeAttr("data-bs-toggle")
-      .attr("data-bs-dismiss", "modal")
-      .text("Tutup");
-    const memberId = $(this).data("memberid");
-    $.ajax({
-      url: `${BASEURL}/admin/dashboard/getdetailtransjson`,
-      data: { id: memberId },
-      method: "post",
-      dataType: "json",
-      success: function (data) {
-        $(".modal-body-evidence img").attr(
-          "src",
-          `${BASEURL}/public/img/evidence/${data.bukti_bayar}`
-        );
-      },
-    });
+  let opsidefMulai = $("<option>")
+    .attr({ value: 0, hidden: true })
+    .text("Silakan Pilih Jam Mulai");
+  let opsidefSelesai = $("<option>")
+    .attr({ value: 0, hidden: true })
+    .text("Silakan Pilih Jam Selesai");
+
+  $(".btn-booking-reset").on("click", function () {
+    $("#formBooking").trigger("reset");
+    $("#jamMulai").empty();
+    $("#jamMulai").append(opsidefMulai);
+
+    $("#jamSelesai").empty();
+    $("#jamSelesai").append(opsidefSelesai);
+    $("#noTrans").val(generateNoTransaction());
+    $("#kodeBooking").val(generateNoBooking());
   });
-});
 
-$(function () {
-  $(document).on("click", ".btn-confirm-booking", function () {
-    $(".btn-navigation-modal")
-      .removeAttr("data-bs-dismiss")
-      .attr("data-bs-target", "#konfirmasi")
-      .attr("data-bs-toggle", "modal")
-      .text("Kembali");
-    const memberId = $(this).data("memberid");
-    $("#id").val(memberId);
-    $.ajax({
-      url: `${BASEURL}/admin/dashboard/getdetailtransjson`,
-      data: { id: memberId },
-      method: "post",
-      dataType: "json",
-      success: function (data) {
-        $("#id_user").val(data.id_user);
-        $(".p-confirm-name").text(data.nama);
-        $(".p-confirm-email").text(data.email);
-        $(".p-confirm-telp").text(data.no_telp);
-        $(".p-confirm-gender").text(data.jenis_kelamin);
-        $(".img-confirm").attr(
-          "src",
-          `${BASEURL}/public/img/evidence/${data.bukti_bayar}`
+  $(document).on("change", "#jadwal", function () {
+    $("#jamMulai").empty();
+    $("#jamSelesai").empty();
+    $("#jamMulai").append(opsidefMulai);
+    $("#jamSelesai").append(opsidefSelesai);
+
+    let opsiData = [];
+    if ($("#jadwal").val() === "pagi") {
+      for (let i = 7; i < 12; i++) {
+        if (i < 10) opsiData.push({ value: `0${i}:00:00`, text: `0${i}:00` });
+        else opsiData.push({ value: `${i}:00:00`, text: `${i}:00` });
+      }
+      $.each(opsiData, function (_, opsi) {
+        $("#jamMulai").append(
+          $("<option>", {
+            value: opsi.value,
+            text: opsi.text,
+          })
         );
-        $(".modal-body-evidence img").attr(
-          "src",
-          `${BASEURL}/public/img/evidence/${data.bukti_bayar}`
+        $("#jamSelesai").append(
+          $("<option>", {
+            value: opsi.value,
+            text: opsi.text,
+          })
         );
-      },
-    });
+      });
+    } else if ($("#jadwal").val() === "siang") {
+      for (let i = 11; i < 18; i++) {
+        opsiData.push({ value: `${i}:00:00`, text: `${i}:00` });
+      }
+      $.each(opsiData, function (_, opsi) {
+        $("#jamMulai").append(
+          $("<option>", {
+            value: opsi.value,
+            text: opsi.text,
+          })
+        );
+        $("#jamSelesai").append(
+          $("<option>", {
+            value: opsi.value,
+            text: opsi.text,
+          })
+        );
+      });
+    } else {
+      for (let i = 17; i < 24; i++) {
+        opsiData.push({ value: `${i}:00:00`, text: `${i}:00` });
+      }
+      $.each(opsiData, function (_, opsi) {
+        $("#jamMulai").append(
+          $("<option>", {
+            value: opsi.value,
+            text: opsi.text,
+          })
+        );
+        $("#jamSelesai").append(
+          $("<option>", {
+            value: opsi.value,
+            text: opsi.text,
+          })
+        );
+      });
+    }
+  });
+
+  let jamMain = new Object();
+
+  $("#jamMulai").on("change", function () {
+    jamMain.mulai = $("#jamMulai").val();
+    if ($("#jamMulai").val() === $("#jamSelesai").val()) {
+      Swal.fire({
+        title: "Upss",
+        text: "Anda Memilih Jam Yang Invalid!",
+        icon: "error",
+      });
+      $("#jamMulai option:first").prop("selected", true);
+    }
+  });
+
+  $("#jamSelesai").on("change", function () {
+    jamMain.selesai = $("#jamSelesai").val();
+    if ($("#jamSelesai").val() === $("#jamMulai").val()) {
+      Swal.fire({
+        title: "Upss...",
+        text: "Anda Memilih Jam Yang Invalid!",
+        icon: "error",
+      });
+      $("#jamSelesai option:first").prop("selected", true);
+    }
+  });
+
+  $.ajax({
+    url: `${BASEURL}/dashboard/checkbeforebooking`,
+    method: "post",
+    dataType: "json",
+    success: function (data) {
+      // a member
+      if (data) {
+        console.log(data);
+        const hariObj = {
+          Minggu: 0,
+          Senin: 1,
+          Selasa: 2,
+          Rabu: 3,
+          Kamis: 4,
+          Jumat: 5,
+          Sabtu: 6,
+        };
+        $("#tanggalSewa").on("change", function () {
+          let tglSewa = new Date($("#tanggalSewa").val());
+          let hari = tglSewa.getDay();
+          let rentangHari = data.hari;
+          let [dari, sampai] = rentangHari
+            .split("-")
+            .map((hari) => hariObj[hari]);
+          if (dari === hariObj.Sabtu && sampai === hariObj.Minggu) {
+            if (!(hari === hariObj.Sabtu || hari === hariObj.Minggu)) {
+              Swal.fire({
+                title: `Upss...`,
+                text: `${data.nama_paket} Hanya Dapat Memilih Hari ${data.hari}!`,
+                icon: "warning",
+              });
+              $("#tanggalSewa").val(null);
+            }
+          } else {
+            if (!(hari >= dari && hari <= sampai)) {
+              Swal.fire({
+                title: `Upss...`,
+                text: `${data.nama_paket} Hanya Dapat Memilih Hari ${data.hari}!`,
+                icon: "warning",
+              });
+              $("#tanggalSewa").val(null);
+            }
+          }
+        });
+
+        $("#jadwal").on("change", function () {
+          if (data.jadwal !== "semua") {
+            if ($(this).val() !== data.jadwal) {
+              Swal.fire({
+                title: `Upss...`,
+                text: `${data.nama_paket} Hanya Dapat Memilih Sesi ${data.jadwal}!`,
+                icon: "warning",
+              });
+              $("#jadwal option:first").prop("selected", true);
+            }
+          }
+        });
+        $("#jamMulai").on("change", function () {
+          if (
+            jamMain.hasOwnProperty("mulai") &&
+            jamMain.hasOwnProperty("selesai")
+          ) {
+            if (selisihWaktu(jamMain.mulai, jamMain.selesai)) {
+              Swal.fire({
+                title: `Upss...`,
+                text: `Waktu Member Bermain Adalah 3 Jam!`,
+                icon: "warning",
+              });
+              $("#jamMulai option:first").prop("selected", true);
+              $("#jamSelesai option:first").prop("selected", true);
+              delete jamMain.mulai;
+              delete jamMain.selesai;
+            }
+          }
+        });
+        $("#jamSelesai").on("change", function () {
+          if (
+            jamMain.hasOwnProperty("mulai") &&
+            jamMain.hasOwnProperty("selesai")
+          ) {
+            if (selisihWaktu(jamMain.mulai, jamMain.selesai)) {
+              Swal.fire({
+                title: `Upss...`,
+                text: `Waktu Member Bermain Adalah 3 Jam!`,
+                icon: "warning",
+              });
+              $("#jamMulai option:first").prop("selected", true);
+              $("#jamSelesai option:first").prop("selected", true);
+              delete jamMain.mulai;
+              delete jamMain.selesai;
+            }
+          }
+        });
+      }
+    },
   });
 });

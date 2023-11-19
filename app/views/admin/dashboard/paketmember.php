@@ -70,7 +70,6 @@
                     <div class="mb-3">
                         <label for="hari" class="form-label">Hari</label>
                         <input type="text" class="form-control input-paket-member" id="hari" name="hari" maxlength="30" placeholder="cth : Senin-Jumat" required>
-
                     </div>
                     <div class="mb-3">
                         <label for="sesi" class="form-label">Sesi</label>

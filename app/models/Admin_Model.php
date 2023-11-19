@@ -19,7 +19,6 @@ class Admin_Model
     {
         $this->db->query("SELECT * FROM " . $this->table . " WHERE username=:username");
         $this->db->bind("username", $username);
-
         $this->db->execute();
         return $this->db->row_count();
     }
@@ -28,7 +27,6 @@ class Admin_Model
     {
         $this->db->query("SELECT * FROM " . $this->table . " WHERE username=:username");
         $this->db->bind("username", $username);
-
         return $this->db->single();
     }
 }

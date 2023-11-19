@@ -29,7 +29,6 @@ class Lapangan_Model
         $this->db->bind("nama_lapangan", $data["nama_lapangan"]);
         $this->db->bind("status_lapangan", $data["status_lapangan"]);
         $this->db->bind("status_booking", null);
-
         $this->db->execute();
         return $this->db->row_count();
     }
@@ -41,7 +40,6 @@ class Lapangan_Model
         $this->db->bind("nama_lapangan", $data["nama_lapangan"]);
         $this->db->bind("status_lapangan", $data["status_lapangan"]);
         $this->db->bind("id", $data["id"]);
-
         $this->db->execute();
         return $this->db->row_count();
     }

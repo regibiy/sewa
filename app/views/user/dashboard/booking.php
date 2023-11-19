@@ -64,13 +64,17 @@
                     <div class="col">
                         <div class="mb-3">
                             <label for="jamMulai" class="form-label">Jam Mulai</label>
-                            <input type="time" class="form-control" id="jamMulai" name="jam_mulai" required>
+                            <select name="jam_mulai" id="jamMulai" class="form-select" required>
+                                <option value="0" hidden>Silakan Pilih Jam Mulai</option>
+                            </select>
                         </div>
                     </div>
                     <div class="col">
                         <div class="mb-3">
                             <label for="jamSelesai" class="form-label">Jam Selesai</label>
-                            <input type="time" class="form-control" id="jamSelesai" name="jam_selesai" required>
+                            <select name="jam_selesai" id="jamSelesai" class="form-select" required>
+                                <option value="0" hidden>Silakan Pilih Jam Selesai</option>
+                            </select>
                         </div>
                     </div>
                 </div>

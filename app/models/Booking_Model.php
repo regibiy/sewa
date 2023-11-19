@@ -36,7 +36,6 @@ class Booking_Model
         $this->db->bind("jam_selesai", $data["jam_selesai"]);
         $this->db->bind("status_booking", "Menunggu");
         $this->db->bind("bukti_bayar", null);
-
         $this->db->execute();
         return $this->db->row_count();
     }
@@ -69,13 +68,11 @@ class Booking_Model
             AND lapangan = :lapangan
             AND tanggal_sewa = :tanggal_sewa
             AND status_booking IN ('Menunggu', 'Sedang Dicek', 'Aktif')";
-
         $this->db->query($sql);
         $this->db->bind("tanggal_sewa", $data["tanggal_sewa"]);
         $this->db->bind("jam_mulai", $data["jam_mulai"] . ":00");
         $this->db->bind("jam_selesai", $data["jam_selesai"] . ":00");
         $this->db->bind("lapangan", $data["lapangan"]);
-
         $this->db->execute();
         return $this->db->row_count();
     }
@@ -86,7 +83,6 @@ class Booking_Model
         $this->db->query($sql);
         $this->db->bind("bukti_bayar", $gambar);
         $this->db->bind("no_transaksi", $data["id"]);
-
         $this->db->execute();
         return $this->db->row_count();
     }
@@ -97,7 +93,6 @@ class Booking_Model
         $this->db->query($sql);
         $this->db->bind("status_booking", "Dibatalkan");
         $this->db->bind("no_transaksi", $no_transaksi);
-
         $this->db->execute();
         return $this->db->row_count();
     }

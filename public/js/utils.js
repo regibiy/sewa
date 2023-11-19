@@ -51,29 +51,14 @@ function swalAlertMalam(select) {
   select.value = null;
 }
 
-function validasiWaktuMain(jamUser, jamMin, jamMax, inputJam, menit, jamObj) {
-  if (jamUser < jamMin || jamUser > jamMax) swalAlertPagi(inputJam);
-  else if (menit % 30 !== 0) swalAlertMenit(inputJam);
-  else {
-    jamObj = inputJam.value;
-    return true;
-  }
-}
+function selisihWaktu(jamMainMulai, jamMainSelesai) {
+  let jamMulai = new Date(`1970-01-01T${jamMainMulai}`);
+  let jamSelesai = new Date(`1970-01-01T${jamMainSelesai}`);
 
-function selisihWaktu(jamMainMulai, jamMainSelesai, inputJam) {
-  let [jamMulai, menitMulai] = jamMainMulai.split(":").map(Number);
-  let [jamSelesai2, menitSelesai] = jamMainSelesai.split(":").map(Number);
-  let differenceInMinutes =
-    (jamSelesai2 - jamMulai) * 60 + (menitSelesai - menitMulai);
-
-  if (differenceInMinutes < 60 || differenceInMinutes % 60 !== 0) {
-    swalAlert(
-      "Upss..",
-      "Waktu Yang Anda Pilih Kurang Dari 1 Jam Atau Tidak Kelipatan 1 Jam!",
-      "warning"
-    );
-    inputJam.value = null;
-  }
+  let selisihMilDetik = jamSelesai - jamMulai;
+  let selisihJam = selisihMilDetik / (1000 * 60 * 60);
+  if (selisihJam < 3) return true;
+  else return false;
 }
 
 export {
@@ -84,5 +69,4 @@ export {
   swalAlertMalam,
   swalAlertMenit,
   selisihWaktu,
-  validasiWaktuMain,
 };
