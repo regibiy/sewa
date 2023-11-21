@@ -22,13 +22,24 @@ class Lapangan_Model
         return $this->db->single();
     }
 
+    public function get_current_booking()
+    {
+        $sql = "SELECT * FROM lapangan 
+        LEFT JOIN booking ON lapangan.id = booking.lapangan 
+        WHERE (status_booking IS NULL OR status_booking NOT IN (:batal, :selesai)) 
+           OR (status_booking IS NULL AND DATE(tanggal_sewa) >= CURRENT_DATE)";
+        $this->db->query($sql);
+        $this->db->bind("batal", "Dibatalkan");
+        $this->db->bind("selesai", "Selesai");
+        return $this->db->result_set();
+    }
+
     public function add_lapangan($data)
     {
-        $sql = "INSERT INTO lapangan (nama_lapangan, status_lapangan, status_booking) VALUES (:nama_lapangan, :status_lapangan, :status_booking)";
+        $sql = "INSERT INTO lapangan (nama_lapangan, status_lapangan) VALUES (:nama_lapangan, :status_lapangan)";
         $this->db->query($sql);
         $this->db->bind("nama_lapangan", $data["nama_lapangan"]);
         $this->db->bind("status_lapangan", $data["status_lapangan"]);
-        $this->db->bind("status_booking", null);
         $this->db->execute();
         return $this->db->row_count();
     }

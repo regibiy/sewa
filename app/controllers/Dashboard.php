@@ -7,6 +7,17 @@ class Dashboard extends Controller
     {
         if (!isLogin()) header("Location: " . BASEURL . "/auth");
         $this->user_data = $this->model("User_Model")->get_data_user_by_username($_SESSION["user"]);
+        if ($_SESSION["status_member"] === "Member") {
+            $total_book = $this->model("Trans_Member_Model")->get_count_book_by_id($_SESSION["id_user"]);
+            $sisa_guna = 4 - $total_book["total_book"]; // 4 didapat dari ketentuan batas booking member
+            if ($sisa_guna === 0) {
+                if ($id_transaksi = $this->model("Trans_Member_Model")->get_status_trans($_SESSION["id_user"])) {
+                    $this->model("Trans_Member_Model")->update_status_member_dua($id_transaksi["id"]);
+                    $this->model("User_Model")->update_status_member_dua($_SESSION["id_user"]);
+                }
+            }
+            $_SESSION["status_member"] = $this->user_data["status_member"];
+        }
     }
 
     public function index()
@@ -119,8 +130,19 @@ class Dashboard extends Controller
             header("Location: " . BASEURL . "/dashboard/booking");
             exit;
         } else {
-            if ($this->model("Booking_Model")->add_booking($_POST) > 0) {
-                Flasher::set_flash("Terima Kasih", "Booking Berhasil Dilakukan. Segera Upload Bukti Pembayaran!", "success");
+            if ($this->model("Booking_Model")->add_booking($_POST, $_SESSION["status_member"]) > 0) {
+                if ($_SESSION["status_member"] === "Member") {
+                    $total_book = $this->model("Trans_Member_Model")->get_count_book_by_id($_SESSION["id_user"]);
+                    $sisa_guna = 4 - $total_book["total_book"]; // 4 didapat dari ketentuan batas booking member
+                    if ($sisa_guna === 0) {
+                        if ($id_transaksi = $this->model("Trans_Member_Model")->get_status_trans($_SESSION["id_user"])) {
+                            $this->model("Trans_Member_Model")->update_status_member_dua($id_transaksi["id"]);
+                            $this->model("User_Model")->update_status_member_dua($_SESSION["id_user"]);
+                        }
+                    }
+                    $_SESSION["status_member"] = $this->user_data["status_member"];
+                }
+                Flasher::set_flash("Terima Kasih", "Booking Berhasil Dilakukan. Segera Upload Bukti Pembayaran JIKA Anda Bukan Member!", "success");
                 header("Location: " . BASEURL . "/dashboard/datasewa");
                 exit;
             }
@@ -176,16 +198,19 @@ class Dashboard extends Controller
         $tanggal_berlaku = new DateTime($status["berlaku_sampai"]);
         $selisih = $tanggal_berlaku->diff(new DateTime());
         $sisa_hari = $selisih->days;
+        $total_book = $this->model("Trans_Member_Model")->get_count_book_by_id($_SESSION["id_user"]);
+        $sisa_guna = 4 - $total_book["total_book"]; // 4 didapat dari ketentuan batas booking member
         $data = [
             "title" =>  "Member Sukses",
             "marker" => [null, null, "active"],
-            "sisa_hari" => $sisa_hari
+            "sisa_hari" => $sisa_hari,
+            "sisa_guna" => $sisa_guna
         ];
 
-        // $this->UserView("templates/header", $data);
-        // $this->UserView("templates/sidebar", $data);
-        // $this->UserView("dashboard/membersuccess");
-        // $this->UserView("templates/footer");
+        $this->UserView("templates/header", $data);
+        $this->UserView("templates/sidebar", $data);
+        $this->UserView("dashboard/membersuccess", $data);
+        $this->UserView("templates/footer");
     }
 
     public function databooking()
@@ -193,7 +218,8 @@ class Dashboard extends Controller
         $data = [
             "title" =>  "Data Booking",
             "marker" => [null, null, null, "active"],
-            "lapangan" => $this->model("Lapangan_Model")->get_all_lapangan()
+            // "lapangan" => $this->model("Lapangan_Model")->get_all_lapangan()
+            "current_book" => $this->model("Lapangan_Model")->get_current_booking()
         ];
 
         $this->UserView("templates/header", $data);

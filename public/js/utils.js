@@ -57,7 +57,7 @@ function selisihWaktu(jamMainMulai, jamMainSelesai) {
 
   let selisihMilDetik = jamSelesai - jamMulai;
   let selisihJam = selisihMilDetik / (1000 * 60 * 60);
-  if (selisihJam < 3) return true;
+  if (selisihJam < 3 || selisihJam > 3) return true;
   else return false;
 }
 

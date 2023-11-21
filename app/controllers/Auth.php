@@ -28,7 +28,16 @@ class Auth extends Controller
                     $_SESSION["user"] = $user_data["username"];
                     $_SESSION["nama_user"] = $user_data["nama"];
                     $_SESSION["status_member"] = $user_data["status_member"];
-
+                    if ($_SESSION["status_member"] === "Member") {
+                        $total_book = $this->model("Trans_Member_Model")->get_count_book_by_id($_SESSION["id_user"]);
+                        $sisa_guna = 4 - $total_book["total_book"]; // 4 didapat dari ketentuan batas booking member
+                        if ($sisa_guna === 0) {
+                            if ($id_transaksi = $this->model("Trans_Member_Model")->get_status_trans($_SESSION["id_user"])) {
+                                $this->model("Trans_Member_Model")->update_status_member_dua($id_transaksi["id"]);
+                                $this->model("User_Model")->update_status_member_dua($_SESSION["id_user"]);
+                            }
+                        }
+                    }
                     Flasher::set_flash("Login", "Berhasil!", "success");
                     header("Location: " . BASEURL . "/dashboard");
                     exit;

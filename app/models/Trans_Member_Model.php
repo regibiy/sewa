@@ -63,11 +63,14 @@ class Trans_Member_Model
         return $this->db->single();
     }
 
-    public function get_count_book($id)
+    public function get_count_book_by_id($id)
     {
-        $sql = "SELECT COUNT(booking.no_transaksi) FROM booking 
+        $sql = "SELECT COUNT(booking.no_transaksi) AS total_book FROM booking 
         INNER JOIN transaksi_member ON booking.id_user = transaksi_member.id_user
-        WHERE booking.id_user = 8 AND booking.tanggal_sewa BETWEEN transaksi_member.tanggal_transaksi AND transaksi_member.berlaku_sampai";
+        WHERE booking.id_user = :id AND booking.tanggal_sewa BETWEEN transaksi_member.tanggal_transaksi AND transaksi_member.berlaku_sampai";
+        $this->db->query($sql);
+        $this->db->bind("id", $id);
+        return $this->db->single();
     }
 
     public function add_trans_member($data, $id_user, $bukti_bayar)

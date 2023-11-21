@@ -22,9 +22,9 @@ class Booking_Model
         return $this->db->single();
     }
 
-    public function add_booking($data)
+    public function add_booking($data, $status_member)
     {
-        $sql = "INSERT INTO booking (no_transaksi, kode_booking, id_user, lapangan, tanggal_sewa, jadwal, jam_mulai, jam_selesai, status_booking, bukti_bayar) VALUES (:no_transaksi, :kode_booking, :id_user, :lapangan, :tanggal_sewa, :jadwal, :jam_mulai, :jam_selesai, :status_booking, :bukti_bayar)";
+        $sql = "INSERT INTO booking (no_transaksi, kode_booking, id_user, lapangan, tanggal_sewa, jadwal, jam_mulai, jam_selesai, status_booking, status_member_when_book, bukti_bayar) VALUES (:no_transaksi, :kode_booking, :id_user, :lapangan, :tanggal_sewa, :jadwal, :jam_mulai, :jam_selesai, :status_booking, :status_member_when_book, :bukti_bayar)";
         $this->db->query($sql);
         $this->db->bind("no_transaksi", $data["no_transaksi"]);
         $this->db->bind("kode_booking", $data["kode_booking"]);
@@ -35,6 +35,7 @@ class Booking_Model
         $this->db->bind("jam_mulai", $data["jam_mulai"]);
         $this->db->bind("jam_selesai", $data["jam_selesai"]);
         $this->db->bind("status_booking", "Menunggu");
+        $this->db->bind("status_member_when_book", $status_member);
         $this->db->bind("bukti_bayar", null);
         $this->db->execute();
         return $this->db->row_count();
@@ -42,7 +43,7 @@ class Booking_Model
 
     public function data_booking_user($id)
     {
-        $sql = "SELECT no_transaksi, lapangan.nama_lapangan, tanggal_sewa, jadwal.harga, jam_mulai, jam_selesai, booking.status_booking, bukti_bayar FROM booking
+        $sql = "SELECT no_transaksi, lapangan.nama_lapangan, tanggal_sewa, jadwal.harga, jam_mulai, jam_selesai, booking.status_booking, status_member_when_book, bukti_bayar FROM booking
         INNER JOIN lapangan ON booking.lapangan = lapangan.id
         INNER JOIN jadwal ON booking.jadwal = jadwal.sesi AND DAYNAME(booking.tanggal_sewa) = jadwal.hari WHERE id_user = :id";
         $this->db->query($sql);
@@ -52,7 +53,7 @@ class Booking_Model
 
     public function detail_booking_by_id($no_transaksi)
     {
-        $sql = "SELECT no_transaksi, kode_booking, lapangan.nama_lapangan, tanggal_sewa, booking.jadwal, jadwal.harga, jam_mulai, jam_selesai, booking.status_booking, bukti_bayar FROM booking 
+        $sql = "SELECT no_transaksi, kode_booking, lapangan.nama_lapangan, tanggal_sewa, booking.jadwal, jadwal.harga, jam_mulai, jam_selesai, booking.status_booking, status_member_when_book, bukti_bayar FROM booking 
         INNER JOIN lapangan ON booking.lapangan = lapangan.id
         INNER JOIN jadwal ON booking.jadwal = jadwal.sesi AND DAYNAME(booking.tanggal_sewa) = jadwal.hari WHERE no_transaksi = :no_transaksi";
         $this->db->query($sql);
