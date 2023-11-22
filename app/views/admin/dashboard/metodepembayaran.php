@@ -32,7 +32,8 @@
                             echo "<td>" . $value["nama_pemilik"] . "</td>";
                             echo "<td>" . $value["no_rekening"] . "</td>";
                             echo "<td>" . $value["status"] . "</td>";
-                            echo "<td><button class='btn btn-sm btn-outline-secondary btn-edit-payment' data-bs-toggle='modal' data-bs-target='#modalMetode' data-id='" . $value["id"] . "'><i class='bi bi-pencil-fill'></i></button></td>";
+                            echo "<td><button class='btn btn-sm btn-outline-secondary btn-edit-payment' data-bs-toggle='modal' data-bs-target='#modalMetode' data-id='" . $value["id"] . "'><i class='bi bi-pencil-fill'></i></button>
+                            <button class='btn btn-sm btn-outline-secondary btn-delete-payment' data-id='" . $value["id"] . "' data-bank=" . $value["nama_bank"] . "><i class='bi bi-trash-fill'></i></button></td>";
                             echo "</tr>";
                         }
                         ?>

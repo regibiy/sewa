@@ -46,6 +46,10 @@ class Dashboard extends Controller
             Flasher::set_flash("Berhasil", "Menambahkan Data Metode Pembayaran!", "success");
             header("Location: " . BASEURL . "/admin/dashboard/metodepembayaran");
             exit;
+        } else {
+            Flasher::set_flash("Gagal", "Menambahkan Data Metode Pembayaran!", "error");
+            header("Location: " . BASEURL . "/admin/dashboard/metodepembayaran");
+            exit;
         }
     }
 
@@ -67,16 +71,48 @@ class Dashboard extends Controller
         }
     }
 
+    public function deletepaymentmethod($url)
+    {
+        if ($this->model("Rekening_Model")->delete_payment_method($url) > 0) {
+            Flasher::set_flash("Berhasil", "Menghapus Data Metode Pembayaran!", "success");
+            header("Location: " . BASEURL . "/admin/dashboard/metodepembayaran");
+            exit;
+        } else {
+            Flasher::set_flash("Gagal", "Menghapus Data Metode Pembayaran", "error");
+            header("Location: " . BASEURL . "/admin/dashboard/metodepembayaran");
+            exit;
+        }
+    }
+
     public function dataakun()
     {
         $data = [
             "title" => "Data Akun",
-            "marker" => [null, "active"]
+            "marker" => [null, "active"],
+            "akun_pengguna" => $this->model("User_Model")->get_all_users()
         ];
         $this->AdminView("templates/header", $data);
         $this->AdminView("templates/sidebar", $data);
         $this->AdminView("dashboard/dataakun", $data);
         $this->AdminView("templates/footer");
+    }
+
+    public function getdataakunjson()
+    {
+        echo json_encode($this->model("User_Model")->get_data_user_by_username($_POST["username"]));
+    }
+
+    public function editdataakun()
+    {
+        if ($this->model("User_Model")->update_status_akun_pengguna($_POST) > 0) {
+            Flasher::set_flash("Berhasil", "Memperbarui Status Akun Pengguna!", "success");
+            header("Location: " . BASEURL . "/admin/dashboard/dataakun");
+            exit;
+        } else {
+            Flasher::set_flash("Ups..", "Anda Tidak Melakukan Perubahan Apapun!", "warning");
+            header("Location: " . BASEURL . "/admin/dashboard/dataakun");
+            exit;
+        }
     }
 
     public function databooking()
@@ -119,6 +155,10 @@ class Dashboard extends Controller
             Flasher::set_flash("Berhasil", "Menambahkan Data Jadwal!", "success");
             header("Location: " . BASEURL . "/admin/dashboard/datajadwal");
             exit;
+        } else {
+            Flasher::set_flash("Gagal", "Menambahkan Data Jadwal!", "error");
+            header("Location: " . BASEURL . "/admin/dashboard/datajadwal");
+            exit;
         }
     }
 
@@ -146,6 +186,10 @@ class Dashboard extends Controller
             Flasher::set_flash("Berhasil", "Menghapus Data Jadwal!", "success");
             header("Location: " . BASEURL . "/admin/dashboard/datajadwal");
             exit;
+        } else {
+            Flasher::set_flash("Gagal", "Menghapus Data Jadwal!", "error");
+            header("Location: " . BASEURL . "/admin/dashboard/datajadwal");
+            exit;
         }
     }
 
@@ -166,6 +210,10 @@ class Dashboard extends Controller
     {
         if ($this->model("Lapangan_Model")->add_lapangan($_POST) > 0) {
             Flasher::set_flash("Berhasil", "Menambahkan Data Lapangan!", "success");
+            header("Location: " . BASEURL . "/admin/dashboard/datalapangan");
+            exit;
+        } else {
+            Flasher::set_flash("Gagal", "Menambahkan Data Lapangan!", "error");
             header("Location: " . BASEURL . "/admin/dashboard/datalapangan");
             exit;
         }
@@ -268,6 +316,10 @@ class Dashboard extends Controller
             Flasher::set_flash("Berhasil", "Menghapus Data Paket Member!", "success");
             header("Location: " . BASEURL . "/admin/dashboard/paketmember");
             exit;
+        } else {
+            Flasher::set_flash("Gagal", "Menghapus Data Paket Member!", "error");
+            header("Location: " . BASEURL . "/admin/dashboard/paketmember");
+            exit;
         }
     }
 
@@ -304,12 +356,63 @@ class Dashboard extends Controller
     {
         $data = [
             "title" => "Informasi",
-            "marker" => [null, null, null, null, null, null, null, null, null, "active"]
+            "marker" => [null, null, null, null, null, null, null, null, null, "active"],
+            "informations" => $this->model("Informasi_Model")->get_all_informations()
         ];
         $this->AdminView("templates/header", $data);
         $this->AdminView("templates/sidebar", $data);
         $this->AdminView("dashboard/informasi", $data);
         $this->AdminView("templates/footer");
+    }
+
+    public function addinform()
+    {
+        if ($this->model("Informasi_Model")->add_inform($_POST) > 0) {
+            Flasher::set_flash("Berhasil", "Menambahkan Data Informasi!", "success");
+            header("Location: " . BASEURL . "/admin/dashboard/informasi");
+            exit;
+        } else {
+            Flasher::set_flash("Gagal", "Menambahkan Data Informasi!", "error");
+            header("Location: " . BASEURL . "/admin/dashboard/informasi");
+            exit;
+        }
+    }
+
+    public function getinformbyidjson()
+    {
+        $raw_inform = $this->model("Informasi_Model")->get_inform_by_id($_POST["id"]);
+        $isi_formatted = str_replace('<br />', '', $raw_inform["isi"]);
+        $informasi = [
+            "judul" => $raw_inform["judul"],
+            "isi" => $isi_formatted
+        ];
+        echo json_encode($informasi);
+    }
+
+    public function editinform()
+    {
+        if ($this->model("Informasi_Model")->edit_inform($_POST) > 0) {
+            Flasher::set_flash("Berhasil", "Memperbarui Data Informasi!", "success");
+            header("Location: " . BASEURL . "/admin/dashboard/informasi");
+            exit;
+        } else {
+            Flasher::set_flash("Ups..", "Anda Tidak Melakukan Perubahan Apapun!", "warning");
+            header("Location: " . BASEURL . "/admin/dashboard/informasi");
+            exit;
+        }
+    }
+
+    public function deleteinform($url)
+    {
+        if ($this->model("Informasi_Model")->delete_inform($url) > 0) {
+            Flasher::set_flash("Berhasil", "Menghapus Data Informasi!", "success");
+            header("Location: " . BASEURL . "/admin/dashboard/informasi");
+            exit;
+        } else {
+            Flasher::set_flash("Gagal", "Menghapus Data Informasi!", "error");
+            header("Location: " . BASEURL . "/admin/dashboard/informasi");
+            exit;
+        }
     }
 
     public function pegawai()

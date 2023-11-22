@@ -90,4 +90,14 @@ class User_Model
         $this->db->execute();
         return $this->db->row_count();
     }
+
+    public function update_status_akun_pengguna($data)
+    {
+        $sql = "UPDATE akun_pengguna SET status_akun = :status_member WHERE id = :id";
+        $this->db->query($sql);
+        $this->db->bind("status_member", $data["status_akun"]);
+        $this->db->bind("id", $data["id"]);
+        $this->db->execute();
+        return $this->db->row_count();
+    }
 }

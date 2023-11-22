@@ -75,14 +75,14 @@ class Trans_Member_Model
 
     public function add_trans_member($data, $id_user, $bukti_bayar)
     {
-        $sql = "INSERT INTO transaksi_member (tanggal_transaksi, no_transaksi, id_user, paket_member, berlaku_sampai, status_transaksi, bukti_bayar) VALUES (:tanggal_transaksi, :id_user, :no_transaksi, :paket_member, :berlaku_sampai, :status, :bukti_bayar)";
+        $sql = "INSERT INTO transaksi_member (tanggal_transaksi, no_transaksi, id_user, paket_member, berlaku_sampai, status_transaksi, bukti_bayar) VALUES (:tanggal_transaksi, :no_transaksi, :id_user, :paket_member, :berlaku_sampai, :status_transaksi, :bukti_bayar)";
         $this->db->query($sql);
         $this->db->bind("tanggal_transaksi", $data["tanggal"]);
         $this->db->bind("no_transaksi", $data["no_transaksi"]);
         $this->db->bind("id_user", $id_user);
         $this->db->bind("paket_member", $data["jenis_paket"]);
         $this->db->bind("berlaku_sampai", $data["berlaku_sampai"]);
-        $this->db->bind("status", "Menunggu");
+        $this->db->bind("status_transaksi", "Menunggu");
         $this->db->bind("bukti_bayar", $bukti_bayar);
         $this->db->execute();
         return $this->db->row_count();

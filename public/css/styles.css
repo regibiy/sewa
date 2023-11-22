@@ -3,7 +3,7 @@
 }
 
 .height-100 {
-  height: calc(100vh - 56px);
+  min-height: calc(100vh - 56px);
 }
 
 .img-zoom {

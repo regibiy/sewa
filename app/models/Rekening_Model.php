@@ -47,4 +47,13 @@ class Rekening_Model
         $this->db->execute();
         return $this->db->row_count();
     }
+
+    public function delete_payment_method($id)
+    {
+        $sql = "DELETE FROM metode_pembayaran WHERE id = :id";
+        $this->db->query($sql);
+        $this->db->bind("id", $id);
+        $this->db->execute();
+        return $this->db->row_count();
+    }
 }

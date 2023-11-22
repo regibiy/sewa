@@ -24,10 +24,7 @@ class Lapangan_Model
 
     public function get_current_booking()
     {
-        $sql = "SELECT * FROM lapangan 
-        LEFT JOIN booking ON lapangan.id = booking.lapangan 
-        WHERE (status_booking IS NULL OR status_booking NOT IN (:batal, :selesai)) 
-           OR (status_booking IS NULL AND DATE(tanggal_sewa) >= CURRENT_DATE)";
+        $sql = "SELECT * FROM lapangan LEFT JOIN booking ON lapangan.id = booking.lapangan WHERE status_booking IS NULL OR status_booking NOT IN (:batal, :selesai) ORDER BY tanggal_sewa";
         $this->db->query($sql);
         $this->db->bind("batal", "Dibatalkan");
         $this->db->bind("selesai", "Selesai");

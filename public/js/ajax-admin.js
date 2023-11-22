@@ -67,6 +67,25 @@ $(function () {
     });
   });
 
+  $(document).on("click", ".btn-delete-payment", function () {
+    const id = $(this).data("id");
+    const bank = $(this).data("bank");
+
+    Swal.fire({
+      title: `Data Rekening Bank ${bank} Akan Dihapus. Apakah Anda Yakin?`,
+      text: "Anda Tidak Dapat Mengembalikan Ini!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya, Hapus!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = `${BASEURL}/admin/dashboard/deletepaymentmethod/${id}`;
+      }
+    });
+  });
+
   $(".btn-add-jadwal").on("click", function () {
     $("#jadwalModalLabel").html("Tambah Data Jadwal");
     $(".modal-content-jadwal form").attr(
@@ -223,6 +242,70 @@ $(function () {
           "src",
           `${BASEURL}/public/img/evidence/${data.bukti_bayar}`
         );
+      },
+    });
+  });
+
+  $(".btn-add-inform").on("click", function () {
+    $("#informModalLabel").html("Tambah Data Informasi");
+    $(".modal-content-inform form").attr(
+      "action",
+      `${BASEURL}/admin/dashboard/addinform`
+    );
+    $(".input-inform").val("");
+    $(".textarea-inform").val("");
+  });
+
+  $(document).on("click", ".btn-edit-inform", function () {
+    $("#informModalLabel").html("Edit Data Informasi");
+    $(".modal-content-inform form").attr(
+      "action",
+      `${BASEURL}/admin/dashboard/editinform`
+    );
+
+    const id = $(this).data("id");
+    $.ajax({
+      url: `${BASEURL}/admin/dashboard/getinformbyidjson`,
+      data: { id: id },
+      method: "post",
+      dataType: "json",
+      success: function (data) {
+        $("#judul").val(data.judul);
+        $("#isi").val(data.isi);
+        $("#id").val(id);
+      },
+    });
+  });
+
+  $(document).on("click", ".btn-delete-inform", function () {
+    const id = $(this).data("id");
+    const judul = $(this).data("judul");
+    Swal.fire({
+      title: `${judul} Akan Dihapus. Apakah Anda Yakin?`,
+      text: "Anda Tidak Dapat Mengembalikan Ini!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya, Hapus!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = `${BASEURL}/admin/dashboard/deleteinform/${id}`;
+      }
+    });
+  });
+
+  $(document).on("click", ".btn-edit-akun-pengguna", function () {
+    const username = $(this).data("username");
+    $.ajax({
+      url: `${BASEURL}/admin/dashboard/getdataakunjson`,
+      data: { username: username },
+      method: "post",
+      dataType: "json",
+      success: function (data) {
+        $("#akunModalLabel").text(`Ubah Status Akun ${data.nama}`);
+        $("#id").val(data.id);
+        $("#statusAkun").val(data.status_akun);
       },
     });
   });

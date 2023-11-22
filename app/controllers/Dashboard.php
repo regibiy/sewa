@@ -95,12 +95,13 @@ class Dashboard extends Controller
     {
         $data = [
             "title" => "Informasi",
-            "marker" => [null, null, null, null, null, "active"]
+            "marker" => [null, null, null, null, null, "active"],
+            "informations" => $this->model("Informasi_Model")->get_all_informations()
         ];
 
         $this->UserView("templates/header", $data);
         $this->UserView("templates/sidebar", $data);
-        $this->UserView("dashboard/informasi");
+        $this->UserView("dashboard/informasi", $data);
         $this->UserView("templates/footer");
     }
 
@@ -218,7 +219,7 @@ class Dashboard extends Controller
         $data = [
             "title" =>  "Data Booking",
             "marker" => [null, null, null, "active"],
-            // "lapangan" => $this->model("Lapangan_Model")->get_all_lapangan()
+            "lapangan" => $this->model("Lapangan_Model")->get_all_lapangan(),
             "current_book" => $this->model("Lapangan_Model")->get_current_booking()
         ];
 
