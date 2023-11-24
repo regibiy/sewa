@@ -16,7 +16,6 @@
                             <th class="fw-medium bg-info-subtle">No.</th>
                             <th class="fw-medium bg-info-subtle">Nama Lapangan</th>
                             <th class="fw-medium bg-info-subtle">Status Lapangan</th>
-                            <th class="fw-medium bg-info-subtle">Status Booking</th>
                             <th class="fw-medium bg-info-subtle">Aksi</th>
                         </tr>
                     </thead>
@@ -29,7 +28,6 @@
                             echo "<td>" . $no . "</td>";
                             echo "<td>" . $value["nama_lapangan"] . "</td>";
                             echo "<td>" . $value["status_lapangan"] . "</td>";
-                            echo "<td>" . ($value["status_booking"] == null ? "Tersedia" : $value["status_booking"]) . "</td>";
                             echo "<td><button type='button' class='btn btn-sm btn-outline-secondary btn-edit-lapangan' data-bs-toggle='modal' data-bs-target='#modalLapangan' data-id='" . $value["id"] . "'><i class='bi bi-pencil-fill'></i></button></td>";
                             echo "</tr>";
                         }

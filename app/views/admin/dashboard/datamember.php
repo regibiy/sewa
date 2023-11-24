@@ -31,9 +31,9 @@
                             echo "<td>" . $value["hari"] . " " . $value["jadwal"] . " " . "</td>";
                             echo "<td>" . $value["harga"] .  "</td>";
                             echo "<td><button type='button' class='btn btn-sm btn-outline-secondary btn-show-evidence-3 mb-1' data-memberid='" . $value["member_id"] . "' data-bs-toggle='modal' data-bs-target='#buktiBayar'>Lihat Bukti</button></td>";
-                            echo "<td><button type='button' class='btn btn-sm btn-outline-secondary mb-1'><i class='bi bi-file-arrow-down-fill'></i></button>
-                            <button type='button' class='btn btn-sm btn-outline-secondary mb-1'><i class='bi bi-trash-fill'></i></button>
-                            <button type='button' class='btn btn-sm btn-outline-secondary btn-confirm-booking mb-1' data-memberid='" . $value["member_id"] . "' data-bs-toggle='modal' data-bs-target='#konfirmasi'><i class='bi bi-check-square-fill'></i></button></td>";
+                            echo "<td>
+                            <button type='button' class='btn btn-sm btn-outline-secondary mb-1 btn-cancel-member' data-id='" . $value["member_id"] . "'><i class='bi bi-x-circle-fill'></i></button>
+                            <button type='button' class='btn btn-sm btn-outline-secondary btn-confirm-member mb-1' data-memberid='" . $value["member_id"] . "' data-bs-toggle='modal' data-bs-target='#konfirmasi'><i class='bi bi-check-square-fill'></i></button></td>";
                         }
                         ?>
                     </tbody>
@@ -83,7 +83,7 @@
                                     <h6>Bukti Pembayaran</h6>
                                 </div>
                                 <div class="col border rounded">
-                                    <img src="" class="img-fluid img-zoom img-confirm" alt="bukti bayar" data-bs-toggle="modal" data-bs-target="#buktiBayar">
+                                    <img src="" class="img-fluid img-zoom img-confirm" alt="bukti bayar" data-bs-toggle="modal" data-bs-target="#buktiBayarDua">
                                 </div>
                             </div>
                         </div>
@@ -113,7 +113,24 @@
                 <img src="" class="img-fluid w-100" alt="bukti bayar">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-navigation-modal">Tutup</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="buktiBayarDua" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Bukti Pembayaran</h1>
+            </div>
+            <div class="modal-body text-center modal-body-evidence-dua">
+                <img src="" class="img-fluid w-100" alt="bukti bayar">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-target="#konfirmasi" data-bs-toggle="modal">Kembali</button>
             </div>
         </div>
     </div>

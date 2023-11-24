@@ -15,11 +15,23 @@ class Booking_Model
         return $this->db->result_set();
     }
 
-    public function get_booking_by_id($id)
+    public function get_booking_by_no_trans($no_trans)
     {
-        $this->db->query("SELECT * FROM " . $this->table . " WHERE id=:id");
-        $this->db->bind("id", $id);
+        $this->db->query("SELECT * FROM " . $this->table . " WHERE no_transaksi = :no_trans");
+        $this->db->bind("no_trans", $no_trans);
         return $this->db->single();
+    }
+
+    public function get_latest_all_booking()
+    {
+        $sql = "SELECT * FROM booking 
+        INNER JOIN lapangan ON booking.lapangan = lapangan.id
+        INNER JOIN jadwal ON booking.jadwal = jadwal.sesi AND DAYNAME(booking.tanggal_sewa) = jadwal.hari
+        WHERE status_booking NOT IN (:status_booking, :batal) AND tanggal_sewa >= CURRENT_DATE()";
+        $this->db->query($sql);
+        $this->db->bind("status_booking", "Selesai");
+        $this->db->bind("batal", "Dibatalkan");
+        return $this->db->result_set();
     }
 
     public function add_booking($data, $status_member)
@@ -53,8 +65,9 @@ class Booking_Model
 
     public function detail_booking_by_id($no_transaksi)
     {
-        $sql = "SELECT no_transaksi, kode_booking, lapangan.nama_lapangan, tanggal_sewa, booking.jadwal, jadwal.harga, jam_mulai, jam_selesai, booking.status_booking, status_member_when_book, bukti_bayar FROM booking 
+        $sql = "SELECT no_transaksi, kode_booking, nama, email, jenis_kelamin, no_telp, status_member, lapangan.nama_lapangan, tanggal_sewa, booking.jadwal, jadwal.harga, jam_mulai, jam_selesai, booking.status_booking, status_member_when_book, bukti_bayar FROM booking 
         INNER JOIN lapangan ON booking.lapangan = lapangan.id
+        INNER JOIN akun_pengguna ON booking.id_user = akun_pengguna.id
         INNER JOIN jadwal ON booking.jadwal = jadwal.sesi AND DAYNAME(booking.tanggal_sewa) = jadwal.hari WHERE no_transaksi = :no_transaksi";
         $this->db->query($sql);
         $this->db->bind("no_transaksi", $no_transaksi);
@@ -84,6 +97,16 @@ class Booking_Model
         $this->db->query($sql);
         $this->db->bind("bukti_bayar", $gambar);
         $this->db->bind("no_transaksi", $data["id"]);
+        $this->db->execute();
+        return $this->db->row_count();
+    }
+
+    public function update_status_booking($data)
+    {
+        $sql = "UPDATE booking SET status_booking = :status_booking WHERE no_transaksi = :no_transaksi";
+        $this->db->query($sql);
+        $this->db->bind("status_booking", $data["keterangan"]);
+        $this->db->bind("no_transaksi", $data["no_transaksi"]);
         $this->db->execute();
         return $this->db->row_count();
     }

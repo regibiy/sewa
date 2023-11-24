@@ -119,12 +119,49 @@ class Dashboard extends Controller
     {
         $data = [
             "title" => "Data Booking",
-            "marker" => [null, null, "active"]
+            "marker" => [null, null, "active"],
+            "booking" => $this->model("Booking_Model")->get_latest_all_booking()
         ];
         $this->AdminView("templates/header", $data);
         $this->AdminView("templates/sidebar", $data);
         $this->AdminView("dashboard/databooking", $data);
         $this->AdminView("templates/footer");
+    }
+
+    public function getbookingdatajson()
+    {
+        echo json_encode($this->model("Booking_Model")->get_booking_by_no_trans($_POST["noTrans"]));
+    }
+
+    public function getdetailbookingjson()
+    {
+        echo json_encode($this->model("Booking_Model")->detail_booking_by_id($_POST["noTrans"]));
+    }
+
+    public function cancelbooking($url)
+    {
+        if ($this->model("Booking_Model")->cancel_booking($url) > 0) {
+            Flasher::set_flash("Berhasil", "Membatalkan Booking Pengguna!", "success");
+            header("Location: " . BASEURL . "/admin/dashboard/databooking");
+            exit;
+        } else {
+            Flasher::set_flash("Gagal", "Membatalkan Booking Pengguna!", "error");
+            header("Location: " . BASEURL . "/admin/dashboard/databooking");
+            exit;
+        }
+    }
+
+    public function confirmdatabooking()
+    {
+        if ($this->model("Booking_Model")->update_status_booking($_POST) > 0) {
+            Flasher::set_flash("Berhasil", "Memperbarui Status Booking!", "success");
+            header("Location: " . BASEURL . "/admin/dashboard/databooking");
+            exit;
+        } else {
+            Flasher::set_flash("Gagal", "Memperbarui Status Jadwal!", "error");
+            header("Location: " . BASEURL . "/admin/dashboard/databooking");
+            exit;
+        }
     }
 
     public function datajadwal()
@@ -260,6 +297,19 @@ class Dashboard extends Controller
             }
         } else {
             Flasher::set_flash("Gagal", "Memperbarui Status Member User!", "error");
+            header("Location: " . BASEURL . "/admin/dashboard/datamember");
+            exit;
+        }
+    }
+
+    public function cancelmember($url)
+    {
+        if ($this->model("Trans_Member_Model")->cancel_member($url) > 0) {
+            Flasher::set_flash("Berhasil", "Membatalkan Pembelian Member Pengguna!", "success");
+            header("Location: " . BASEURL . "/admin/dashboard/datamember");
+            exit;
+        } else {
+            Flasher::set_flash("Gagal", "Membatalkan Pembelian Member Pengguna!", "error");
             header("Location: " . BASEURL . "/admin/dashboard/datamember");
             exit;
         }

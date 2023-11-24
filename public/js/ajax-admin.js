@@ -195,11 +195,6 @@ $(function () {
   });
 
   $(document).on("click", ".btn-show-evidence-3", function () {
-    $(".btn-navigation-modal")
-      .removeAttr("data-bs-target")
-      .removeAttr("data-bs-toggle")
-      .attr("data-bs-dismiss", "modal")
-      .text("Tutup");
     const memberId = $(this).data("memberid");
     $.ajax({
       url: `${BASEURL}/admin/dashboard/getdetailtransjson`,
@@ -215,12 +210,7 @@ $(function () {
     });
   });
 
-  $(document).on("click", ".btn-confirm-booking", function () {
-    $(".btn-navigation-modal")
-      .removeAttr("data-bs-dismiss")
-      .attr("data-bs-target", "#konfirmasi")
-      .attr("data-bs-toggle", "modal")
-      .text("Kembali");
+  $(document).on("click", ".btn-confirm-member", function () {
     const memberId = $(this).data("memberid");
     $("#id").val(memberId);
     $.ajax({
@@ -238,7 +228,7 @@ $(function () {
           "src",
           `${BASEURL}/public/img/evidence/${data.bukti_bayar}`
         );
-        $(".modal-body-evidence img").attr(
+        $(".modal-body-evidence-dua img").attr(
           "src",
           `${BASEURL}/public/img/evidence/${data.bukti_bayar}`
         );
@@ -262,7 +252,6 @@ $(function () {
       "action",
       `${BASEURL}/admin/dashboard/editinform`
     );
-
     const id = $(this).data("id");
     $.ajax({
       url: `${BASEURL}/admin/dashboard/getinformbyidjson`,
@@ -307,6 +296,107 @@ $(function () {
         $("#id").val(data.id);
         $("#statusAkun").val(data.status_akun);
       },
+    });
+  });
+
+  $(document).on("click", ".btn-show-evidence-4", function () {
+    const noTrans = $(this).data("notrans");
+    $.ajax({
+      url: `${BASEURL}/admin/dashboard/getbookingdatajson`,
+      data: { noTrans: noTrans },
+      method: "post",
+      dataType: "json",
+      success: function (data) {
+        $(".modal-body-evidence-dua img").attr(
+          "src",
+          `${BASEURL}/public/img/evidence/${data.bukti_bayar}`
+        );
+      },
+    });
+  });
+
+  $(document).on("click", ".btn-confirm-booking", function () {
+    const noTrans = $(this).data("notrans");
+    $.ajax({
+      url: `${BASEURL}/admin/dashboard/getdetailbookingjson`,
+      data: { noTrans: noTrans },
+      method: "post",
+      dataType: "json",
+      success: function (data) {
+        $("#no_transaksi").val(data.no_transaksi);
+        $("#keterangan").val(data.status_booking);
+        $(".confirm-name").text(data.nama);
+        $(".confirm-email").text(data.email);
+        $(".confirm-no-telp").text(data.no_telp);
+        $(".confirm-jenis-kelamin").text(data.jenis_kelamin);
+        $(".img-zoom-book-evidence").attr(
+          "src",
+          `${BASEURL}/public/img/evidence/${data.bukti_bayar}`
+        );
+        $(".modal-body-evidence img").attr(
+          "src",
+          `${BASEURL}/public/img/evidence/${data.bukti_bayar}`
+        );
+      },
+    });
+  });
+
+  $(document).on("click", ".btn-cancel-booking", function () {
+    const noTrans = $(this).data("notrans");
+    Swal.fire({
+      title: `Data Booking Dengan Nomor Transaksi ${noTrans} Akan Dibatalkan. Apakah Anda Yakin?`,
+      text: "Anda Tidak Dapat Mengembalikan Ini!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya, Batalkan!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = `${BASEURL}/admin/dashboard/cancelbooking/${noTrans}`;
+      }
+    });
+  });
+
+  $(document).on("click", ".btn-detail-booking", function () {
+    const noTrans = $(this).data("notrans");
+    const lamaSewa = $(this).data("lamasewa");
+    $.ajax({
+      url: `${BASEURL}/admin/dashboard/getdetailbookingjson`,
+      data: { noTrans: noTrans },
+      method: "post",
+      dataType: "json",
+      success: function (data) {
+        let harga = 0;
+        if (data.status_member_when_book !== "Member") harga = data.harga;
+        $("#detail-no-trans").text(data.no_transaksi);
+        $("#detail-no-book").text(data.kode_booking);
+        $("#detail-nama").text(data.nama);
+        $("#detail-status").text(data.status_member_when_book);
+        $("#detail-lapangan").text(data.nama_lapangan);
+        $("#detail-tanggal").text(data.tanggal_sewa);
+        $("#detail-jadwal").text(data.jadwal);
+        $("#detail-jam").text(data.jam_mulai + " - " + data.jam_selesai);
+        $("#detail-lama").text(lamaSewa + " Jam");
+        $("#detail-harga").text(harga * lamaSewa);
+      },
+    });
+  });
+
+  $(document).on("click", ".btn-cancel-member", function () {
+    const id = $(this).data("id");
+    Swal.fire({
+      title: `Data Transaksi Member Dengan ID ${id} Akan Dibatalkan. Apakah Anda Yakin?`,
+      text: "Anda Tidak Dapat Mengembalikan Ini!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya, Batalkan!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = `${BASEURL}/admin/dashboard/cancelmember/${id}`;
+      }
     });
   });
 });

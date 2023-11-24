@@ -20,6 +20,8 @@ $(function () {
       method: "post",
       dataType: "json",
       success: function (data) {
+        let harga = 0;
+        if (data.status_member_when_book !== "Member") harga = data.harga;
         $("#detail-no-trans").text(data.no_transaksi);
         $("#detail-no-book").text(data.kode_booking);
         $("#detail-nama").text(nama);
@@ -29,7 +31,7 @@ $(function () {
         $("#detail-jadwal").text(data.jadwal);
         $("#detail-jam").text(data.jam_mulai + " - " + data.jam_selesai);
         $("#detail-lama").text(lama + " Jam");
-        $("#detail-harga").text(data.harga * lama);
+        $("#detail-harga").text(harga * lama);
       },
     });
   });
@@ -365,7 +367,6 @@ $(function () {
     success: function (data) {
       // a member
       if (data) {
-        console.log(data);
         const hariObj = {
           Minggu: 0,
           Senin: 1,

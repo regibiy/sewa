@@ -33,15 +33,16 @@
                         foreach ($data["data_booking"] as $value) {
                             $no++;
                             $lama_sewa = getLamaSewa($value["jam_mulai"], $value["jam_selesai"]);
+                            $harga = $value["status_member_when_book"] === "Member" ? 0 : $value["harga"];
                             echo "<tr>";
                             echo  "<td>" . $no . "</td>";
                             echo  "<td>" . $value["nama_lapangan"] . "</td>";
-                            echo  "<td>" . ($value["status_member_when_book"] === "Member" ? 0 : $value["harga"]) . "</td>";
+                            echo  "<td>" . $harga . "</td>";
                             echo  "<td>" . $value["jam_mulai"] . "</td>";
                             echo  "<td>" . $value["jam_selesai"] . "</td>";
                             echo  "<td>" . $lama_sewa . " Jam</td>";
                             echo  "<td>" . ($value["bukti_bayar"] === null ? "Segera upload bukti pembayaran Anda JIKA Anda Bukan Member!" : "<button type='button' class='btn btn-sm btn-outline-secondary btn-show-evidence mb-1' data-notrans='" . $value["no_transaksi"] . "' data-bs-toggle='modal' data-bs-target='#buktiBayar'>Lihat Bukti</button>") . "</td>";
-                            echo  "<td>" . $value["harga"] * $lama_sewa . "</td>";
+                            echo  "<td>" . $harga * $lama_sewa . "</td>";
                             echo  "<td>" . $value["status_booking"] . "</td>";
                             echo  "<td>
                             <button type='button' class='btn btn-sm btn-outline-secondary btn-detail-booking mb-1' data-bs-toggle='modal' data-notrans='" . $value["no_transaksi"] . "' data-nama='" . $_SESSION["nama_user"] . "' data-status='" . $_SESSION["status_member"] . "' data-lama='" . $lama_sewa . "' data-bs-target='#detailBooking'><i class='bi bi-file-text'></i></button>
