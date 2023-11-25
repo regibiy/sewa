@@ -112,19 +112,28 @@ $(function () {
 
   $(document).on("click", ".btn-cancel-booking", function () {
     const noTrans = $(this).data("notrans");
-    Swal.fire({
-      title: "Apakah Anda Yakin?",
-      text: "Saat Membatalkan, Pembayaran Yang Telah Dilakukan Tidak Dapat Dikembalikan!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Ya, Batalkan!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        window.location.href = `${BASEURL}/dashboard/cancelbooking/${noTrans}`;
-      }
-    });
+    const statusBooking = $(this).data("statusbook");
+    if (statusBooking !== "Menunggu") {
+      Swal.fire({
+        title: "Upss...",
+        text: `Status Booking Saat Ini ${statusBooking}. Anda Tidak Dapat Melakukan Pembatalan!`,
+        icon: "warning",
+      });
+    } else {
+      Swal.fire({
+        title: "Apakah Anda Yakin?",
+        text: "Saat Membatalkan, Pembayaran Yang Telah Dilakukan Tidak Dapat Dikembalikan!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya, Batalkan!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = `${BASEURL}/dashboard/cancelbooking/${noTrans}`;
+        }
+      });
+    }
   });
 
   const statusMember = $(".status-user").text();
@@ -367,6 +376,7 @@ $(function () {
     success: function (data) {
       // a member
       if (data) {
+        $("#noTransMember").val(data.no_transaksi);
         const hariObj = {
           Minggu: 0,
           Senin: 1,
@@ -452,6 +462,8 @@ $(function () {
             }
           }
         });
+      } else {
+        $("#noTransMember").val(0);
       }
     },
   });

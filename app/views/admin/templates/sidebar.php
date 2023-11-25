@@ -2,8 +2,8 @@
     <div class="row">
         <div class="col-2 p-3 border-end bg-body-tertiary height-100">
             <div class="mb-3">
-                <h4>Nama Admin</h4>
-                <p>Admin</p>
+                <h4><?= $_SESSION["nama_admin"] ?></h4>
+                <p><?= $_SESSION["role"] ?></p>
             </div>
             <div class="mb-5 text-center">
                 <ul class="list-group mb-3">
@@ -54,12 +54,17 @@
                             </a>
                         </div>
                     </div>
-                    <a href="<?= BASEURL ?>/admin/dashboard/informasi" class="text-decoration-none text-white border-start border-end">
+                    <a href="<?= BASEURL ?>/admin/dashboard/informasi" class="text-decoration-none text-white border-start border-end <?= $_SESSION["role"] !== "Owner" ? "rounded-bottom" : "" ?>">
                         <li class="list-group-item <?= $data["marker"][9] ?>">Informasi</li>
                     </a>
-                    <a href="<?= BASEURL ?>/admin/dashboard/pegawai" class="text-decoration-none text-white border border-top-0 rounded-bottom">
-                        <li class="list-group-item <?= $data["marker"][10] ?>">Pegawai</li>
-                    </a>
+                    <?php
+                    if ($_SESSION["role"] === "Owner") {
+                        echo "<a href='" . BASEURL . "/admin/dashboard/pegawai' class='text-decoration-none text-white border border-top-0 rounded-bottom'>
+                        <li class='list-group-item " . (isset($data["marker"][10]) ? "active" : "") . "'>Pegawai</li>
+                        </a>
+                        ";
+                    }
+                    ?>
                 </ul>
             </div>
             <div class="text-center">

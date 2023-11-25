@@ -56,7 +56,7 @@ class Trans_Member_Model
 
     public function get_status_trans($id)
     {
-        $sql = "SELECT * FROM transaksi_member INNER JOIN member ON transaksi_member.paket_member = member.id WHERE id_user = :id AND status_transaksi = :status_transaksi";
+        $sql = "SELECT *, transaksi_member.id AS trans_member_id FROM transaksi_member INNER JOIN member ON transaksi_member.paket_member = member.id WHERE id_user = :id AND status_transaksi = :status_transaksi";
         $this->db->query($sql);
         $this->db->bind("id", $id);
         $this->db->bind("status_transaksi", "Aktif");
@@ -67,9 +67,12 @@ class Trans_Member_Model
     {
         $sql = "SELECT COUNT(booking.no_transaksi) AS total_book FROM booking 
         INNER JOIN transaksi_member ON booking.id_user = transaksi_member.id_user
-        WHERE booking.id_user = :id AND booking.tanggal_sewa BETWEEN transaksi_member.tanggal_transaksi AND transaksi_member.berlaku_sampai";
+        WHERE booking.id_user = :id AND 
+        (booking.tanggal_sewa BETWEEN transaksi_member.tanggal_transaksi AND transaksi_member.berlaku_sampai)
+        AND status_booking NOT IN (:status_booking)";
         $this->db->query($sql);
         $this->db->bind("id", $id);
+        $this->db->bind("status_booking", "Dibatalkan");
         return $this->db->single();
     }
 

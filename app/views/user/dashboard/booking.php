@@ -5,6 +5,7 @@
         </div>
     </div>
     <form action="<?= BASEURL ?>/dashboard/bookingprocess" id="formBooking" method="post" autocomplete="off">
+        <input type="hidden" id="noTransMember" name="no_trans_member">
         <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 border p-3 rounded shadow-sm">
             <div class="col">
                 <div class="mb-3">

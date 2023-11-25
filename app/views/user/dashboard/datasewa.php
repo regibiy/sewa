@@ -50,7 +50,7 @@
                             <button type='button' class='btn btn-sm btn-outline-secondary btn-upload mb-1' data-notrans='" . $value["no_transaksi"] . "' " . ($value["status_member_when_book"] === "Member" ? 'disabled' : '') . ">
                             <i class='bi bi-cloud-arrow-up-fill'></i>
                             </button>
-                            <button type='button' class='btn btn-sm btn-outline-secondary btn-cancel-booking mb-1' data-notrans='" . $value["no_transaksi"] . "'><i class='bi bi-x-circle-fill'></i></button> 
+                            <button type='button' class='btn btn-sm btn-outline-secondary btn-cancel-booking mb-1' data-notrans='" . $value["no_transaksi"] . "' data-statusbook='" . $value["status_booking"] . "'><i class='bi bi-x-circle-fill'></i></button> 
                             </td>";
                             echo "</tr>";
                         }

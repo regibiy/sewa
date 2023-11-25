@@ -361,15 +361,20 @@ class Dashboard extends Controller
 
     public function deletepaketmember($url)
     {
-        //add validation whether the data is used or not
-        if ($this->model("Member_Model")->delete_member($url) > 0) {
-            Flasher::set_flash("Berhasil", "Menghapus Data Paket Member!", "success");
+        if ($this->model("Member_Model")->is_package_member_used() > 0) {
+            Flasher::set_flash("Gagal Menghapus Data Paket Member!", "Paket Member Memiliki Riwayat Transaksi.", "error");
             header("Location: " . BASEURL . "/admin/dashboard/paketmember");
             exit;
         } else {
-            Flasher::set_flash("Gagal", "Menghapus Data Paket Member!", "error");
-            header("Location: " . BASEURL . "/admin/dashboard/paketmember");
-            exit;
+            if ($this->model("Member_Model")->delete_member($url) > 0) {
+                Flasher::set_flash("Berhasil", "Menghapus Data Paket Member!", "success");
+                header("Location: " . BASEURL . "/admin/dashboard/paketmember");
+                exit;
+            } else {
+                Flasher::set_flash("Gagal", "Menghapus Data Paket Member!", "error");
+                header("Location: " . BASEURL . "/admin/dashboard/paketmember");
+                exit;
+            }
         }
     }
 
@@ -469,13 +474,64 @@ class Dashboard extends Controller
     {
         $data = [
             "title" => "Beranda",
-            "marker" => [null, null, null, null, null, null, null, null, null, null, "active"]
+            "marker" => [null, null, null, null, null, null, null, null, null, null, "active"],
+            "employees" => $this->model("Admin_Model")->get_all_admins()
         ];
 
         $this->AdminView("templates/header", $data);
         $this->AdminView("templates/sidebar", $data);
         $this->AdminView("dashboard/pegawai", $data);
         $this->AdminView("templates/footer");
+    }
+
+    public function getdataadminbyusernamejson()
+    {
+        echo json_encode($this->model("Admin_Model")->get_admin_by_username($_POST["username"]));
+    }
+
+    public function getdataadminjson()
+    {
+        echo json_encode($this->model("Admin_Model")->get_data_admin_by_username($_POST["username"]));
+    }
+
+    public function addpegawai()
+    {
+
+        if ($this->model("Admin_Model")->add_pegawai($_POST) > 0) {
+            Flasher::set_flash("Berhasil", "Menambahkan Data Pegawai!", "success");
+            header("Location: " . BASEURL . "/admin/dashboard/pegawai");
+            exit;
+        } else {
+            Flasher::set_flash("Gagal", "Menambahkan Data Pegawai!", "error");
+            header("Location: " . BASEURL . "/admin/dashboard/pegawai");
+            exit;
+        }
+    }
+
+    public function editpegawai()
+    {
+        if ($this->model("Admin_Model")->edit_pegawai($_POST) > 0) {
+            Flasher::set_flash("Berhasil", "Memperbarui Data Pegawai!", "success");
+            header("Location: " . BASEURL . "/admin/dashboard/pegawai");
+            exit;
+        } else {
+            Flasher::set_flash("Upss...", "Anda Tidak Melakukan Perubahan Apapun!", "warning");
+            header("Location: " . BASEURL . "/admin/dashboard/pegawai");
+            exit;
+        }
+    }
+
+    public function deletepegawai($url)
+    {
+        if ($this->model("Admin_Model")->delete_admin($url) > 0) {
+            Flasher::set_flash("Berhasil", "Menghapus Data Pegawai!", "success");
+            header("Location: " . BASEURL . "/admin/dashboard/pegawai");
+            exit;
+        } else {
+            Flasher::set_flash("Gagal", "Menghapus Data Pegawai!", "error");
+            header("Location: " . BASEURL . "/admin/dashboard/pegawai");
+            exit;
+        }
     }
 
     public function cetakbooking()

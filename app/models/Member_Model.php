@@ -51,6 +51,14 @@ class Member_Model
         return $this->db->row_count();
     }
 
+    public function is_package_member_used()
+    {
+        $sql = "SELECT * FROM member INNER JOIN transaksi_member ON member.id = transaksi_member.paket_member";
+        $this->db->query($sql);
+        $this->db->execute();
+        return $this->db->row_count();
+    }
+
     public function delete_member($id)
     {
         $sql = "DELETE FROM member WHERE id = :id";

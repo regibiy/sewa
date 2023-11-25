@@ -399,4 +399,92 @@ $(function () {
       }
     });
   });
+
+  $(".btn-add-pegawai").on("click", function () {
+    $("#pegawaiModalLabel").html("Tambah Data Pegawai");
+    $("#formPegawai").attr("action", `${BASEURL}/admin/dashboard/addpegawai`);
+    $(".modal-footer button[type='submit']").addClass("btn-submit-pegawai");
+    $("#formPegawai").trigger("reset");
+  });
+
+  $(document).on("click", ".btn-edit-pegawai", function () {
+    $("#pegawaiModalLabel").html("Edit Data Pegawai");
+    $("#formPegawai").attr("action", `${BASEURL}/admin/dashboard/editpegawai`);
+    $(".modal-footer button[type='submit']").removeClass("btn-submit-pegawai");
+    const username = $(this).data("username");
+    $.ajax({
+      url: `${BASEURL}/admin/dashboard/getdataadminjson`,
+      data: { username: username },
+      method: "post",
+      dataType: "json",
+      success: function (data) {
+        $("#id").val(data.id);
+        $("#username").val(data.username);
+        $("#nama").val(data.nama);
+        $("#password").val(data.password);
+        $("#email").val(data.email);
+        $("#jenisKelamin").val(data.jenis_kelamin);
+        $("#noTelp").val(data.no_telp);
+        $("#role").val(data.role);
+        $("#statusAkun").val(data.status_akun);
+      },
+    });
+  });
+
+  $(document).on("click", ".btn-delete-pegawai", function () {
+    const id = $(this).data("id");
+    const role = $(this).data("role");
+    if (role === "Owner") {
+      Swal.fire({
+        title: "Upss...",
+        text: "Role Owner Tidak Dapat Dihapus!",
+        icon: "error",
+      });
+    } else {
+      Swal.fire({
+        title: `Data Pegawai Dengan ID ${id} Akan Dihapus. Apakah Anda Yakin?`,
+        text: "Anda Tidak Dapat Mengembalikan Ini!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya, Hapus!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = `${BASEURL}/admin/dashboard/deletepegawai/${id}`;
+        }
+      });
+    }
+  });
+
+  $(document).on("click", ".btn-submit-pegawai", function (event) {
+    let valid = true;
+    $("#formPegawai input").each(function () {
+      if ($(this).prop("required") && $.trim($(this).val()) === "") {
+        valid = false;
+        return false;
+      }
+    });
+    if (valid) {
+      event.preventDefault();
+      const usernameInput = $("#username").val();
+      $.ajax({
+        url: `${BASEURL}/admin/dashboard/getdataadminbyusernamejson`,
+        data: { username: usernameInput },
+        method: "post",
+        dataType: "json",
+        success: function (data) {
+          if (data > 0) {
+            Swal.fire({
+              title: "Upss...",
+              text: "Username Yang Anda Masukkan Telah Digunakan!",
+              icon: "warning",
+            });
+          } else {
+            $("#formPegawai").unbind("submit").submit();
+          }
+        },
+      });
+    }
+  });
 });

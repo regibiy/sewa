@@ -75,7 +75,7 @@ class Dashboard extends Controller
         $old_pass = $this->user_data["password"];
         if ($_POST["old_password"] === $old_pass) {
             if ($this->model("User_Model")->edit_password($_POST) > 0) {
-                unset($_SESSION["login"], $_SESSION["user"], $_SESSION["nama_user"], $_SESSION["status_member"]);
+                unset($_SESSION["login"], $_SESSION["id_user"], $_SESSION["user"], $_SESSION["nama_user"], $_SESSION["status_member"]);
                 Flasher::set_flash("Berhasil", "Mengubah Password! Silakan Login Kembali.", "info");
                 header("Location: " . BASEURL . "/auth");
                 exit;
@@ -137,7 +137,7 @@ class Dashboard extends Controller
                     $sisa_guna = 4 - $total_book["total_book"]; // 4 didapat dari ketentuan batas booking member
                     if ($sisa_guna === 0) {
                         if ($id_transaksi = $this->model("Trans_Member_Model")->get_status_trans($_SESSION["id_user"])) {
-                            $this->model("Trans_Member_Model")->update_status_member_dua($id_transaksi["id"]);
+                            $this->model("Trans_Member_Model")->update_status_member_dua($id_transaksi["trans_member_id"]);
                             $this->model("User_Model")->update_status_member_dua($_SESSION["id_user"]);
                         }
                     }
@@ -307,7 +307,6 @@ class Dashboard extends Controller
 
     public function cancelmember($url)
     {
-        //ada kondisi jika sudah diubah oleh admin tidak boleh dicancel
         if ($this->model("Trans_Member_Model")->cancel_member($url)) {
             Flasher::set_flash("Pembatalan Berhasil!", "Terima Kasih Telah Mengunjungi Web Gor Unipol.", "success");
             header("Location: " . BASEURL . "/dashboard/profil/1");
@@ -321,7 +320,7 @@ class Dashboard extends Controller
 
     public function cancelbooking($url)
     {
-        //ada kondisi jika sudah diubah oleh admin tidak boleh dicancel
+        //tambah validasi jika user adalah member dan status telah berubah ke non member
         if ($this->model("Booking_Model")->cancel_booking($url)) {
             Flasher::set_flash("Pembatalan Berhasil!", "Terima Kasih Telah Melakukan Booking Di Web Gor Unipol", "success");
             header("Location: " . BASEURL . "/dashboard/datasewa");

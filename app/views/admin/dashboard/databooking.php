@@ -207,7 +207,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="konfirmasi" tabindex="-1" aria-labelledby="konfirmasiModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal fade" id="konfirmasi" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="konfirmasiModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -215,7 +215,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="row">
+                <div class="row mb-4">
                     <div class="col border rounded p-3">
                         <form action="<?= BASEURL ?>/admin/dashboard/confirmdatabooking" method="post" autocomplete="off">
                             <input type="hidden" name="no_transaksi" id="no_transaksi">
@@ -236,43 +236,44 @@
                                 <div class="col">
                                     <button type="submit" class="btn btn-primary w-100">Konfirmasi</button>
                                 </div>
+                            </div>
                         </form>
                     </div>
-                    <div class="row border rounded mb-4">
-                        <div class="row mb-4">
-                            <div class="col">
-                                <p class="m-0">Nama</p>
-                                <p class="m-0 confirm-name"></p>
-                            </div>
-                            <div class="col">
-                                <p class="m-0">Email</p>
-                                <p class="m-0 confirm-email"></p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <p class="m-0">No. Telepon / WA</p>
-                                <p class="m-0 confirm-no-telp"></p>
-                            </div>
-                            <div class="col">
-                                <p class="m-0">Jenis Kelamin</p>
-                                <p class="confirm-jenis-kelamin"></p>
-                            </div>
-                        </div>
-                    </div>
+                </div>
+                <div class="row border rounded mb-4">
                     <div class="row mb-4">
                         <div class="col">
-                            <h6>Bukti Pembayaran</h6>
+                            <p class="m-0">Nama</p>
+                            <p class="m-0 confirm-name"></p>
                         </div>
-                        <div class="col border rounded evidence-area">
-                            <img src="" class="img-fluid img-zoom img-zoom-book-evidence" alt="Bukti Bayar Belum Ada" data-bs-toggle="modal" data-bs-target="#buktiBayar">
+                        <div class="col">
+                            <p class="m-0">Email</p>
+                            <p class="m-0 confirm-email"></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p class="m-0">No. Telepon / WA</p>
+                            <p class="m-0 confirm-no-telp"></p>
+                        </div>
+                        <div class="col">
+                            <p class="m-0">Jenis Kelamin</p>
+                            <p class="confirm-jenis-kelamin"></p>
                         </div>
                     </div>
                 </div>
+                <div class="row mb-4">
+                    <div class="col">
+                        <h6>Bukti Pembayaran</h6>
+                    </div>
+                    <div class="col border rounded evidence-area">
+                        <img src="" class="img-fluid img-zoom img-zoom-book-evidence" alt="Bukti Bayar Belum Ada" data-bs-toggle="modal" data-bs-target="#buktiBayar">
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            </div>
         </div>
     </div>
 </div>
@@ -295,11 +296,11 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="buktiBayarDua" tabindex="-1" aria-labelledby="evidenceModalLabel" aria-hidden="true">
+<div class="modal fade" id="buktiBayarDua" tabindex="-1" aria-labelledby="evidenceDuaModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
-            <div class="modal-header modal-header-evidence">
-                <h1 class="modal-title fs-5" id="evidenceModalLabel">Bukti Pembayaran</h1>
+            <div class="modal-header modal-header-evidence-dua">
+                <h1 class="modal-title fs-5" id="evidenceDuaModalLabel">Bukti Pembayaran</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body text-center modal-body-evidence-dua">

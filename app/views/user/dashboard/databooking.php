@@ -3,6 +3,7 @@
         <div class="col-12 col-sm-12 col-md-2">
             <?php
             $count = 0;
+            $book_exist = true;
             foreach ($data["current_book"] as $value) {
                 if ($value["nama_lapangan"] === "Lapangan 1") {
                     if (strtotime($value["tanggal_sewa"]) >= strtotime(date("Y-m-d"))) {
