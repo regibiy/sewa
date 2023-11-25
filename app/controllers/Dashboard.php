@@ -219,7 +219,7 @@ class Dashboard extends Controller
         $data = [
             "title" =>  "Data Booking",
             "marker" => [null, null, null, "active"],
-            "lapangan" => $this->model("Lapangan_Model")->get_all_lapangan(),
+            "status_booking" => ["Dibatalkan", "Selesai"],
             "current_book" => $this->model("Lapangan_Model")->get_current_booking()
         ];
 
@@ -307,6 +307,17 @@ class Dashboard extends Controller
 
     public function cancelmember($url)
     {
+        // if ($_SESSION["status_member"] === "Member") {
+        //     $total_book = $this->model("Trans_Member_Model")->get_count_book_by_id($_SESSION["id_user"]);
+        //     $sisa_guna = 4 - $total_book["total_book"]; // 4 didapat dari ketentuan batas booking member
+        //     if ($sisa_guna === 0) {
+        //         if ($id_transaksi = $this->model("Trans_Member_Model")->get_status_trans($_SESSION["id_user"])) {
+        //             $this->model("Trans_Member_Model")->update_status_member_dua($id_transaksi["id"]);
+        //             $this->model("User_Model")->update_status_member_dua($_SESSION["id_user"]);
+        //         }
+        //     }
+        //     $_SESSION["status_member"] = $this->user_data["status_member"];
+        // }
         if ($this->model("Trans_Member_Model")->cancel_member($url)) {
             Flasher::set_flash("Pembatalan Berhasil!", "Terima Kasih Telah Mengunjungi Web Gor Unipol.", "success");
             header("Location: " . BASEURL . "/dashboard/profil/1");
