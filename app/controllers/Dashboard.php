@@ -5,11 +5,12 @@ class Dashboard extends Controller
 
     public function __construct()
     {
-        if (!isLogin()) header("Location: " . BASEURL . "/auth");
+        if (!isLoginUser()) header("Location: " . BASEURL . "/auth");
         $this->user_data = $this->model("User_Model")->get_data_user_by_username($_SESSION["user"]);
         if ($_SESSION["status_member"] === "Member") {
-            $total_book = $this->model("Trans_Member_Model")->get_count_book_by_id($_SESSION["id_user"]);
-            $sisa_guna = 4 - $total_book["total_book"]; // 4 didapat dari ketentuan batas booking member
+            $status = $this->model("Trans_Member_Model")->get_status_trans($_SESSION["id_user"]);
+            $total_book = $this->model("Trans_Member_Model")->get_count_book_by_id_debug($_SESSION["id_user"], $status["no_transaksi"]);
+            $sisa_guna = 4 - $total_book["total_book"];
             if ($sisa_guna === 0) {
                 if ($id_transaksi = $this->model("Trans_Member_Model")->get_status_trans($_SESSION["id_user"])) {
                     $this->model("Trans_Member_Model")->update_status_member_dua($id_transaksi["id"]);
@@ -133,8 +134,9 @@ class Dashboard extends Controller
         } else {
             if ($this->model("Booking_Model")->add_booking($_POST, $_SESSION["status_member"]) > 0) {
                 if ($_SESSION["status_member"] === "Member") {
-                    $total_book = $this->model("Trans_Member_Model")->get_count_book_by_id($_SESSION["id_user"]);
-                    $sisa_guna = 4 - $total_book["total_book"]; // 4 didapat dari ketentuan batas booking member
+                    $status = $this->model("Trans_Member_Model")->get_status_trans($_SESSION["id_user"]);
+                    $total_book = $this->model("Trans_Member_Model")->get_count_book_by_id_debug($_SESSION["id_user"], $status["no_transaksi"]);
+                    $sisa_guna = 4 - $total_book["total_book"];
                     if ($sisa_guna === 0) {
                         if ($id_transaksi = $this->model("Trans_Member_Model")->get_status_trans($_SESSION["id_user"])) {
                             $this->model("Trans_Member_Model")->update_status_member_dua($id_transaksi["trans_member_id"]);
@@ -156,7 +158,6 @@ class Dashboard extends Controller
             "title" =>  "Data Booking",
             "marker" => [null, null, "active"],
             "status_member" => $_SESSION["status_member"],
-            //some get all methods has status field that must be a criteria when get all data !!!WARNING
             "paket_member" => $this->model("Member_Model")->get_all_members(),
             "metode_bayar" => $this->model("Rekening_Model")->get_all_payment_methods()
         ];
@@ -199,8 +200,8 @@ class Dashboard extends Controller
         $tanggal_berlaku = new DateTime($status["berlaku_sampai"]);
         $selisih = $tanggal_berlaku->diff(new DateTime());
         $sisa_hari = $selisih->days;
-        $total_book = $this->model("Trans_Member_Model")->get_count_book_by_id($_SESSION["id_user"]);
-        $sisa_guna = 4 - $total_book["total_book"]; // 4 didapat dari ketentuan batas booking member
+        $total_book = $this->model("Trans_Member_Model")->get_count_book_by_id_debug($_SESSION["id_user"], $status["no_transaksi"]);
+        $sisa_guna = 4 - $total_book["total_book"];
         $data = [
             "title" =>  "Member Sukses",
             "marker" => [null, null, "active"],
@@ -307,17 +308,6 @@ class Dashboard extends Controller
 
     public function cancelmember($url)
     {
-        // if ($_SESSION["status_member"] === "Member") {
-        //     $total_book = $this->model("Trans_Member_Model")->get_count_book_by_id($_SESSION["id_user"]);
-        //     $sisa_guna = 4 - $total_book["total_book"]; // 4 didapat dari ketentuan batas booking member
-        //     if ($sisa_guna === 0) {
-        //         if ($id_transaksi = $this->model("Trans_Member_Model")->get_status_trans($_SESSION["id_user"])) {
-        //             $this->model("Trans_Member_Model")->update_status_member_dua($id_transaksi["id"]);
-        //             $this->model("User_Model")->update_status_member_dua($_SESSION["id_user"]);
-        //         }
-        //     }
-        //     $_SESSION["status_member"] = $this->user_data["status_member"];
-        // }
         if ($this->model("Trans_Member_Model")->cancel_member($url)) {
             Flasher::set_flash("Pembatalan Berhasil!", "Terima Kasih Telah Mengunjungi Web Gor Unipol.", "success");
             header("Location: " . BASEURL . "/dashboard/profil/1");
@@ -331,7 +321,7 @@ class Dashboard extends Controller
 
     public function cancelbooking($url)
     {
-        //tambah validasi jika user adalah member dan status telah berubah ke non member
+        //add validation when status member change
         if ($this->model("Booking_Model")->cancel_booking($url)) {
             Flasher::set_flash("Pembatalan Berhasil!", "Terima Kasih Telah Melakukan Booking Di Web Gor Unipol", "success");
             header("Location: " . BASEURL . "/dashboard/datasewa");

@@ -22,6 +22,13 @@ $(function () {
       success: function (data) {
         let harga = 0;
         if (data.status_member_when_book !== "Member") harga = data.harga;
+        let confirm = "Belum Dikonfirmasi";
+        if (data.status_booking !== "Menunggu") confirm = "Sudah Dikonfirmasi";
+        let ket = "Segera Upload Bukti Transfer";
+        if (data.bukti_bayar !== null) {
+          if (data.status_booking === "Aktif") ket = "Aktif";
+          else if (data.status_booking === "Selesai") ket = "Selesai";
+        }
         $("#detail-no-trans").text(data.no_transaksi);
         $("#detail-no-book").text(data.kode_booking);
         $("#detail-nama").text(nama);
@@ -32,6 +39,8 @@ $(function () {
         $("#detail-jam").text(data.jam_mulai + " - " + data.jam_selesai);
         $("#detail-lama").text(lama + " Jam");
         $("#detail-harga").text(harga * lama);
+        $("#detail-konfir").text(confirm);
+        $("#detail-ket").text(ket);
       },
     });
   });

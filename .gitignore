@@ -1,3 +1,4 @@
 .old/
 vendor/
 public/img/evidence/
+app/views/reports/custom/temp/dir/path/mpdf/mpdf/

@@ -17,9 +17,22 @@ class Trans_Member_Model
 
     public function get_all_trans_members_dua()
     {
-        $sql = "SELECT *, transaksi_member.id AS member_id, akun_pengguna.id AS user_id 
-        FROM transaksi_member INNER JOIN akun_pengguna ON transaksi_member.id_user = akun_pengguna.id";
+        $sql = "SELECT *, transaksi_member.id AS member_id, akun_pengguna.id AS user_id FROM transaksi_member 
+        INNER JOIN akun_pengguna ON transaksi_member.id_user = akun_pengguna.id
+        INNER JOIN member ON transaksi_member.paket_member = member.id";
         $this->db->query($sql);
+        return $this->db->result_set();
+    }
+
+    public function get_report_trans_member_by_period($data)
+    {
+        $sql = "SELECT * FROM transaksi_member 
+        INNER JOIN akun_pengguna ON transaksi_member.id_user = akun_pengguna.id
+        INNER JOIN member ON transaksi_member.paket_member = member.id 
+        WHERE tanggal_transaksi BETWEEN :tanggal_awal AND :tanggal_akhir";
+        $this->db->query($sql);
+        $this->db->bind("tanggal_awal", $data["tanggal_awal"]);
+        $this->db->bind("tanggal_akhir", $data["tanggal_akhir"]);
         return $this->db->result_set();
     }
 
@@ -63,21 +76,23 @@ class Trans_Member_Model
         return $this->db->single();
     }
 
-    public function get_count_book_by_id($id)
+    public function get_count_book_by_id_debug($id, $no_trans_member)
     {
-        // $sql = "SELECT COUNT(booking.no_transaksi) AS total_book FROM booking 
-        // INNER JOIN transaksi_member ON booking.id_user = transaksi_member.id_user
-        // WHERE booking.id_user = :id AND 
-        // (booking.tanggal_sewa BETWEEN transaksi_member.tanggal_transaksi AND transaksi_member.berlaku_sampai)
-        // AND status_booking NOT IN (:status_booking)";
         $sql = "SELECT COUNT(booking.no_transaksi) AS total_book FROM booking 
-        INNER JOIN transaksi_member ON booking.id_user = transaksi_member.id_user
-        WHERE booking.id_user = 8
-        AND booking.no_trans_member = 25117911
+        WHERE booking.id_user = :id AND no_trans_member = :no_trans_member
         AND status_booking NOT IN (:status_booking)";
         $this->db->query($sql);
         $this->db->bind("id", $id);
+        $this->db->bind("no_trans_member", $no_trans_member);
         $this->db->bind("status_booking", "Dibatalkan");
+        return $this->db->single();
+    }
+
+    public function get_count_notif()
+    {
+        $sql = "SELECT COUNT(id) AS total_notif FROM transaksi_member WHERE status_transaksi = :status_transaksi";
+        $this->db->query($sql);
+        $this->db->bind("status_transaksi", "Menunggu");
         return $this->db->single();
     }
 

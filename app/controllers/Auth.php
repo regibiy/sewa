@@ -4,7 +4,7 @@ class Auth extends Controller
 
     public function __construct()
     {
-        if (isLogin()) header("Location: " . BASEURL . "/dashboard");
+        if (isLoginUser()) header("Location: " . BASEURL . "/dashboard");
     }
 
     public function index()
@@ -23,14 +23,15 @@ class Auth extends Controller
             $user_data = $this->model("User_Model")->get_data_user_by_username($_POST["username"]);
             if ($user_data["password"] === $_POST["password"]) {
                 if ($user_data["status_akun"] === "Aktif") {
-                    $_SESSION["login"] = "login";
+                    $_SESSION["login_user"] = "login";
                     $_SESSION["id_user"] = $user_data["id"];
                     $_SESSION["user"] = $user_data["username"];
                     $_SESSION["nama_user"] = $user_data["nama"];
                     $_SESSION["status_member"] = $user_data["status_member"];
                     if ($_SESSION["status_member"] === "Member") {
-                        $total_book = $this->model("Trans_Member_Model")->get_count_book_by_id($_SESSION["id_user"]);
-                        $sisa_guna = 4 - $total_book["total_book"]; // 4 didapat dari ketentuan batas booking member
+                        $status = $this->model("Trans_Member_Model")->get_status_trans($_SESSION["id_user"]);
+                        $total_book = $this->model("Trans_Member_Model")->get_count_book_by_id_debug($_SESSION["id_user"], $status["no_transaksi"]);
+                        $sisa_guna = 4 - $total_book["total_book"];
                         if ($sisa_guna === 0) {
                             if ($id_transaksi = $this->model("Trans_Member_Model")->get_status_trans($_SESSION["id_user"])) {
                                 $this->model("Trans_Member_Model")->update_status_member_dua($id_transaksi["id"]);

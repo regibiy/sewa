@@ -3,7 +3,7 @@
 require_once '../vendor/autoload.php';
 
 try {
-    $mpdf = new \Mpdf\Mpdf(['tempDir' => __DIR__ . '/custom/temp/dir/path/mpdf', 'format' => 'A4']);
+    $mpdf = new \Mpdf\Mpdf(['tempDir' => __DIR__ . '/custom/temp/dir/path/mpdf', 'format' => 'A4', 'default_font' => 'dejavusans']);
     $html = '
     <h1 style="text-align:center">GOR UNIPOL</h1>
     <hr>
@@ -59,7 +59,7 @@ try {
     <p style="text-align:center"><b>Gor Unipol</b></p>
     <p style="text-align:center">Jalan Patikrama, Kec. Nanga Pinoh, Kab. Melawi, Kalimantan Barat</p>';
     $mpdf->WriteHTML($html);
-    $file_name = "Bukti_Booking_" . $data["detail_booking"]["no_transaksi"] . ".pdf";
+    $file_name = "Bukti_Booking " . $data["detail_booking"]["no_transaksi"] . ".pdf";
     $mpdf->Output($file_name, \Mpdf\Output\Destination::DOWNLOAD);
 } catch (\Mpdf\MpdfException $e) { // Note: safer fully qualified exception name used for catch
     // Process the exception, log, print etc.

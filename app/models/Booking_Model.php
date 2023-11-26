@@ -34,6 +34,36 @@ class Booking_Model
         return $this->db->result_set();
     }
 
+    public function get_count_notif()
+    {
+        $sql = "SELECT COUNT(no_transaksi) AS total_notif FROM booking WHERE status_booking = :status_booking";
+        $this->db->query($sql);
+        $this->db->bind("status_booking", "Menunggu");
+        return $this->db->single();
+    }
+
+    public function get_booking_report()
+    {
+        $sql = "SELECT no_transaksi, kode_booking, lapangan.nama_lapangan, tanggal_sewa, booking.jadwal, jadwal.harga, jam_mulai, jam_selesai, booking.status_booking, status_member_when_book, bukti_bayar FROM booking 
+        INNER JOIN lapangan ON booking.lapangan = lapangan.id
+        INNER JOIN jadwal ON booking.jadwal = jadwal.sesi AND DAYNAME(booking.tanggal_sewa) = jadwal.hari WHERE booking.status_booking = :status_booking";
+        $this->db->query($sql);
+        $this->db->bind("status_booking", "Selesai");
+        return $this->db->result_set();
+    }
+
+    public function get_booking_report_by_period($data)
+    {
+        $sql = "SELECT no_transaksi, kode_booking, lapangan.nama_lapangan, tanggal_sewa, booking.jadwal, jadwal.harga, jam_mulai, jam_selesai, booking.status_booking, status_member_when_book, bukti_bayar FROM booking 
+        INNER JOIN lapangan ON booking.lapangan = lapangan.id
+        INNER JOIN jadwal ON booking.jadwal = jadwal.sesi AND DAYNAME(booking.tanggal_sewa) = jadwal.hari WHERE booking.status_booking = :status_booking  AND (tanggal_sewa BETWEEN :tanggal_awal AND :tanggal_akhir)";
+        $this->db->query($sql);
+        $this->db->bind("status_booking", "Selesai");
+        $this->db->bind("tanggal_awal", $data["tanggal_awal"]);
+        $this->db->bind("tanggal_akhir", $data["tanggal_akhir"]);
+        return $this->db->result_set();
+    }
+
     public function add_booking($data, $status_member)
     {
         $sql = "INSERT INTO booking (no_transaksi, kode_booking, id_user, lapangan, tanggal_sewa, jadwal, jam_mulai, jam_selesai, status_booking, status_member_when_book, no_trans_member, bukti_bayar) VALUES (:no_transaksi, :kode_booking, :id_user, :lapangan, :tanggal_sewa, :jadwal, :jam_mulai, :jam_selesai, :status_booking, :status_member_when_book, :no_trans_member, :bukti_bayar)";

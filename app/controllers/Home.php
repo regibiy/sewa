@@ -4,7 +4,7 @@ class Home extends Controller
 
     public function __construct()
     {
-        if (isLogin()) header("Location: " . BASEURL . "/dashboard");
+        if (isLoginUser()) header("Location: " . BASEURL . "/dashboard");
     }
 
     public function index()

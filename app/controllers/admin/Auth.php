@@ -4,7 +4,7 @@ class Auth extends Controller
 
     public function __construct()
     {
-        if (isLogin()) header("Location: " . BASEURL . "/admin/dashboard");
+        if (isLoginAdmin()) header("Location: " . BASEURL . "/admin/dashboard");
         $data = $this->model("Trans_Member_Model")->get_all_trans_members_dua();
         foreach ($data as $item) {
             if (date("Y-m-d") === $item["berlaku_sampai"]) {
@@ -30,7 +30,7 @@ class Auth extends Controller
             $admin_data = $this->model("Admin_Model")->get_data_admin_by_username($_POST["username"]);
             if ($admin_data["password"] === $_POST["password"]) {
                 if ($admin_data["status_akun"] === "Aktif") {
-                    $_SESSION["login"] = "login";
+                    $_SESSION["login_admin"] = "login";
                     $_SESSION["id_admin"] = $admin_data["id"];
                     $_SESSION["admin"] = $admin_data["username"];
                     $_SESSION["nama_admin"] = $admin_data["nama"];

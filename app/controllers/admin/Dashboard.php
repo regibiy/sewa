@@ -2,9 +2,11 @@
 class Dashboard extends Controller
 {
 
+    private $notif;
+
     public function __construct()
     {
-        if (!isLogin()) header("Location: " . BASEURL . "/admin/auth");
+        if (!isLoginAdmin()) header("Location: " . BASEURL . "/admin/auth");
         $data = $this->model("Trans_Member_Model")->get_all_trans_members_dua();
         foreach ($data as $item) {
             if (date("Y-m-d") === $item["berlaku_sampai"]) {
@@ -12,13 +14,17 @@ class Dashboard extends Controller
                 $this->model("User_Model")->update_status_member_dua($item["user_id"]);
             }
         }
+        $notif_booking = $this->model("Booking_Model")->get_count_notif();
+        $notif_member = $this->model("Trans_Member_Model")->get_count_notif();
+        $this->notif = $notif_booking["total_notif"] + $notif_member["total_notif"];
     }
 
     public function index()
     {
         $data = [
             "title" => "Beranda",
-            "marker" => ["active"]
+            "marker" => ["active"],
+            "notif" => $this->notif
         ];
         $this->AdminView("templates/header", $data);
         $this->AdminView("templates/sidebar", $data);
@@ -387,7 +393,8 @@ class Dashboard extends Controller
     {
         $data = [
             "title" => "Laporan Booking",
-            "marker" => [null, null, null, null, null, null, null, "active"]
+            "marker" => [null, null, null, null, null, null, null, "active"],
+            "booking_data" => $this->model("Booking_Model")->get_booking_report()
         ];
         $this->AdminView("templates/header", $data);
         $this->AdminView("templates/sidebar", $data);
@@ -399,7 +406,8 @@ class Dashboard extends Controller
     {
         $data = [
             "title" => "Laporan Member",
-            "marker" => [null, null, null, null, null, null, null, null, "active"]
+            "marker" => [null, null, null, null, null, null, null, null, "active"],
+            "member_data" => $this->model("Trans_Member_Model")->get_all_trans_members_dua()
         ];
         $this->AdminView("templates/header", $data);
         $this->AdminView("templates/sidebar", $data);
@@ -536,7 +544,24 @@ class Dashboard extends Controller
 
     public function cetakbooking()
     {
-        $this->Reporting("laporanbooking");
+        $data = [
+            "booking_data" => $this->model("Booking_Model")->get_booking_report_by_period($_POST),
+            "tanggal_awal" => $_POST["tanggal_awal"],
+            "tanggal_akhir" => $_POST["tanggal_akhir"],
+            "user" => $_SESSION["nama_admin"]
+        ];
+        $this->Reporting("laporanbooking", $data);
+    }
+
+    public function cetakmember()
+    {
+        $data = [
+            "member_data" => $this->model("Trans_Member_Model")->get_report_trans_member_by_period($_POST),
+            "tanggal_awal" => $_POST["tanggal_awal"],
+            "tanggal_akhir" => $_POST["tanggal_akhir"],
+            "user" => $_SESSION["nama_admin"]
+        ];
+        $this->Reporting("laporanmember", $data);
     }
 
     public function logout()

@@ -1,8 +1,13 @@
 <?php
-function isLogin()
+function isLoginUser()
 {
-    if (isset($_SESSION["login"]) && isset($_SESSION["id_admin"])) return true;
-    elseif (isset($_SESSION["login"]) && isset($_SESSION["id_user"])) return true;
+    if (isset($_SESSION["login_user"]) && isset($_SESSION["id_user"])) return true;
+    else return false;
+}
+
+function isLoginAdmin()
+{
+    if (isset($_SESSION["login_admin"]) && isset($_SESSION["id_admin"])) return true;
     else return false;
 }
 

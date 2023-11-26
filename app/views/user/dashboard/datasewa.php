@@ -153,8 +153,8 @@
                         <p id="detail-jam"></p>
                         <p id="detail-lama"></p>
                         <p id="detail-harga"></p>
-                        <p id="detail-konfir">Belum Dikonfirmasi / Sudah Dikonfirmasi</p>
-                        <p id="detail-ket">Segera Upload Bukti Transfer / Aktif / Selesai</p>
+                        <p id="detail-konfir"></p>
+                        <p id="detail-ket"></p>
                     </div>
                 </div>
             </div>

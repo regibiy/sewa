@@ -182,7 +182,7 @@
                                 <p>:</p>
                             </div>
                             <div class="col-7">
-                                <p>Belum Dikonfirmasi / Sudah Dikonfirmasi</p>
+                                <p id="detail-confirm"></p>
                             </div>
                         </div>
                         <div class="row">
@@ -193,7 +193,7 @@
                                 <p>:</p>
                             </div>
                             <div class="col-7">
-                                <p>Segera Upload Bukti Transfer / Aktif / Selesai</p>
+                                <p id="detail-keterangan"></p>
                             </div>
                         </div>
                     </div>
