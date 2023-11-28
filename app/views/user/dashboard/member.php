@@ -15,10 +15,10 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="detailPembelian" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <form action="<?= BASEURL ?>/dashboard/memberprocess" enctype="multipart/form-data" method="post" autocomplete="off">
+<form action="<?= BASEURL ?>/dashboard/memberprocess" enctype="multipart/form-data" method="post" autocomplete="off">
+    <div class="modal fade" id="detailPembelian" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Data Pembelian</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -116,7 +116,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                     <button type="submit" class="btn btn-primary">Konfirmasi</button>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
-</div>
+</form>

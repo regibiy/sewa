@@ -6,6 +6,7 @@ try {
     $mpdf = new \Mpdf\Mpdf(['tempDir' => __DIR__ . '/custom/temp/dir/path/mpdf', 'format' => 'A4', 'default_font' => 'dejavusans']);
     $html = '
     <h1 style="text-align:center">GOR UNIPOL</h1>
+    <p style="text-align:center">Jalan Patikrama, Kec. Nanga Pinoh, Kab. Melawi, Kalimantan Barat</p>
     <hr>
     <table style="width:100%">
     <tr>
@@ -56,10 +57,10 @@ try {
     <tr>
     </table>
     <hr style="margin-bottom:24px">
-    <p style="text-align:center"><b>Gor Unipol</b></p>
-    <p style="text-align:center">Jalan Patikrama, Kec. Nanga Pinoh, Kab. Melawi, Kalimantan Barat</p>';
+    <p style="text-align:center"><b>Terima Kasih</b></p>
+    <p style="text-align:center">Telah Melakukan Booking Lapangan Bulutangkis di Gor Unipol</p>';
     $mpdf->WriteHTML($html);
-    $file_name = "Bukti_Booking " . $data["detail_booking"]["no_transaksi"] . ".pdf";
+    $file_name = "Bukti Booking " . $data["detail_booking"]["no_transaksi"] . ".pdf";
     $mpdf->Output($file_name, \Mpdf\Output\Destination::DOWNLOAD);
 } catch (\Mpdf\MpdfException $e) { // Note: safer fully qualified exception name used for catch
     // Process the exception, log, print etc.

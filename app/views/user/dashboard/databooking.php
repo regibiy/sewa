@@ -8,9 +8,9 @@
                 if ($value["nama_lapangan"] === "Lapangan 1") {
                     if (strtotime($value["tanggal_sewa"]) >= strtotime(date("Y-m-d")) && !in_array($value["status_booking"], $data["status_booking"])) {
                         $count++;
-                        echo "<div class='row p-4 mb-3 border shadow-sm rounded bg-body-tertiary text-center'>
+                        echo "<div class='row p-4 mb-3 border shadow-sm rounded bg-primary-subtle text-center'>
                         <div class='col'>
-                        <h3>" . $value["nama_lapangan"] . "</h3>
+                        <h4>" . $value["nama_lapangan"] . "</h4>
                         <p>" . $value["tanggal_sewa"] . "</p>
                         <p>" . $value["jam_mulai"] . " - " .  $value["jam_selesai"] . "</p>
                         <p>" . getLamaSewa($value["jam_mulai"], $value["jam_selesai"]) . " Jam</p>
@@ -23,9 +23,9 @@
                 }
             }
             if ($book_exist === false && $count === 0) {
-                echo "<div class='row p-4 mb-3 border shadow-sm rounded bg-body-tertiary text-center'>
+                echo "<div class='row p-4 mb-3 border shadow-sm rounded bg-primary-subtle text-center'>
                 <div class='col'>
-                <h3>" . $lapangan . "</h3>
+                <h4>" . $lapangan . "</h4>
                 <p>Belum Memiliki Jadwal Booking</p>
                 </div>
                 </div>";
@@ -40,9 +40,9 @@
                 if ($value["nama_lapangan"] === "Lapangan 2") {
                     if (strtotime($value["tanggal_sewa"]) >= strtotime(date("Y-m-d")) && !in_array($value["status_booking"], $data["status_booking"])) {
                         $count++;
-                        echo "<div class='row p-4 mb-3 border shadow-sm rounded bg-body-tertiary text-center'>
+                        echo "<div class='row p-4 mb-3 border shadow-sm rounded bg-primary-subtle text-center'>
                         <div class='col'>
-                        <h3>" . $value["nama_lapangan"] . "</h3>
+                        <h4>" . $value["nama_lapangan"] . "</h4>
                         <p>" . $value["tanggal_sewa"] . "</p>
                         <p>" . $value["jam_mulai"] . " - " .  $value["jam_selesai"] . "</p>
                         <p>" . getLamaSewa($value["jam_mulai"], $value["jam_selesai"]) . " Jam</p>
@@ -55,9 +55,9 @@
                 }
             }
             if ($book_exist === false && $count === 0) {
-                echo "<div class='row p-4 mb-3 border shadow-sm rounded bg-body-tertiary text-center'>
+                echo "<div class='row p-4 mb-3 border shadow-sm rounded bg-primary-subtle text-center'>
                 <div class='col'>
-                <h3>" . $lapangan . "</h3>
+                <h4>" . $lapangan . "</h4>
                 <p>Belum Memiliki Jadwal Booking</p>
                 </div>
                 </div>";
@@ -72,9 +72,9 @@
                 if ($value["nama_lapangan"] === "Lapangan 3") {
                     if (strtotime($value["tanggal_sewa"]) >= strtotime(date("Y-m-d")) && !in_array($value["status_booking"], $data["status_booking"])) {
                         $count++;
-                        echo "<div class='row p-4 mb-3 border shadow-sm rounded bg-body-tertiary text-center'>
+                        echo "<div class='row p-4 mb-3 border shadow-sm rounded bg-primary-subtle text-center'>
                         <div class='col'>
-                        <h3>" . $value["nama_lapangan"] . "</h3>
+                        <h4>" . $value["nama_lapangan"] . "</h4>
                         <p>" . $value["tanggal_sewa"] . "</p>
                         <p>" . $value["jam_mulai"] . " - " .  $value["jam_selesai"] . "</p>
                         <p>" . getLamaSewa($value["jam_mulai"], $value["jam_selesai"]) . " Jam</p>
@@ -87,9 +87,9 @@
                 }
             }
             if ($book_exist === false && $count === 0) {
-                echo "<div class='row p-4 mb-3 border shadow-sm rounded bg-body-tertiary text-center'>
+                echo "<div class='row p-4 mb-3 border shadow-sm rounded bg-primary-subtle text-center'>
                 <div class='col'>
-                <h3>" . $lapangan . "</h3>
+                <h4>" . $lapangan . "</h4>
                 <p>Belum Memiliki Jadwal Booking</p>
                 </div>
                 </div>";
@@ -104,9 +104,9 @@
                 if ($value["nama_lapangan"] === "Lapangan 4") {
                     if (strtotime($value["tanggal_sewa"]) >= strtotime(date("Y-m-d")) && !in_array($value["status_booking"], $data["status_booking"])) {
                         $count++;
-                        echo "<div class='row p-4 mb-3 border shadow-sm rounded bg-body-tertiary text-center'>
+                        echo "<div class='row p-4 mb-3 border shadow-sm rounded bg-primary-subtle text-center'>
                         <div class='col'>
-                        <h3>" . $value["nama_lapangan"] . "</h3>
+                        <h4>" . $value["nama_lapangan"] . "</h4>
                         <p>" . $value["tanggal_sewa"] . "</p>
                         <p>" . $value["jam_mulai"] . " - " .  $value["jam_selesai"] . "</p>
                         <p>" . getLamaSewa($value["jam_mulai"], $value["jam_selesai"]) . " Jam</p>
@@ -119,9 +119,9 @@
                 }
             }
             if ($book_exist === false && $count === 0) {
-                echo "<div class='row p-4 mb-3 border shadow-sm rounded bg-body-tertiary text-center'>
+                echo "<div class='row p-4 mb-3 border shadow-sm rounded bg-primary-subtle text-center'>
                 <div class='col'>
-                <h3>" . $lapangan . "</h3>
+                <h4>" . $lapangan . "</h4>
                 <p>Belum Memiliki Jadwal Booking</p>
                 </div>
                 </div>";

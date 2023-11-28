@@ -1,9 +1,30 @@
-function generateNoTransaction() {
-  let date = new Date();
-  let getDate = date.getDate();
-  let getMonth = date.getMonth() + 1;
-  let random = Math.random().toString();
-  return `${getDate}${getMonth}${random.slice(2, 6)}`;
+function generateNoTransaction(url) {
+  return new Promise((resolve, reject) => {
+    let date = new Date();
+    let getDate = date.getDate();
+    let getMonth = date.getMonth() + 1;
+    let getYear = date.getFullYear().toString();
+    let counter;
+    $.ajax({
+      url: url,
+      method: "post",
+      dataType: "json",
+      success: function (data) {
+        if (data.max_no_trans === null) {
+          counter = "01";
+        } else {
+          let noTransBefore = data.max_no_trans.toString();
+          counter = (parseInt(noTransBefore.slice(6, 8)) + 1)
+            .toString()
+            .padStart(2, "0");
+        }
+        resolve(`${getDate}${getMonth}${getYear.slice(2, 4)}${counter}`);
+      },
+      error: function (error) {
+        reject(error);
+      },
+    });
+  });
 }
 
 function generateNoBooking() {

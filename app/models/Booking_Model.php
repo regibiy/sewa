@@ -66,9 +66,10 @@ class Booking_Model
 
     public function add_booking($data, $status_member)
     {
-        $sql = "INSERT INTO booking (no_transaksi, kode_booking, id_user, lapangan, tanggal_sewa, jadwal, jam_mulai, jam_selesai, status_booking, status_member_when_book, no_trans_member, bukti_bayar) VALUES (:no_transaksi, :kode_booking, :id_user, :lapangan, :tanggal_sewa, :jadwal, :jam_mulai, :jam_selesai, :status_booking, :status_member_when_book, :no_trans_member, :bukti_bayar)";
+        $sql = "INSERT INTO booking (no_transaksi, tanggal_booking, kode_booking, id_user, lapangan, tanggal_sewa, jadwal, jam_mulai, jam_selesai, status_booking, status_member_when_book, no_trans_member, bukti_bayar) VALUES (:no_transaksi, :tanggal_booking, :kode_booking, :id_user, :lapangan, :tanggal_sewa, :jadwal, :jam_mulai, :jam_selesai, :status_booking, :status_member_when_book, :no_trans_member, :bukti_bayar)";
         $this->db->query($sql);
         $this->db->bind("no_transaksi", $data["no_transaksi"]);
+        $this->db->bind("tanggal_booking", date("Y-m-d"));
         $this->db->bind("kode_booking", $data["kode_booking"]);
         $this->db->bind("id_user", $_SESSION["id_user"]);
         $this->db->bind("lapangan", $data["lapangan"]);
@@ -140,6 +141,13 @@ class Booking_Model
         $this->db->bind("no_transaksi", $data["no_transaksi"]);
         $this->db->execute();
         return $this->db->row_count();
+    }
+
+    public function get_max_no_trans_book()
+    {
+        $sql = "SELECT MAX(no_transaksi) AS max_no_trans FROM booking WHERE tanggal_booking = CURRENT_DATE()";
+        $this->db->query($sql);
+        return $this->db->single();
     }
 
     public function cancel_booking($no_transaksi)

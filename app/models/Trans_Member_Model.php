@@ -96,6 +96,13 @@ class Trans_Member_Model
         return $this->db->single();
     }
 
+    public function get_max_no_trans_member()
+    {
+        $sql = "SELECT MAX(no_transaksi) AS max_no_trans FROM transaksi_member WHERE tanggal_transaksi = CURRENT_DATE()";
+        $this->db->query($sql);
+        return $this->db->single();
+    }
+
     public function add_trans_member($data, $id_user, $bukti_bayar)
     {
         $sql = "INSERT INTO transaksi_member (tanggal_transaksi, no_transaksi, id_user, paket_member, berlaku_sampai, status_transaksi, bukti_bayar) VALUES (:tanggal_transaksi, :no_transaksi, :id_user, :paket_member, :berlaku_sampai, :status_transaksi, :bukti_bayar)";

@@ -101,7 +101,6 @@
                         <label for="role" class="form-label">Role</label>
                         <select name="role" id="role" class="form-select" required>
                             <option value="Admin">Admin</option>
-                            <option value="Owner">Owner</option>
                         </select>
                     </div>
                     <div class="mb-3">

@@ -164,7 +164,12 @@ $(function () {
       .attr("data-bs-target", "#detailPembelian");
     $(document).on("click", ".btn-buy-package", function () {
       const id = $(this).data("id");
-      const noTrans = generateNoTransaction();
+      let noTrans;
+      generateNoTransaction(`${BASEURL}/dashboard/getmaxtransnumbermemberjson`)
+        .then((result) => {
+          noTrans = result;
+        })
+        .catch((error) => console.error(error));
       const date = new Date();
       const currentDate = date.toISOString().split("T")[0];
       date.setDate(date.getDate() + 30);

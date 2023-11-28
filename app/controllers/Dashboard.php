@@ -7,7 +7,7 @@ class Dashboard extends Controller
     {
         if (!isLoginUser()) header("Location: " . BASEURL . "/auth");
         $this->user_data = $this->model("User_Model")->get_data_user_by_username($_SESSION["user"]);
-        if ($_SESSION["status_member"] === "Member") {
+        if ($this->user_data["status_member"] === "Member") {
             $status = $this->model("Trans_Member_Model")->get_status_trans($_SESSION["id_user"]);
             $total_book = $this->model("Trans_Member_Model")->get_count_book_by_id_debug($_SESSION["id_user"], $status["no_transaksi"]);
             $sisa_guna = 4 - $total_book["total_book"];
@@ -17,8 +17,8 @@ class Dashboard extends Controller
                     $this->model("User_Model")->update_status_member_dua($_SESSION["id_user"]);
                 }
             }
-            $_SESSION["status_member"] = $this->user_data["status_member"];
         }
+        $_SESSION["status_member"] = $this->user_data["status_member"];
     }
 
     public function index()
@@ -143,8 +143,8 @@ class Dashboard extends Controller
                             $this->model("User_Model")->update_status_member_dua($_SESSION["id_user"]);
                         }
                     }
-                    $_SESSION["status_member"] = $this->user_data["status_member"];
                 }
+                $_SESSION["status_member"] = $this->user_data["status_member"];
                 Flasher::set_flash("Terima Kasih", "Booking Berhasil Dilakukan. Segera Upload Bukti Pembayaran JIKA Anda Bukan Member!", "success");
                 header("Location: " . BASEURL . "/dashboard/datasewa");
                 exit;
@@ -331,6 +331,16 @@ class Dashboard extends Controller
             header("Location: " . BASEURL . "/dashboard/datasewa");
             exit;
         }
+    }
+
+    public function getmaxtransnumberbookjson()
+    {
+        echo json_encode($this->model("Booking_Model")->get_max_no_trans_book());
+    }
+
+    public function getmaxtransnumbermemberjson()
+    {
+        echo json_encode($this->model("Trans_Member_Model")->get_max_no_trans_member());
     }
 
     public function logout()

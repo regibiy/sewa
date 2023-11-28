@@ -1,12 +1,6 @@
-import {
-  generateNoTransaction,
-  generateNoBooking,
-  swalAlertPagi,
-  swalAlertSiang,
-  swalAlertMalam,
-  swalAlertMenit,
-  selisihWaktu,
-} from "./utils.js";
+import { generateNoTransaction, generateNoBooking } from "./utils.js";
+
+const BASEURL = "http://localhost/sewa-lapangan";
 
 document.addEventListener("DOMContentLoaded", function () {
   const checkShowPass = document.querySelector("#showPassword"),
@@ -75,7 +69,11 @@ document.addEventListener("DOMContentLoaded", function () {
   // -----
 
   const noTransInput = document.querySelector("#noTrans");
-  if (noTransInput) noTransInput.value = generateNoTransaction();
+  generateNoTransaction(`${BASEURL}/dashboard/getmaxtransnumberbookjson`)
+    .then((result) => {
+      if (noTransInput) noTransInput.value = result;
+    })
+    .catch((error) => console.error(error));
 
   const noBookingInput = document.querySelector("#kodeBooking");
   if (noBookingInput) noBookingInput.value = generateNoBooking();
