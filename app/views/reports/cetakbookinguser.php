@@ -30,7 +30,7 @@ try {
     <td><b>' . $data["detail_booking"]["tanggal_sewa"] . '</b></td>
     <tr>
     <tr>
-    <td style="width:20%; padding:16px">Jadwal</td>
+    <td style="width:20%; padding:16px">Sesi</td>
     <td style="width:5%">:</td>
     <td><b>' . $data["detail_booking"]["jadwal"] . '</b></td>
     <tr>

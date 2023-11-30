@@ -504,28 +504,60 @@ class Dashboard extends Controller
 
     public function addpegawai()
     {
-
-        if ($this->model("Admin_Model")->add_pegawai($_POST) > 0) {
-            Flasher::set_flash("Berhasil", "Menambahkan Data Pegawai!", "success");
-            header("Location: " . BASEURL . "/admin/dashboard/pegawai");
-            exit;
+        if ($_POST["role"] === "Owner") {
+            if ($this->model("Admin_Model")->get_owner() > 0) {
+                Flasher::set_flash("Upss...", "Menambahkan Role Owner Tidak Diizinkan!", "error");
+                header("Location: " . BASEURL . "/admin/dashboard/pegawai");
+                exit;
+            }
         } else {
-            Flasher::set_flash("Gagal", "Menambahkan Data Pegawai!", "error");
-            header("Location: " . BASEURL . "/admin/dashboard/pegawai");
-            exit;
+            if ($this->model("Admin_Model")->add_pegawai($_POST) > 0) {
+                Flasher::set_flash("Berhasil", "Menambahkan Data Pegawai!", "success");
+                header("Location: " . BASEURL . "/admin/dashboard/pegawai");
+                exit;
+            } else {
+                Flasher::set_flash("Gagal", "Menambahkan Data Pegawai!", "error");
+                header("Location: " . BASEURL . "/admin/dashboard/pegawai");
+                exit;
+            }
         }
     }
 
     public function editpegawai()
     {
-        if ($this->model("Admin_Model")->edit_pegawai($_POST) > 0) {
-            Flasher::set_flash("Berhasil", "Memperbarui Data Pegawai!", "success");
-            header("Location: " . BASEURL . "/admin/dashboard/pegawai");
-            exit;
+        $data_admin = $this->model("Admin_Model")->get_data_admin_by_id($_POST["id"]);
+        if ($data_admin["role"] === "Owner") {
+            if ($_POST["role"] !== $data_admin["role"]) {
+                Flasher::set_flash("Upss...", "Role Owner Tidak Dapat Diubah!", "error");
+                header("Location: " . BASEURL . "/admin/dashboard/pegawai");
+                exit;
+            } else {
+                if ($this->model("Admin_Model")->edit_pegawai($_POST) > 0) {
+                    Flasher::set_flash("Berhasil", "Memperbarui Data Pegawai!", "success");
+                    header("Location: " . BASEURL . "/admin/dashboard/pegawai");
+                    exit;
+                } else {
+                    Flasher::set_flash("Upss...", "Anda Tidak Melakukan Perubahan Apapun!", "warning");
+                    header("Location: " . BASEURL . "/admin/dashboard/pegawai");
+                    exit;
+                }
+            }
         } else {
-            Flasher::set_flash("Upss...", "Anda Tidak Melakukan Perubahan Apapun!", "warning");
-            header("Location: " . BASEURL . "/admin/dashboard/pegawai");
-            exit;
+            if ($_POST["role"] === "Owner") {
+                Flasher::set_flash("Upss...", "Admin Tidak Diizinkan Menjadi Owner!", "error");
+                header("Location: " . BASEURL . "/admin/dashboard/pegawai");
+                exit;
+            } else {
+                if ($this->model("Admin_Model")->edit_pegawai($_POST) > 0) {
+                    Flasher::set_flash("Berhasil", "Memperbarui Data Pegawai!", "success");
+                    header("Location: " . BASEURL . "/admin/dashboard/pegawai");
+                    exit;
+                } else {
+                    Flasher::set_flash("Upss...", "Anda Tidak Melakukan Perubahan Apapun!", "warning");
+                    header("Location: " . BASEURL . "/admin/dashboard/pegawai");
+                    exit;
+                }
+            }
         }
     }
 

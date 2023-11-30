@@ -1,7 +1,7 @@
 <div class="col-10 p-5">
     <div class="row justify-content-between mb-3">
         <div class="col">
-            <h4>Data Sewa</h4>
+            <h4>Data Booking</h4>
         </div>
         <div class="col text-end">
             <button type="button" class="btn btn-primary btn-show-payment-method" data-bs-toggle="modal" data-bs-target="#metodePembayaran">
@@ -44,14 +44,14 @@
                             echo  "<td>" . ($value["bukti_bayar"] === null ? "Segera upload bukti pembayaran Anda JIKA Anda Bukan Member!" : "<button type='button' class='btn btn-sm btn-outline-secondary btn-show-evidence mb-1' data-notrans='" . $value["no_transaksi"] . "' data-bs-toggle='modal' data-bs-target='#buktiBayar'>Lihat Bukti</button>") . "</td>";
                             echo  "<td>" . $harga * $lama_sewa . "</td>";
                             echo  "<td>" . $value["status_booking"] . "</td>";
-                            echo  "<td>
-                            <button type='button' class='btn btn-sm btn-outline-secondary btn-detail-booking mb-1' data-bs-toggle='modal' data-notrans='" . $value["no_transaksi"] . "' data-nama='" . $_SESSION["nama_user"] . "' data-status='" . $_SESSION["status_member"] . "' data-lama='" . $lama_sewa . "' data-bs-target='#detailBooking'><i class='bi bi-file-text'></i></button>
-                            <button type='button' class='btn btn-sm btn-outline-secondary btn-print mb-1' data-notrans='" . $value["no_transaksi"] . "' data-nama='" . $_SESSION["nama_user"] . "' data-status='" . $_SESSION["status_member"] . "' data-lama='" . $lama_sewa . "' data-bs-toggle='modal' data-bs-target='#cetak'><i class='bi bi-printer-fill'></i></button>
-                            <button type='button' class='btn btn-sm btn-outline-secondary btn-upload mb-1' data-notrans='" . $value["no_transaksi"] . "' " . ($value["status_member_when_book"] === "Member" ? 'disabled' : '') . ">
-                            <i class='bi bi-cloud-arrow-up-fill'></i>
-                            </button>
-                            <button type='button' class='btn btn-sm btn-outline-secondary btn-cancel-booking mb-1' data-notrans='" . $value["no_transaksi"] . "' data-statusbook='" . $value["status_booking"] . "'><i class='bi bi-x-circle-fill'></i></button> 
-                            </td>";
+                            echo  "<td>";
+                            echo "<button type='button' class='btn btn-sm btn-outline-secondary btn-detail-booking mb-1 me-1' data-bs-toggle='modal' data-notrans='" . $value["no_transaksi"] . "' data-nama='" . $_SESSION["nama_user"] . "' data-status='" . $_SESSION["status_member"] . "' data-lama='" . $lama_sewa . "' data-bs-target='#detailBooking'><i class='bi bi-file-text'></i></button>";
+                            if ($value["status_booking"] !== "Selesai" && $value["status_booking"] !== "Dibatalkan") {
+                                echo "<button type='button' class='btn btn-sm btn-outline-secondary btn-print mb-1 me-1' data-notrans='" . $value["no_transaksi"] . "' data-nama='" . $_SESSION["nama_user"] . "' data-status='" . $_SESSION["status_member"] . "' data-lama='" . $lama_sewa . "' data-bs-toggle='modal' data-bs-target='#cetak'><i class='bi bi-printer-fill'></i></button>";
+                            }
+                            echo "<button type='button' class='btn btn-sm btn-outline-secondary btn-upload mb-1 me-1' data-notrans='" . $value["no_transaksi"] . "' " . ($value["status_member_when_book"] === "Member" ? 'disabled' : '') . "><i class='bi bi-cloud-arrow-up-fill'></i></button>";
+                            echo "<button type='button' class='btn btn-sm btn-outline-secondary btn-cancel-booking mb-1' data-notrans='" . $value["no_transaksi"] . "' data-statusbook='" . $value["status_booking"] . "'><i class='bi bi-x-circle-fill'></i></button>";
+                            echo "</td>";
                             echo "</tr>";
                         }
                         ?>
@@ -121,7 +121,7 @@
                         <p>Status</p>
                         <p>Lapangan</p>
                         <p>Tanggal</p>
-                        <p>Jadwal</p>
+                        <p>Sesi</p>
                         <p>Jam</p>
                         <p>Lama Sewa</p>
                         <p>Harga</p>
@@ -180,7 +180,7 @@
                         <p>Status</p>
                         <p>Lapangan</p>
                         <p>Tanggal</p>
-                        <p>Jadwal</p>
+                        <p>Sesi</p>
                         <p>Jam</p>
                         <p>Lama Sewa</p>
                         <p>Harga</p>

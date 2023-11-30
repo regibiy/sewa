@@ -34,7 +34,9 @@
                                 <option value="0" selected hidden>Silakan pilih lapangan</option>
                                 <?php
                                 foreach ($data["lapangan"] as $value) {
-                                    echo "<option value='" . $value["id"] . "'>" . $value["nama_lapangan"] . "</option>";
+                                    if ($value["status_lapangan"] === "Aktif") {
+                                        echo "<option value='" . $value["id"] . "'>" . $value["nama_lapangan"] . "</option>";
+                                    }
                                 }
                                 ?>
                             </select>
@@ -50,9 +52,9 @@
                 <div class="row">
                     <div class="col">
                         <div class="mb-3">
-                            <label for="jadwal" class="form-label">Pilih Jadwal</label>
+                            <label for="jadwal" class="form-label">Pilih Sesi</label>
                             <select name="jadwal" id="jadwal" class="form-select" required>
-                                <option value="0" selected hidden>Silakan pilih jadwal</option>
+                                <option value="0" selected hidden>Silakan pilih sesi</option>
                                 <option value="pagi">Pagi</option>
                                 <option value="siang">Siang</option>
                                 <option value="malam">Malam</option>
@@ -66,7 +68,7 @@
                         <div class="mb-3">
                             <label for="jamMulai" class="form-label">Jam Mulai</label>
                             <select name="jam_mulai" id="jamMulai" class="form-select" required>
-                                <option value="0" hidden>Silakan Pilih Jam Mulai</option>
+                                <option value="0" hidden>Silakan pilih jam mulai</option>
                             </select>
                         </div>
                     </div>
@@ -74,7 +76,7 @@
                         <div class="mb-3">
                             <label for="jamSelesai" class="form-label">Jam Selesai</label>
                             <select name="jam_selesai" id="jamSelesai" class="form-select" required>
-                                <option value="0" hidden>Silakan Pilih Jam Selesai</option>
+                                <option value="0" hidden>Silakan pilih jam selesai</option>
                             </select>
                         </div>
                     </div>

@@ -15,6 +15,22 @@ class Admin_Model
         return $this->db->result_set();
     }
 
+    public function get_owner()
+    {
+        $sql = "SELECT * FROM akun_pegawai WHERE role = :role";
+        $this->db->query($sql);
+        $this->db->bind("role", "Owner");
+        $this->db->execute();
+        return $this->db->row_count();
+    }
+
+    public function get_data_admin_by_id($id)
+    {
+        $this->db->query("SELECT * FROM akun_pegawai WHERE id = :id");
+        $this->db->bind("id", $id);
+        return $this->db->single();
+    }
+
     public function get_admin_by_username($username)
     {
         $this->db->query("SELECT * FROM " . $this->table . " WHERE username=:username");

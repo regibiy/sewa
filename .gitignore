@@ -2,3 +2,5 @@
 vendor/
 public/img/evidence/
 app/views/reports/custom/temp/dir/path/mpdf/mpdf/
+procedure to run app
+db_sewa_lapangan (1).sql

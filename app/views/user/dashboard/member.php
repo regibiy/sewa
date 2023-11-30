@@ -2,13 +2,15 @@
     <div class="row row-cols-1 row-cols-sm-1 row-cols-md-4 justify-content-md-evenly mb-5">
         <?php
         foreach ($data["paket_member"] as $value) {
-            echo "<div class='col-12 col-sm-12 col-md-2 p-3 text-center border bg-body-tertiary rounded'>";
-            echo "<h5 class='mb-4'>" . $value["nama_paket"] . "</h5>";
-            echo "<p class='m-0'>" . $value["hari"] . "</p>";
-            echo "<p class='m-0'>" . ucfirst($value["jadwal"]) . "</p>";
-            echo "<p class='m-4'>" . $value["harga"] . "</p>";
-            echo "<button type='button' class='btn btn-primary w-100 btn-buy-package' data-id='" . $value["id"] . "' data-statusmember='" . $data["status_member"] . "'>Beli</button>";
-            echo "</div>";
+            if ($value["status_member"] === "Aktif") {
+                echo "<div class='col-12 col-sm-12 col-md-2 p-3 text-center border bg-body-tertiary rounded'>";
+                echo "<h5 class='mb-4'>" . $value["nama_paket"] . "</h5>";
+                echo "<p class='m-0'>" . $value["hari"] . "</p>";
+                echo "<p class='m-0'>" . ucfirst($value["jadwal"]) . "</p>";
+                echo "<p class='m-4'>" . $value["harga"] . "</p>";
+                echo "<button type='button' class='btn btn-primary w-100 btn-buy-package' data-id='" . $value["id"] . "' data-statusmember='" . $data["status_member"] . "'>Beli</button>";
+                echo "</div>";
+            }
         }
         ?>
     </div>
