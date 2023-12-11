@@ -28,6 +28,8 @@ $(function () {
         if (data.bukti_bayar !== null) {
           if (data.status_booking === "Aktif") ket = "Aktif";
           else if (data.status_booking === "Selesai") ket = "Selesai";
+          else if (data.status_booking === "Sedang Dicek") ket = "Sedang Dicek";
+          else ket = "Menunggu Konfirmasi Oleh Admin";
         }
         $("#detail-no-trans").text(data.no_transaksi);
         $("#detail-no-book").text(data.kode_booking);
@@ -288,7 +290,11 @@ $(function () {
 
     $("#jamSelesai").empty();
     $("#jamSelesai").append(opsidefSelesai);
-    $("#noTrans").val(generateNoTransaction());
+    generateNoTransaction(`${BASEURL}/dashboard/getmaxtransnumberbookjson`)
+      .then((result) => {
+        $("#noTrans").val(result);
+      })
+      .catch((error) => console.error(error));
     $("#kodeBooking").val(generateNoBooking());
   });
 

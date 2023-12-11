@@ -375,6 +375,8 @@ $(function () {
         if (data.bukti_bayar !== null) {
           if (data.status_booking === "Aktif") ket = "Aktif";
           else if (data.status_booking === "Selesai") ket = "Selesai";
+          else if (data.status_booking === "Sedang Dicek") ket = "Sedang Dicek";
+          else ket = "Menunggu Konfirmasi Oleh Admin";
         }
         $("#detail-no-trans").text(data.no_transaksi);
         $("#detail-no-book").text(data.kode_booking);

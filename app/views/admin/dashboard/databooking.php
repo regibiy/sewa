@@ -14,8 +14,8 @@
                             <th class="fw-medium bg-info-subtle">Jam Mulai</th>
                             <th class="fw-medium bg-info-subtle">Jam Selesai</th>
                             <th class="fw-medium bg-info-subtle">Lama Sewa</th>
-                            <th class="fw-medium bg-info-subtle">Bukti Pembayaran</th>
                             <th class="fw-medium bg-info-subtle">Total</th>
+                            <th class="fw-medium bg-info-subtle">Status Booking</th>
                             <th class="fw-medium bg-info-subtle">Aksi</th>
                         </tr>
                     </thead>
@@ -35,8 +35,8 @@
                             echo "<td>" . $value["jam_mulai"] . "</td>";
                             echo "<td>" . $value["jam_selesai"] . "</td>";
                             echo "<td>" . $lama_sewa . " Jam</td>";
-                            echo "<td>" . ($value["bukti_bayar"] === null ? "Belum Upload Bukti Bayar" : "<button type='button' class='btn btn-sm btn-outline-secondary btn-show-evidence-4 mb-1' data-notrans='" . $value["no_transaksi"] . "' data-bs-toggle='modal' data-bs-target='#buktiBayarDua'>Lihat Bukti</button>") . "</td>";
                             echo "<td>" . $harga * $lama_sewa . "</td>";
+                            echo "<td>" . $value["status_booking"] . "</td>";
                             echo "<td>
                             <button type='button' class='btn btn-sm btn-outline-secondary mb-1 btn-cancel-booking' data-notrans=" . $value["no_transaksi"] . "><i class='bi bi-x-circle-fill'></i></button>
                             <button type='button' class='btn btn-sm btn-outline-secondary mb-1 btn-detail-booking' data-bs-toggle='modal' data-bs-target='#detail' data-notrans=" . $value["no_transaksi"] . " data-lamasewa=" . $lama_sewa . "><i class='bi bi-file-text'></i></button>
