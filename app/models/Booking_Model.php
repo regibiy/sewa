@@ -109,11 +109,10 @@ class Booking_Model
     public function check_booking($data)
     {
         $sql = "SELECT * FROM booking WHERE
-            (:jam_mulai NOT BETWEEN jam_mulai AND jam_selesai
-             OR :jam_selesai NOT BETWEEN jam_mulai AND jam_selesai)
-            AND lapangan = :lapangan
-            AND tanggal_sewa = :tanggal_sewa
-            AND status_booking IN ('Menunggu', 'Sedang Dicek', 'Aktif')";
+          NOT (
+            :jam_mulai < jam_mulai AND :jam_selesai <= jam_mulai
+            OR :jam_mulai >= jam_selesai AND :jam_selesai > jam_selesai
+          ) AND lapangan = :lapangan AND tanggal_sewa = :tanggal_sewa AND status_booking IN ('Menunggu', 'Sedang Dicek', 'Aktif');";
         $this->db->query($sql);
         $this->db->bind("tanggal_sewa", $data["tanggal_sewa"]);
         $this->db->bind("jam_mulai", $data["jam_mulai"] . ":00");
